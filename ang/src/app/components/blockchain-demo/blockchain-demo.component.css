@@ -1,0 +1,15 @@
+.activeNav {
+    background-color: #eeedf7 !important;
+    color: #312a44;
+}
+
+.navOverride {
+    background-color: transparent;
+    color: #312a44;
+}
+
+
+.navOverride:hover {
+    background-color: transparent;
+    color: #312a44;
+}

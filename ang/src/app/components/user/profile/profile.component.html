@@ -1,0 +1,9 @@
+<br>
+<button type="submit" (click)="showProfile()">Show Profile</button>
+<div *ngIf="user">
+	<h2>{{user.name}}</h2>
+	<ul>
+		<li>Username: {{user.username}}</li>
+		<li>Email: {{user.email}}</li>
+	</ul>
+</div>
