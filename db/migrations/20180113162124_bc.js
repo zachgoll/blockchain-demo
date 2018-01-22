@@ -31,6 +31,7 @@ exports.up = function(knex, Promise) {
             table.string('password');
             table.timestamps(true, true);
             table.string('picture_url');
+            table.string('session');
         });
     })
     .then(() => {

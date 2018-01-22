@@ -20,6 +20,19 @@ router.get('/users', (req, res, next) => {
         });
 });
 
+router.put('/:username/image', (req, res, next) => {
+    const username = req.params.username;
+
+    queries.editUser(username, {picture_url: req.body.picture})
+        .then((user) => {
+            res.status(200).json(user);
+        })
+        .catch((err) => {
+            console.log(err);
+            next(err);
+        });
+ });
+
 router.get('/users/:id', (req, res, next) => {
     const id = req.params.id;
     

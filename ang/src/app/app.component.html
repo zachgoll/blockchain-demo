@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar *ngIf="authService.loggedIn()"></app-navbar>
 <div class="container-fluid">
 	<router-outlet></router-outlet>
 </div>

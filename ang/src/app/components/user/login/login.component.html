@@ -1,8 +1,8 @@
 <div class="container">
-  <br>
+  <br><br><br><br><br><br><br>
   <div class="row">
-    <div class="col-5 mr-auto ml-auto">
-      <form class="shadowBox" (ngSubmit)="onRegisterSubmit()" #register>
+    <div class="col-12 col-xl-5 col-lg-6 col-md-8 col-sm-10 mr-auto ml-auto">
+      <form class="shadowBox" (ngSubmit)="onLoginSubmit()" #login="ngForm">
         <h2>Login</h2>
         <hr>
         <div class="form-group">
@@ -13,9 +13,8 @@
           <label for="l_name">Password</label>
           <input type="password" class="form-control" name="password" ngModel>
         </div>
-      </form>
-      <br>
-      <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+      </form>     
     </div>
   </div>
 </div>

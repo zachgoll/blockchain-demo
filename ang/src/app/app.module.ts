@@ -1,3 +1,4 @@
+import { CanDeactivateGuard } from './services/can-deactivate-service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { PowDemoComponent } from './components/presentation-resources/pow-demo/pow-demo.component';
 import { HashDemoComponent } from './components/presentation-resources/hash-demo/hash-demo.component';
@@ -6,8 +7,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanDeactivate } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FileSelectDirective } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/user/register/register.component';
@@ -30,23 +32,30 @@ import { HomeComponent } from './components/home/home.component';
 import { CertificationComponent } from './components/certification/certification.component';
 import { PresentationResourcesComponent } from './components/presentation-resources/presentation-resources.component';
 import { WalletGeneratorComponent } from './components/presentation-resources/wallet-generator/wallet-generator.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
 
+/**
+ * All child routes protected if canActivate present on parent
+ * To allow the parent but not the children, use canActivateChild: [AuthGuardService] instead
+ */
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent },
   { path: 'blockchain-demo', canActivate: [AuthGuardService], component: BlockchainDemoComponent, children: [
-    { path: 'create-tx', canActivate: [AuthGuardService], component: CreateTxComponent },
-    { path: 'create-block', canActivate: [AuthGuardService], component: CreateBlockComponent },
-    { path: 'blockchain', canActivate: [AuthGuardService], component: BlockchainComponent }
+    { path: 'create-tx', component: CreateTxComponent, canDeactivate: [CanDeactivateGuard] },
+    { path: 'create-block', component: CreateBlockComponent },
+    { path: 'blockchain', component: BlockchainComponent }
   ]},
   { path: 'certification', canActivate: [AuthGuardService], component: CertificationComponent },
   { path: 'presentation-resources', canActivate: [AuthGuardService], component: PresentationResourcesComponent, children: [
-    { path: 'hash-demo', canActivate: [AuthGuardService], component: HashDemoComponent },
-    { path: 'pow-demo', canActivate: [AuthGuardService], component: PowDemoComponent },
-    { path: 'wallet-generator', canActivate: [AuthGuardService], component: WalletGeneratorComponent }
+    { path: 'hash-demo', component: HashDemoComponent },
+    { path: 'pow-demo', component: PowDemoComponent },
+    { path: 'wallet-generator', component: WalletGeneratorComponent }
   ]},
+  { path: 'error-page', component: ErrorPageComponent, data: {message: 'Page not found!'}},
+  { path: '**', redirectTo: '/error-page'}
 ];
 
 
@@ -74,16 +83,18 @@ const appRoutes: Routes = [
     CertificationComponent,
     PresentationResourcesComponent,
     HashDemoComponent,
-    PowDemoComponent
+    PowDemoComponent,
+    ErrorPageComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes),
-    NgbModule
+    RouterModule.forRoot(appRoutes, {useHash: true}),
+    NgbModule.forRoot()
   ],
-  providers: [AuthService, AuthGuardService],
+  providers: [AuthService, AuthGuardService, CanDeactivateGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

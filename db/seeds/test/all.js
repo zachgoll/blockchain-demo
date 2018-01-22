@@ -12,7 +12,8 @@ exports.seed = function(knex, Promise) {
       f_name: 'Zach',
       l_name: 'Gollwitzer',
       password: 'mypassword',
-      picture_url: 'none'
+      picture_url: 'none',
+      session: '1234'
     })
       .then(() => {
         return knex('utxo').insert([{value: 3.24}, {value: 5.34}, {value: 4.98}, {value: 3.5}, {value: 44.3}]);

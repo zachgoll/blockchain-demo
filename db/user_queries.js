@@ -20,11 +20,19 @@ function postUser(user) {
     return User().insert(user, 'id');
 }
 
+function editUser(username, update) {
+    return User()
+        .where('username', username)
+        .first()
+        .update(update);
+}
+
 
 
 module.exports = {
     getAllUsers: getAllUsers,
     getUserById: getUserById,
     postUser: postUser,
-    getUserByUsername: getUserByUsername
+    getUserByUsername: getUserByUsername,
+    editUser: editUser
 }

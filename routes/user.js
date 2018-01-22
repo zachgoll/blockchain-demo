@@ -4,6 +4,7 @@ const queries = require('./../db/user_queries');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const config = require('./../secrets/db_config');
 
 function comparePw(password, hash, callback) {
     bcrypt.compare(password, hash, (err, isMatch) => {
@@ -52,7 +53,7 @@ router.post('/authenticate', (req, res, next) => {
                 comparePw(password, user.password, (err, isMatch) => {
                     if (err) throw err;
                     if(isMatch){
-                        const token = jwt.sign({data: user}, 'secret-key', {
+                        const token = jwt.sign({data: user}, config.secret, {
                             expiresIn: 604800
                         });
 
@@ -75,6 +76,10 @@ router.post('/authenticate', (req, res, next) => {
         });
 });
 
+router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    res.json({user: req.user});
+});
+
 router.get('/:username', (req, res, next) => {
     const username = req.params.username;
 
@@ -85,11 +90,6 @@ router.get('/:username', (req, res, next) => {
         .catch((err) => {
             next(err);
         })
-});
-
-
-router.get('/profile', (req, res, next) => {
-	res.json({user: "anything"});
 });
 
 module.exports = router;
