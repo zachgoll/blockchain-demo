@@ -1,3 +1,32 @@
-<p>
-  {{ mempool[0].hash }}
-</p>
+
+  <p-carousel numVisible="1" headerText="Incoming Transactions" [value]="items">
+    <ng-template let-item pTemplate="item">
+      <div class="items carou">
+        <div class="ui-grid-row">
+          <div class="ui-grid-col-12 hash">
+            {{item.txhash}}
+          </div>
+        </div>
+        <div class="ui-grid-row">
+          <div class="ui-grid-col-3 inout">
+            <div>
+              <strong>Inputs</strong>
+            </div>
+            <div class="utxo" *ngFor="let input of item.inputs">{{input}}</div>
+          </div>
+          <div class="ui-grid-col-3 inout">
+            <div>
+              <strong>Outputs</strong>
+            </div>
+            <div class="utxo" *ngFor="let output of item.outputs">{{output}}</div>
+          </div>
+          <div class="ui-grid-col-6">
+            <button type="button" class="btn btn-sm btn-primary txButton ml-auto">Accept</button>
+            <button type="button" class="btn btn-sm btn-primary txButton mr-auto">Reject</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+
+

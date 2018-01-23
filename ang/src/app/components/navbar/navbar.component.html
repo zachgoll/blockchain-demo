@@ -30,6 +30,8 @@
             <span class="caret"></span>
           </a>
           <div ngbDropdownMenu aria-labelledby="basicdrop">
+            <h4 class="dropdown-item text-capitalize">{{ authService.currentUser.f_name }}</h4>
+            <hr>
             <button class="dropdown-item" [routerLink]="['/profile']">Profile</button>
             <button class="dropdown-item" href="#" (click)="onLogout()">Logout</button>
           </div>

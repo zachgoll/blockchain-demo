@@ -1,1 +1,72 @@
-<app-mempool></app-mempool>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-4 col-12 tx-form">
+      <div class="row">
+        <div class="col-12">
+          <form class="shadowBoxLight" (ngSubmit)="onQuestionSubmit()" #question="ngForm">
+            <h2 class="text-primary">Create Transaction</h2>
+            <hr>
+            <div class="form-group form-row">
+
+            </div>
+            <div class="form-group form-row">
+              <label for="amount" class="col-form-label">Send</label>
+              <div class="col-lg-8 col-12">
+                <input type="text" class="form-control" name="amount" placeholder="Amount...">
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <ng-template #rt let-r="result" let-t="term">
+                <img [src]="r['picture']" width="50"> {{ r.f_name }} {{ r.l_name }}
+              </ng-template>
+              <label for="typeahead-template" class="col-form-label">User Lookup:</label>
+              <div class="col-lg-6 col-12">
+                <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
+                  [inputFormatter]="formatter" />
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <label for="fee" class="col-form-label">Add Fee</label>
+              <div class="col-lg-3 col-12">
+                <input type="text" class="form-control" name="fee">
+              </div>
+              <div class="col-lg-3 col-12">
+                <button class="btn btn-outline-primary">Estimate</button>
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <label for="fee" class="col-form-label">Fund Transaction</label>
+              <div class="col-12">
+                <div class="helper-text">Drag UTXOs from UTXO set</div>
+                <div class="utxo-box" pDroppable="utxos" (onDrop)="drop($event)">
+                  <div class="utxoSelected">
+                      <div class="utxo" pDraggable="selUtxos"
+                       (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)" *ngFor="let utxo of selectedUtxos">{{utxo.value}}</div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Transaction</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-12">
+      <div class="row utxo-set">
+        <div class="col-12 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
+          <div class="box-header">UTXO Set</div>
+          <div *ngFor="let utxo of utxos" class="utxo" pDraggable="utxos"
+           (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
+            {{utxo.value}}
+          </div>
+        </div>
+      </div>
+      <div class="row mempool">
+        <div class="col-12 shadowBoxLight">
+          <app-mempool></app-mempool>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

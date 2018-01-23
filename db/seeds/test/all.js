@@ -9,6 +9,7 @@ exports.seed = function(knex, Promise) {
     knex('tx_outputs').del(),
     knex('user_profile').insert({
       username: 'zachgoll',
+      email: 'zach@chainworks.com',
       f_name: 'Zach',
       l_name: 'Gollwitzer',
       password: 'mypassword',

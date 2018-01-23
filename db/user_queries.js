@@ -27,12 +27,23 @@ function editUser(username, update) {
         .update(update);
 }
 
+function postUserQuestion(id, question) {
+    return knex('user_questions').insert({
+        user_id: id,
+        question: question
+    });
+}
 
+function getQuestionsById(id) {
+    return knex('user_questions').where('user_id', id);
+}
 
 module.exports = {
     getAllUsers: getAllUsers,
     getUserById: getUserById,
     postUser: postUser,
     getUserByUsername: getUserByUsername,
-    editUser: editUser
+    editUser: editUser,
+    postUserQuestion: postUserQuestion,
+    getQuestionsById: getQuestionsById
 }

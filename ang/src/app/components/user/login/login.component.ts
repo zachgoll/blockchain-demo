@@ -29,7 +29,16 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(user).subscribe((userObj: {success: boolean, token: string, user: {id: number, username: string}}) => {
         if (userObj.success) {
           this.authService.storeUserData(userObj.token, userObj.user);
-          this.router.navigate(['/']);
+          this.authService.getProfile().subscribe((profile: {user: {picture_url: ''}}) => {
+            if (profile.user.picture_url) {
+              this.authService.image = profile.user.picture_url;
+            }
+            this.authService.currentUser = profile.user;
+            console.log(this.authService.currentUser);
+            this.router.navigate(['/']);
+          }, (err) => {
+            console.log(err);
+          });
         } else {
           this.router.navigate(['/register']);
         }

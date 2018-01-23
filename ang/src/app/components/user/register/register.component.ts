@@ -23,6 +23,7 @@ export class RegisterComponent {
     const password = this.registerForm.value.password;
 
     const user = {
+      email: this.registerForm.value.userEmail,
       f_name: this.registerForm.value.f_name,
       l_name: this.registerForm.value.l_name,
       username: username,

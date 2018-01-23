@@ -25,6 +25,7 @@ exports.up = function(knex, Promise) {
     .then(() => {
         return knex.schema.createTable('user_profile', (table) => {
             table.increments().primary();
+            table.string('email');
             table.string('username');
             table.string('f_name');
             table.string('l_name');
@@ -32,6 +33,12 @@ exports.up = function(knex, Promise) {
             table.timestamps(true, true);
             table.string('picture_url');
             table.string('session');
+        });
+    })
+    .then(() => {
+        return knex.schema.createTable('user_questions', (table) => {
+            table.integer('user_id').references('id').inTable('user_profile');
+            table.text('question');
         });
     })
     .then(() => {
@@ -118,6 +125,9 @@ exports.down = function(knex, Promise) {
         })
         .then(() => {
             return knex.schema.dropTableIfExists('block_subscriptions')
+        })
+        .then(() => {
+            return knex.schema.dropTableIfExists('user_questions')
         })
         .then(() => {
             return knex.schema.dropTableIfExists('blockchain')

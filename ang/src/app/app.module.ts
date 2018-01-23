@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule, CanDeactivate } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileSelectDirective } from 'ng2-file-upload';
+import { Ng2CarouselamosModule } from 'ng2-carouselamos';
+import { CarouselModule } from 'primeng/carousel';
+import {DragDropModule} from 'primeng/dragdrop';
 
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/user/register/register.component';
@@ -21,11 +24,9 @@ import { MempoolComponent } from './components/blockchain-demo/create-tx/mempool
 import { BlockchainComponent } from './components/blockchain-demo/blockchain/blockchain.component';
 import { CreateBlockComponent } from './components/blockchain-demo/create-block/create-block.component';
 import { IncomingBlocksComponent } from './components/blockchain-demo/create-block/incoming-blocks/incoming-blocks.component';
-import { UtxoSetComponent } from './components/blockchain-demo/create-tx/utxo/utxo-set/utxo-set.component';
 import { NavbarSecondaryComponent } from './components/blockchain-demo/navbar-secondary/navbar-secondary.component';
 import { BlockHeaderComponent } from './components/blockchain-demo/blockchain/block-header/block-header.component';
 import { BlockTxsComponent } from './components/blockchain-demo/blockchain/block-txs/block-txs.component';
-import { TxFormComponent } from './components/blockchain-demo/create-tx/tx-form/tx-form.component';
 import { BlockFormComponent } from './components/blockchain-demo/create-block/block-form/block-form.component';
 import { BlockchainDemoComponent } from './components/blockchain-demo/blockchain-demo.component';
 import { HomeComponent } from './components/home/home.component';
@@ -33,6 +34,7 @@ import { CertificationComponent } from './components/certification/certification
 import { PresentationResourcesComponent } from './components/presentation-resources/presentation-resources.component';
 import { WalletGeneratorComponent } from './components/presentation-resources/wallet-generator/wallet-generator.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { QueryService } from './services/query.service';
 
 /**
  * All child routes protected if canActivate present on parent
@@ -43,7 +45,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent },
-  { path: 'blockchain-demo', canActivate: [AuthGuardService], component: BlockchainDemoComponent, children: [
+  { path: 'blockchain-demo', /*canActivate: [AuthGuardService],*/ component: BlockchainDemoComponent, children: [
     { path: 'create-tx', component: CreateTxComponent, canDeactivate: [CanDeactivateGuard] },
     { path: 'create-block', component: CreateBlockComponent },
     { path: 'blockchain', component: BlockchainComponent }
@@ -71,11 +73,9 @@ const appRoutes: Routes = [
     BlockchainComponent,
     CreateBlockComponent,
     IncomingBlocksComponent,
-    UtxoSetComponent,
     NavbarSecondaryComponent,
     BlockHeaderComponent,
     BlockTxsComponent,
-    TxFormComponent,
     BlockFormComponent,
     BlockchainDemoComponent,
     HomeComponent,
@@ -92,9 +92,12 @@ const appRoutes: Routes = [
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {useHash: true}),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    Ng2CarouselamosModule,
+    CarouselModule,
+    DragDropModule
   ],
-  providers: [AuthService, AuthGuardService, CanDeactivateGuard],
+  providers: [AuthService, AuthGuardService, CanDeactivateGuard, QueryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

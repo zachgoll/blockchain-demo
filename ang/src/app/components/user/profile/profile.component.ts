@@ -1,3 +1,4 @@
+import { QueryService } from './../../../services/query.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
@@ -15,18 +16,17 @@ export class ProfileComponent implements OnInit {
   fileReady = false;
   uploaded = '';
   uploadMessage = '';
+  questions: any;
   public uploader: FileUploader = new FileUploader({url: '/upload', itemAlias: 'photo'});
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private queryService: QueryService) { }
 
   ngOnInit() {
-    this.authService.getProfile().subscribe((profile: {user: {picture_url: ''}}) => {
-      this.user = profile.user;
-      if (profile.user.picture_url) {
-        this.authService.image = profile.user.picture_url;
-      }
-    }, (err) => {
-      this.user = {};
+    this.user = this.authService.currentUser;
+
+    this.queryService.getUserQuestions().subscribe((questions) => {
+      this.questions = questions;
+      console.log(questions);
     });
 
     this.uploader.onAfterAddingFile = (file) => {

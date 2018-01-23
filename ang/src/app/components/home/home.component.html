@@ -1,16 +1,66 @@
-<div class="container">
-    <br><br><br><br><br><br>
-    <div class="row text-center">
-        <div class="col-6 mr-auto ml-auto">
-            
-            <div class="display-2">Welcome</div>
-            <br>
-            <br>
-            <div class="lead">This training portal was created to help you better understand blockchain technology.</div>
-            <br>
-            <br>
-            <button type="button" class="btn btn-lg btn-primary" routerLink="/register">Register</button>
-            <button type="button" class="btn btn-lg btn-info" routerLink="/login">Login</button>
-        </div>
+<div *ngIf="authService.loggedIn()" class="container">
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-12 col-lg-6 mr-auto ml-auto">
+      <div class="display-4 text-capitalize">Welcome {{ authService.currentUser.f_name }}!</div>
+      <br>
+      <br>
+      <div class="lead">Chainworks thanks you for your attendance and willingness to learn more about Blockchain technology. This site will
+        be your companion throughout the training session. On each page, there are tips indicated by the
+        <i class="fa fa-question" aria-hidden="true"></i> icon. There are many confusing concepts when talking about blockchain, and we want a painless experience for
+        all our trainees! If you have a question at any point in the training, you can submit it on the "Submit Question"
+        tab, and we will be sure to get to it at some point during or after the presentation! Enjoy!
+      </div>
+      <br>
+      <button type="button" class="btn btn-lg btn-primary" routerLink="/register">Go to the Demos</button>
+      <button type="button" class="btn btn-lg btn-primary" routerLink="/register">Take a Short Tour</button>
+      <br>
+      <br>
     </div>
+    <div class="col-12 col-lg-6">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-10 ml-auto">
+            <form class="shadowBox" (ngSubmit)="onQuestionSubmit()" #question="ngForm">
+              <h2 class="text-primary">Ask a Question</h2>
+              <hr>
+              <div class="form-group">
+                <textarea type="text" class="form-control" name="question" placeholder="Enter your question here..." ngModel></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Question</button>
+              <div *ngIf="questionSuccess" class="form-group">
+                <br>
+                <p class="text-success">Your question has been submitted!</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+    </div>
+  </div>
+</div>
+<div *ngIf="!authService.loggedIn()" class="container">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="row text-center">
+    <div class="col-6 mr-auto ml-auto">
+
+      <div class="display-2 text-primary">Welcome</div>
+      <br>
+      <br>
+      <div class="lead">This training portal was created to help you better understand blockchain technology.</div>
+      <br>
+      <br>
+      <button type="button" class="btn btn-lg btn-primary" routerLink="/register">Register</button>
+      <button type="button" class="btn btn-lg btn-info" routerLink="/login">Login</button>
+    </div>
+  </div>
 </div>

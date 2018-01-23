@@ -45,4 +45,28 @@ router.get('/users/:id', (req, res, next) => {
         });
 });
 
+router.post('/:id/question', (req, res, next) => {
+    const id = req.params.id;
+
+    queries.postUserQuestion(id, req.body.question)
+        .then((user) => {
+            res.status(200).json(user);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.get('/:id/questions', (req, res, next) => {
+    const id = req.params.id;
+    
+    queries.getQuestionsById(id)
+        .then((questions) => {
+            res.status(200).json(questions);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
 module.exports = router;

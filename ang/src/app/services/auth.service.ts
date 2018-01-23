@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { tokenNotExpired } from 'angular2-jwt';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService {
 
   authToken: any;
   user: any;
+  currentUser: any;
   image = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   registerUser(user){
     const headers = new HttpHeaders({'Content-type': 'application/json'});
@@ -71,6 +73,8 @@ export class AuthService {
     this.authToken = null;
     this.user = null;
     localStorage.clear();
+    this.router.navigate(['/']);
+    this.image = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
   }
 
 }
