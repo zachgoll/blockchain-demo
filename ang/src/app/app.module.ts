@@ -24,7 +24,6 @@ import { MempoolComponent } from './components/blockchain-demo/create-tx/mempool
 import { BlockchainComponent } from './components/blockchain-demo/blockchain/blockchain.component';
 import { CreateBlockComponent } from './components/blockchain-demo/create-block/create-block.component';
 import { IncomingBlocksComponent } from './components/blockchain-demo/create-block/incoming-blocks/incoming-blocks.component';
-import { NavbarSecondaryComponent } from './components/blockchain-demo/navbar-secondary/navbar-secondary.component';
 import { BlockHeaderComponent } from './components/blockchain-demo/blockchain/block-header/block-header.component';
 import { BlockTxsComponent } from './components/blockchain-demo/blockchain/block-txs/block-txs.component';
 import { BlockFormComponent } from './components/blockchain-demo/create-block/block-form/block-form.component';
@@ -51,7 +50,7 @@ const appRoutes: Routes = [
     { path: 'blockchain', component: BlockchainComponent }
   ]},
   { path: 'certification', canActivate: [AuthGuardService], component: CertificationComponent },
-  { path: 'presentation-resources', canActivate: [AuthGuardService], component: PresentationResourcesComponent, children: [
+  { path: 'presentation-resources', /*canActivate: [AuthGuardService],*/ component: PresentationResourcesComponent, children: [
     { path: 'hash-demo', component: HashDemoComponent },
     { path: 'pow-demo', component: PowDemoComponent },
     { path: 'wallet-generator', component: WalletGeneratorComponent }
@@ -73,7 +72,6 @@ const appRoutes: Routes = [
     BlockchainComponent,
     CreateBlockComponent,
     IncomingBlocksComponent,
-    NavbarSecondaryComponent,
     BlockHeaderComponent,
     BlockTxsComponent,
     BlockFormComponent,

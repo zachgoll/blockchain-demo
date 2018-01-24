@@ -2,21 +2,6 @@
     border-radius: 0px;
 }
 
-.hash {
-  background : #eeedf7;
-  border: solid rgba(49,42,68,.1) 0.5px;
-  border-radius : 7px;
-  -moz-border-radius : 7px;
-  -webkit-border-radius : 7px;
-  font-size: 0.8rem;
-  font-family: roboto-mono;
-  letter-spacing: 1.25px;
-  text-align: center;
-  margin: 15px auto;
-  max-width: 560px;
-  word-wrap: break-word;
-}
-
 .utxo {
     font-size: 0.7rem;
     border: solid black 1px;

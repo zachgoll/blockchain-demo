@@ -1,0 +1,24 @@
+.block {
+    width: 600px;
+    margin: 20px 40px 20px 40px;
+    display: inline-block;
+}
+
+.block2 {
+    width: 40px;
+    margin: 20px 40px 20px 40px;
+    display: inline-block;
+}
+
+.blockchain {
+    overflow: scroll;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.sel-tx-container {
+    padding: 20px;
+    border: dashed rgba(49,42,68,1) 1px;
+}
+

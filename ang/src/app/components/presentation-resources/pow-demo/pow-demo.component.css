@@ -1,0 +1,22 @@
+.nonce {
+    height: 200px;
+    width: 200px;
+}
+
+.noncetext {
+    line-height: 40px;
+    font-family: monospace;
+    font-size: 5.5rem;
+    margin-top: 40px;
+}
+
+.txt {
+    line-height: 40px;
+    font-family: monospace;
+    font-size: large;
+    overflow: scroll;
+}
+
+.lg {
+    font-size: 2.0rem;
+}

@@ -1,3 +1,37 @@
-<p>
-  hash-demo works!
-</p>
+<div class="container">
+  <br>
+  <div class="row text-center">
+    <div class="col-12 col-lg-8 mr-auto ml-auto">
+      <h2>Hash Demo</h2>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+      <div class="col-12 col-lg-8 mr-auto ml-auto shadowBoxLight">
+          <form (ngSubmit)="onFormSubmit()" #hashform="ngForm">
+              <div class="form-group">
+                  <textarea style="min-height: 100px;" type="text" class="form-control" name="rawdata" placeholder="Enter some text here..." ngModel></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Hash Text</button>
+            </form>
+      </div>
+  </div>
+  <br>
+  <br>
+  <div *ngIf="hashedData" class="row text-center">
+    <div class="col-12 col-lg-8 mr-auto ml-auto shadow-box">
+      <div class="txt">{{ hashedData }}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-8 mr-auto ml-auto">
+      <div class="row text-center">
+        <div class="col-12 col-md-4 h2">Deterministic</div>
+        <div class="col-12 col-md-4 h2">Irreversible</div>
+        <div class="col-12 col-md-4 h2">Constant Size</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

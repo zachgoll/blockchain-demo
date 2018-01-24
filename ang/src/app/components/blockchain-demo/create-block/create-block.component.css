@@ -1,0 +1,72 @@
+.carou {
+    border-radius: 0px;
+}
+
+.utxoSelected {
+    line-height: 60px;
+    margin-left: 10px;
+}
+
+.txButton {
+    margin-top:15px;
+}
+
+.utxo-box {
+    border: dashed rgba(49,42,68,.1) 4px;
+    background: #eeedf7;
+    margin-top: 10px;
+    min-height: 60px;
+    width: 100%;
+}
+
+
+.in-btn1 {
+    margin: -5px 0px 10px 10px;
+    color: white;
+}
+
+.in-btn2 {
+    margin: -5px 0px 1px 10px;
+    color: white;
+}
+
+.drag-container {
+    
+    border: dashed rgba(49,42,68,1) 4px;
+    padding: 20px;
+    min-height: 100px;
+}
+
+.drag-container:hover {
+    border: dashed rgba(49,42,68,1) 5px;
+    cursor: grab;
+}
+
+.utxo {
+    font-size: 0.7rem;
+    border: solid black 1px;
+    border-radius: 50%;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    margin: 5px;
+}
+
+.inout {
+    margin-bottom: 20px;
+}
+
+.sel-tx-container {
+    padding: 20px;
+}
+
+.sel-tx-container:hover {
+    border: dashed rgba(49,42,68,1) 4px;
+    cursor: grab;
+}
+
+.sel-coinbase-container {
+    padding: 20px;
+}

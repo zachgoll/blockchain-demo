@@ -3,6 +3,7 @@
     <ng-template let-item pTemplate="item">
       <div class="items carou">
         <div class="ui-grid-row">
+          <h6>Tx Hash</h6> 
           <div class="ui-grid-col-12 hash">
             {{item.txhash}}
           </div>
@@ -10,13 +11,13 @@
         <div class="ui-grid-row">
           <div class="ui-grid-col-3 inout">
             <div>
-              <strong>Inputs</strong>
+              <h6>Inputs</h6>
             </div>
             <div class="utxo" *ngFor="let input of item.inputs">{{input}}</div>
           </div>
           <div class="ui-grid-col-3 inout">
             <div>
-              <strong>Outputs</strong>
+              <h6>Outputs</h6>
             </div>
             <div class="utxo" *ngFor="let output of item.outputs">{{output}}</div>
           </div>

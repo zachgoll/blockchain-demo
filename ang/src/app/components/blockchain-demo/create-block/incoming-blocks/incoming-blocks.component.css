@@ -1,0 +1,12 @@
+.blockButton {
+    margin-top:-5px;
+}
+
+.items {
+    max-height: 200px;
+    overflow: auto;
+}
+
+.hash-gold {
+    background: #fcc200;
+}

@@ -19,3 +19,13 @@
     height: 50px;
     width: 50px;
 }
+
+.dd:hover {
+  cursor: pointer;
+}
+
+navli:hover {
+  cursor: default;
+  background-color: transparent;
+  background: none;
+}

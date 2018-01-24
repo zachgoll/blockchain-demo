@@ -14,8 +14,82 @@
   padding: 20px;
 }
 
+.shadowBoxDark {
+  -webkit-box-shadow: 2px 2px 15px 2px #312a44;
+  -moz-box-shadow: 2px 2px 15px 2px #312a44;
+  box-shadow: 2px 2px 15px 2px #312a44;
+  border: none;
+  border-color: transparent;
+  padding: 20px;
+}
+
 .display-1.display-2.display-3.display-4 {
   color: #312a44; 
 }
 
+.helper-text {
+  font-size: large;
+  font-family: monospace;
 
+}
+
+.hash {
+  background : #eeedf7;
+  border: solid rgba(49,42,68,.1) 0.5px;
+  border-radius : 7px;
+  -moz-border-radius : 7px;
+  -webkit-border-radius : 7px;
+  font-size: 0.8rem;
+  font-family: roboto-mono;
+  letter-spacing: 1.25px;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 15px;
+  max-width: 580px;
+  overflow: scroll;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.hash-inverse {
+  background: rgb(49,42,68);
+  color: white;
+  border: solid rgba(49,42,68,.1) 0.5px;
+}
+
+.hash-no-margin {
+  margin-bottom: 0px;
+}
+
+.hash-margin-top {
+  margin-top: 20px;
+}
+
+.hash-no-overflow {
+  display: inline-block;
+  overflow: visible;
+}
+
+.utxo {
+    font-size: 0.7rem;
+    border: solid black 1px;
+    border-radius: 50%;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    margin: 5px;
+}
+
+.mempool {
+  margin: 20px 0 40px 0;
+}
+
+.utxo-set {
+  margin: 0px 0 20px 0;
+}
+
+.tx-form {
+  margin-bottom: 40px;
+}

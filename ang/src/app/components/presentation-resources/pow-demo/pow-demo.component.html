@@ -1,3 +1,35 @@
-<p>
-  pow-demo works!
-</p>
+<div class="container">
+  <br>
+  <h1 class="text-center">Proof of Work Demo</h1>
+  <br>
+  <div class="row">
+    <div class="col-12 shadowBoxLight">
+      <form (ngSubmit)="mine()" #powForm="ngForm">
+        <div class="form-group">
+          <textarea style="min-height: 100px;" type="text" class="form-control" name="rawdata" placeholder="Enter some text here..."
+            ngModel></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Mine</button>
+      </form>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row  shadowBoxLight">
+    <div class="col-8">
+      <h4>Target</h4>
+      <div class="txt">
+        <span [ngClass]="{'text-success lg': finished, 'text-danger': !finished}">{{ difficulty[0].substring(0, 4) }}</span><span>{{ difficulty[0].substring(4) }}</span>
+      </div>
+      <br>
+      <h4>Solution</h4>
+      <div class="txt">
+        <span [ngClass]="{'text-success lg': finished, 'text-danger': !finished}">{{ solution.substring(0, 4) }}</span><span>{{ solution.substring(4) }}</span>
+      </div>
+    </div>
+    <div class="col-4 text-center">
+      <h4>Nonce</h4>
+      <div class="noncetext">{{ nonce }}</div>
+    </div>
+  </div>
+</div>

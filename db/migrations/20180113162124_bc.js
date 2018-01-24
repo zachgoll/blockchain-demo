@@ -20,6 +20,7 @@ exports.up = function(knex, Promise) {
             table.increments().primary();
             table.string('tx_hash');
             table.float('fee');
+            table.boolean('coinbase').defaultTo(false);
         });
     })
     .then(() => {
