@@ -4,6 +4,7 @@ import { Tx } from '../../tx.model';
 import { UtxoRaw } from '../../utxo-raw.model';
 import { QueryService } from '../../../../services/query.service';
 
+
 @Component({
   selector: 'app-mempool',
   templateUrl: './mempool.component.html',
@@ -22,19 +23,23 @@ export class MempoolComponent implements OnInit {
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
     this.loadTxs();
+    setInterval(() => {
+      this.loadTxs();
+    }, 5000);
   }
 
   loadTxs() {
-    this.txs = [];
     this.query.getIncomingTxs(this.user.id).subscribe((data) => {
       data.forEach((element) => {
-        this.query.getInputs(element.id).subscribe((inputs) => {
-          element.inputs = inputs;
-          this.query.getOutputs(element.id).subscribe((outputs) => {
-            element.outputs = outputs;
-            this.txs.push(element);
+        if (this.txs.findIndex(el => el.id === element.id) === -1) {
+          this.query.getInputs(element.id).subscribe((inputs) => {
+            element.inputs = inputs;
+            this.query.getOutputs(element.id).subscribe((outputs) => {
+              element.outputs = outputs;
+              this.txs.push(element);
+            });
           });
-        });
+        }
       });
       this.txSubscribed.emit();
     });

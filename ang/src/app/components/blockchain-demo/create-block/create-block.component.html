@@ -3,7 +3,7 @@
     <div class="col-12">
         <ngb-alert class="helper-text" *ngIf="coinbaseAlert" type="warning" [dismissible]="false">Please add a Coinbase Transaction before mining the block!</ngb-alert>
         <ngb-alert class="helper-text" *ngIf="blockAlert" type="warning" [dismissible]="false">You must either accept or reject all incoming blocks first!</ngb-alert>
-        <ngb-alert class="helper-text" *ngIf="broadcastAlert" type="success" [dismissible]="false">Congrats!  You have won the competition and mined the block.</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="broadcastAlert" type="success" [dismissible]="false">Congrats!  You have won the competition and mined the block.  You have received the block reward for this round!</ngb-alert>
         <ngb-alert class="helper-text" *ngIf="blockLoser" type="danger" [dismissible]="false">Sorry!  Another miner has found this block solution already.  Please accept or reject incoming blocks and start mining the next block.</ngb-alert>
     </div>
   </div>
@@ -43,7 +43,7 @@
             <hr>
             <h4 class="d-inline">Block Transactions</h4>
             <button *ngIf="!coinbaseAdded" class="btn btn-sm btn-warning in-btn2 d-inline" (click)="createCoinbase()">Add Coinbase Transaction</button>
-            <button *ngIf="coinbaseAdded" class="btn btn-sm btn-danger in-btn2 d-inline" (click)="removeCoinbase()">Remove Coinbase Transaction</button>
+            <button *ngIf="coinbaseAdded && !mining" class="btn btn-sm btn-danger in-btn2 d-inline" (click)="removeCoinbase()">Remove Coinbase Transaction</button>
             <hr>
             <div class="utxo-box" pDroppable="txs" (onDrop)="drop($event)">
               <div *ngIf="selectedTxs.length === 0 && !coinbaseAdded" class="helper-text text-center utxoSelected">Drag Transactions here</div>

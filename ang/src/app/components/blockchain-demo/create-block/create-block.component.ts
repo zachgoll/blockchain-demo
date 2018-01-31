@@ -108,6 +108,7 @@ export class CreateBlockComponent implements OnInit {
 
   onBlockSub() {
     this.loadTxs();
+    this.blockHeight++;
     this.resetBlock();
     this.getUserBlockchain();
   }
@@ -142,40 +143,52 @@ export class CreateBlockComponent implements OnInit {
     num_txs: this.numberTxsInBlock
   };
 
-  this.query.postBlock(block).subscribe((blk) => {
-    this.broadcastAlert = true;
-    setTimeout(() => {
-      this.broadcastAlert = false;
-    }, 2000);
+  // Check to make sure that current user won the mining race
+  this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
+    if (blocks.length === 0) {
+      this.query.postBlock(block).subscribe((blk) => {
+        this.broadcastAlert = true;
+        setTimeout(() => {
+          this.broadcastAlert = false;
+        }, 8000);
 
-    const coinbaseToSubmit: TxSubmit = {
-      from: this.user.id,
-      tx: {
-        tx_hash: '',
-        fee: 0,
-        coinbase: true
-      },
-      inputs: [],
-      outputs: this.coinbase.outputs
-    };
+        const coinbaseToSubmit: TxSubmit = {
+          from: this.user.id,
+          tx: {
+            tx_hash: '',
+            fee: 0,
+            coinbase: true
+          },
+          inputs: [],
+          outputs: this.coinbase.outputs
+        };
 
-    this.selectedTxs.forEach((tx) => {
-      this.query.unsubscribeTx(tx.id).subscribe();
-      this.query.addTxToBlock(tx.id, blk.id).subscribe();
-    });
+        this.selectedTxs.forEach((tx) => {
+          this.query.unsubscribeTx(tx.id).subscribe();
+          this.query.addTxToBlock(tx.id, blk.id).subscribe();
+        });
 
-    this.query.postTx(coinbaseToSubmit).subscribe((coinbase_tx) => {
-      this.query.unsubscribeTx(coinbase_tx.id).subscribe();
-      this.query.addTxToBlock(coinbase_tx.id, blk.id).subscribe();
-    });
+        this.query.postTx(coinbaseToSubmit).subscribe((coinbase_tx) => {
+          this.query.unsubscribeTx(coinbase_tx.id).subscribe();
+          this.query.addTxToBlock(coinbase_tx.id, blk.id).subscribe();
+        });
 
-    this.resetBlock();
+        this.resetBlock();
+        this.mem.loadBlocks();
 
-    this.query.subscribeBlock(blk.id).subscribe(() => {
-      this.getUserBlockchain();
-    });
+        this.query.subscribeBlock(blk.id).subscribe(() => {
+          this.getUserBlockchain();
+        });
 
-    this.loadTxs();
+        this.loadTxs();
+      });
+    } else {
+      this.blockLoser = true;
+      setTimeout(() => {
+        this.blockLoser = false;
+      }, 8000);
+      this.mem.loadBlocks();
+    }
   });
  }
 
@@ -251,9 +264,8 @@ export class CreateBlockComponent implements OnInit {
             this.blockLoser = true;
             setTimeout(() => {
               this.blockLoser = false;
-            }, 3000);
+            }, 8000);
             this.mining = false;
-            this.resetBlock();
             this.mem.loadBlocks();
           }
         });
