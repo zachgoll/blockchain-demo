@@ -1,8 +1,18 @@
+import { AuthService } from './../../../services/auth.service';
 import { CanComponentDeactivate } from './../../../services/can-deactivate-service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
+import { QueryService } from '../../../services/query.service';
+import { Utxo } from '../utxo.model';
+import { Tx } from '../tx.model';
+import { NgForm } from '@angular/forms';
+import { TxSubmit } from '../tx-submit.model';
+
+declare var Web3: any;
+
+const web3 = new Web3();
 
 @Component({
   selector: 'app-create-tx',
@@ -11,33 +21,96 @@ import 'rxjs/add/operator/map';
 })
 export class CreateTxComponent implements OnInit, CanComponentDeactivate {
 
+  constructor(private authService: AuthService, private query: QueryService) { }
+
   changes = true;
 
-  constructor() { }
+  @ViewChild('txform') txForm: NgForm;
 
-  utxos = [
-    {value: 22.3, user_id: 1},
-    {value: 21.3, user_id: 2},
-    {value: 25.3, user_id: 3},
-  ];
-
-  txUtxos = [];
-
-  selectedUtxos: {value: number, user_id: number}[] = [];
-
-  draggedUtxo: any;
-
-  usersWithPics = [
-    {'f_name': 'Zach', 
-    'l_name': 'Gollwitzer', 
-    'name': 'Zach', 
-    'picture': 'http://gozips.com/images/2017/5/17/31x6rygaeo4it3vj.jpg?width=300'}
-  ];
+  utxo: Utxo;
+  draggedUtxo: Utxo;
+  utxos: Utxo[] = [];
+  txUtxos: Utxo[] = [];
+  selectedUtxos: Utxo[] = [];
+  user: any;
+  usersWithPics: {username: string, id: number, picture_url: string}[] = [];
 
   public model: any;
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
     this.selectedUtxos = [];
+    this.updateUtxos();
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.authService.loadUserProfiles().subscribe((users) => {
+      this.usersWithPics = users;
+    });
+  }
+
+  onTxSubmit() {
+
+    const sendAmount = +this.txForm.value.amount;
+    const currentUserId = this.user.id;
+    const fee = +this.txForm.value.fee;
+    let totalInputs = 0;
+
+    for (let i = 0; i < this.selectedUtxos.length; i++) {
+      totalInputs = totalInputs + this.selectedUtxos[i].value;
+    }
+
+    const txToSubmit: TxSubmit = {
+      from: currentUserId,
+      tx: {
+        tx_hash: '',
+        fee: fee
+      },
+      inputs: this.selectedUtxos,
+      outputs: [{
+        value: sendAmount,
+        to: this.txForm.value.selectedUser.id
+      },
+      {
+        value: totalInputs - (sendAmount + fee),
+        to: currentUserId
+      }]
+    };
+
+    console.log(txToSubmit);
+    this.query.postTx(txToSubmit).subscribe((tx) => {
+      // Reload UTXOs, reset form, reset selected UTXOs
+      this.updateUtxos();
+      this.txForm.reset();
+      this.selectedUtxos = [];
+    }, (err) => {
+      console.log(err);
+    });
+
+  }
+
+  /**
+   * Fee is estimated based on the number of UTXO inputs
+   */
+  estimateFee() {
+    let fee = 0;
+    this.selectedUtxos.forEach(() => fee += 0.2 );
+    this.txForm.form.patchValue({
+      fee: fee
+    });
+  }
+
+  onTxSub(eventData: Event) {
+    console.log('Bethany sent me money');
+    this.updateUtxos();
+  }
+
+  updateUtxos() {
+    console.log('updating utxos...');
+    this.query.getUtxos(this.user.id).subscribe((utxos) => {
+      this.utxos = utxos;
+    });
   }
 
 /**
@@ -66,7 +139,7 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   findIndex(utxo) {
       let index = -1;
       for (let i = 0; i < this.utxos.length; i++) {
-          if (utxo.user_id === this.utxos[i].user_id) {
+          if (utxo.id === this.utxos[i].id) {
               index = i;
               break;
           }
@@ -86,7 +159,7 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   findIndexSel(utxo) {
     let index = -1;
     for (let i = 0; i < this.selectedUtxos.length; i++) {
-        if (utxo.user_id === this.selectedUtxos[i].user_id) {
+        if (utxo.id === this.selectedUtxos[i].id) {
             index = i;
             break;
         }
@@ -104,12 +177,12 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   text$
     .debounceTime(200)
     .map(term => term === '' ? []
-      : this.usersWithPics.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
-  
-  formatter = (x: {name: string}) => x.name;
-  
+      : this.usersWithPics.filter(v => v.username.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+
+  formatter = (x: {username: string}) => x.username;
+
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if(!this.changes){
+    if (!this.changes) {
       return true;
     } else {
       return confirm('Are you sure you want to navigate away?  All changes will be lost!');

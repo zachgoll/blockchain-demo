@@ -39,7 +39,7 @@ function checkFileType(file, callback){
 // Initialize upload variable
 const upload = multer({
     storage: storage,
-    limits: {fileSize: 1000000},
+    limits: {fileSize: 5000000},
     fileFilter: function(req, file, callback){
         checkFileType(file, callback);
     }
@@ -77,7 +77,7 @@ app.post('/upload', (req, res, next) => {
         if(err) {
             return res.status(422).json({
                 success: false, 
-                msg: "Images less than 1 MB only!"
+                msg: "Images less than 5 MB only!"
             });
         }
         path = req.file.path;

@@ -10,7 +10,9 @@
           <div class="shadowBoxLight" pDroppable="txs" (onDrop)="drop($event)">
             <h2 *ngIf="blockHeight > 0" class="text-primary d-inline">Create Block #{{ blockHeight }}</h2>
             <h2 *ngIf="blockHeight === 0" class="text-primary d-inline">Create Genesis Block</h2>
-            <button class="btn btn-warning btn-sm in-btn1 d-inline" (click)="mine()">Mine Block</button>
+            <button *ngIf="!finished" class="btn btn-warning btn-sm in-btn1 d-inline" (click)="mine()">Mine Block</button>
+            <button *ngIf="finished" class="btn btn-warning btn-sm in-btn1 d-inline pulse-button" (click)="broadcast()">Broadcast Block</button>
+            <h4 *ngIf="coinbaseAlert" class="helper-text">Please add a Coinbase Transaction before mining the block!</h4>
             <div class="hash hash-no-margin">{{ blockHash }}</div>
             <hr>
             <h4>Block Header</h4>
@@ -19,14 +21,14 @@
             <div *ngIf="blockHeight === 0" class="hash">0x0000000000000000000000000000000000000000000000000000000000000000</div>
             <div *ngIf="blockHeight > 0" class="hash">{{ prevBlockHash }}</div>
             <h6>Merkle Root</h6>
-            <div class="hash">{{ merkleRoot }}</div>
+            <div class="hash hash-highlight" [ngClass]="{'hash-highlight': merkleHighlight }">{{ merkleRoot }}</div>
             <div>
               <h6 class="d-inline">Timestamp</h6>
               <div class="hash hash-no-overflow">{{ timestamp }}</div>
             </div>
             <div>
               <h6 class="d-inline">Nonce</h6>
-              <div class="hash hash-no-overflow">{{ nonce }}</div>
+              <div class="hash hash-no-overflow" [ngClass]="{'nonce': mining, 'nonce-finished': finished}">{{ nonce }}</div>
             </div>
             <div>
               <h6 class="d-inline">Number of Transactions in Block</h6>
@@ -35,6 +37,7 @@
             <hr>
             <h4 class="d-inline">Block Transactions</h4>
             <button *ngIf="!coinbaseAdded" class="btn btn-sm btn-warning in-btn2 d-inline" (click)="createCoinbase()">Add Coinbase Transaction</button>
+            <button *ngIf="coinbaseAdded" class="btn btn-sm btn-danger in-btn2 d-inline" (click)="removeCoinbase()">Remove Coinbase Transaction</button>
             <hr>
             <div class="utxo-box" pDroppable="txs" (onDrop)="drop($event)">
               <div *ngIf="selectedTxs.length === 0 && !coinbaseAdded" class="helper-text text-center utxoSelected">Drag Transactions here</div>
@@ -42,7 +45,7 @@
                 <h4>Coinbase Transaction</h4>
                 <hr>
                 <h6>Transaction Hash</h6>
-                <div class="hash hash-inverse">{{coinbase.hash}}</div>
+                <div class="hash hash-inverse">{{coinbase.tx_hash}}</div>
                 <div>
                   <h6 class="d-inline">
                     Transaction Outputs
@@ -50,23 +53,23 @@
                   </h6>
                 </div>
               </div>
-              <div class="sel-tx-container" pDraggable="selTxs" (onDragStart)="dragStart($event, tx)" (onDragEnd)="dragEnd($event)" *ngFor="let tx of selectedTxs; let i = index;">
+              <div *ngFor="let selTx of selectedTxs; let i = index;" class="sel-tx-container" pDraggable="selTxs" (onDragStart)="dragStart($event, selTx)" (onDragEnd)="dragEnd($event)">
                 <h4>Transaction #{{ i + 1 }}</h4>
-                <h4 *ngIf="tx.coinbase === true">Coinbase Transaction</h4>
+                <h4 *ngIf="selTx.coinbase === true">Coinbase Transaction</h4>
                 <hr>
                 <h6>Transaction Hash</h6>
-                <div class="hash hash-inverse">{{tx.hash}}</div>
+                <div class="hash hash-inverse">{{selTx.tx_hash}}</div>
                 <div>
                   <h6 class="d-inline">
                     Transaction Inputs
-                    <div class="utxo" *ngFor="let input of tx.inputs">{{ input }}</div>
+                    <div class="utxo" *ngFor="let input of selTx.inputs">{{ input.value.toFixed(1) }}</div>
                   </h6>
                 </div>
 
                 <div>
                   <h6 class="d-inline">
                     Transaction Outputs
-                    <div class="utxo" *ngFor="let output of tx.outputs">{{ output }}</div>
+                    <div class="utxo" *ngFor="let output of selTx.outputs">{{ output.value.toFixed(1) }}</div>
                   </h6>
                 </div>
 
@@ -78,53 +81,50 @@
     </div>
 
     <div class="col-lg-6 col-12">
-      
-      <!--==================================
-      Incoming Blocks
-      ====================================-->
-      
-      <div class="row incoming-blocks">
-        <div class="col-12 shadowBoxLight">
-            <app-incoming-blocks></app-incoming-blocks>
-        </div>
-      </div>
 
       <!--==================================
           Mempool
       ======================================-->
 
-      <div class="row mempool">
-        <div class="col-12 shadowBoxLight" pDroppable="selTxs" (onDrop)="dropSel($event)">
-            <div *ngIf="items.length === 0" class="helper-text">There are no more transactions in your Mempool!</div>
-          <p-carousel numVisible="1" headerText="Mempool" [value]="items">
-            <ng-template let-item pTemplate="item">
-              <div class="items drag-container" pDroppable="selTxs" (onDrop)="dropSel($event)" pDraggable="txs" (onDragStart)="dragStart($event, item)"
-                (onDragEnd)="dragEnd($event)">
-                <div class="ui-grid-row">
-                  <div class="ui-grid-col-12">
-                    <h6>Tx Hash</h6>
-                    <div class="hash">{{item.hash}}</div>
-                  </div>
-                </div>
-                <div class="ui-grid-row">
-                  <div class="ui-grid-col-3 inout">
-                    <div>
-                      <h6>Inputs</h6>
-                    </div>
-                    <div class="utxo" *ngFor="let input of item.inputs">{{input}}</div>
-                  </div>
-                  <div class="ui-grid-col-3 inout">
-                    <div>
-                      <h6>Outputs</h6>
-                    </div>
-                    <div class="utxo" *ngFor="let output of item.outputs">{{output}}</div>
-                  </div>
-                  <div class="ui-grid-col-6">
-                  </div>
-                </div>
+      <div class="row">
+        <div class="col-12 shadowBoxLight blockpool" pDroppable="selTxs" (onDrop)="dropSel($event)">
+          <div *ngIf="txs.length === 0" class="helper-text">There are no more transactions in your Mempool!</div>
+          <h4>Mempool</h4>  
+          <div class="items drag-container" *ngFor="let tx of txs" pDroppable="selTxs" (onDrop)="dropSel($event)" pDraggable="txs" (onDragStart)="dragStart($event, tx)"
+            (onDragEnd)="dragEnd($event)">
+            <div class="row">
+              <div class="col-12">
+                <h6>Tx Hash</h6>
+                <div class="hash">{{tx.tx_hash}}</div>
               </div>
-            </ng-template>
-          </p-carousel>
+            </div>
+            <div class="row">
+              <div class="col-3 inout">
+                <div>
+                  <h6>Inputs</h6>
+                </div>
+                <div class="utxo" *ngFor="let input of tx.inputs">{{ input.value.toFixed(1) }}</div>
+              </div>
+              <div class="col-3 inout">
+                <div>
+                  <h6>Outputs</h6>
+                </div>
+                <div class="utxo" *ngFor="let output of tx.outputs">{{ output.value.toFixed(1) }}</div>
+              </div>
+              <div class="col-6">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--==================================
+      Incoming Blocks
+      ====================================-->
+      
+      <div class="row incoming-blocks">
+        <div class="col-12 shadowBoxLight mempool">
+            <app-incoming-blocks (blockSubscribed)="onBlockSub()"></app-incoming-blocks>
         </div>
       </div>
     </div>

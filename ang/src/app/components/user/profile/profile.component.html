@@ -17,7 +17,7 @@
       <p *ngIf="!fileReady && uploadMessage != ''">{{ uploadMessage }}</p>
       <div class="card">
         <div class="pic card-img-top" (mouseover)="changeStyle($event)" (mouseout)="changeStyle($event)">
-          <img class="img-fluid" src="{{authService.image}}">
+          <img class="img-fluid" src="{{ user.picture_url }}">
           <div class="overlay"></div>
           <div class="info" [ngClass]="display">
             <input *ngIf="!uploader.isReady && !uploader.isUploading && !uploader.isSuccess && !fileReady" type="file" name="photo" ng2FileSelect
@@ -25,15 +25,15 @@
           </div>
         </div>
         <div class="card-body">
-          <h5 class="card-title text-capitalize">{{ authService.currentUser.f_name }}'s Profile</h5>
+          <h5 class="card-title text-capitalize">{{ user.f_name }}'s Profile</h5>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            <strong>Email: </strong>{{ authService.currentUser.email }}</li>
+            <strong>Email: </strong>{{ user.email }}</li>
           <li class="list-group-item">
-            <strong>Username: </strong>{{ authService.currentUser.username }}</li>
+            <strong>Username: </strong>{{ user.username }}</li>
           <li class="list-group-item">
-            <strong>Session Id: </strong>{{ authService.currentUser.session }}</li>
+            <strong>Session Id: </strong>{{ user.session }}</li>
         </ul>
 
       </div>

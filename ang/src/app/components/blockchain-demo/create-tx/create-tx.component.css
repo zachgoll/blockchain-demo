@@ -5,6 +5,10 @@
 }
 
 
+.mempool {
+    max-height: 500px;
+    overflow: auto;
+}
 
 .utxoSelected {
     line-height: 60px;
@@ -27,3 +31,12 @@
     cursor: grab;
 }
 
+.my-utxo {
+    background-color: #ffc200;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 0.8rem;
+    color: white;
+    border: none;
+}

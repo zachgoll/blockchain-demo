@@ -15,6 +15,9 @@
         <li class="nav-item">
           <a routerLink="/certification" routerLinkActive="active" class="nav-link">Certification</a>
         </li>
+        <li class="nav-item">
+          <a routerLink="/glossary" routerLinkActive="active" class="nav-link">Glossary</a>
+        </li>
         <li *ngIf="authService.loggedIn()" class="nav-item" ngbDropdown placement="bottom-right">
           <a id="presentation-resources" class="nav-link dd" ngbDropdownToggle>Presentation Resources</a>
           <div ngbDropdownMenu aria-labelledby="presentation-resources">
@@ -35,12 +38,12 @@
           <a class="nav-link dd" id="basicdrop" ngbDropdownToggle>
             <!-- The Profile picture inserted via div class below, with shaping provided by Bootstrap -->
             <div class="profile-img dd">
-              <img class="roundImg dd" src="{{authService.image}}">
+              <img class="roundImg dd" src="{{ this.authService.picture_url }}">
             </div>
             <span class="caret dd"></span>
           </a>
           <div ngbDropdownMenu aria-labelledby="basicdrop">
-            <h4 class="dropdown-item text-capitalize navli">{{ authService.currentUser.f_name }}</h4>
+            <h4 *ngIf="user" class="dropdown-item text-capitalize navli">{{ user.f_name }}</h4>
             <hr>
             <button class="dropdown-item dd" [routerLink]="['/profile']">Profile</button>
             <button class="dropdown-item dd" href="#" (click)="onLogout()">Logout</button>

@@ -1,7 +1,9 @@
+import { User } from './../user.model';
 import { QueryService } from './../../../services/query.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-profile',
@@ -19,14 +21,15 @@ export class ProfileComponent implements OnInit {
   questions: any;
   public uploader: FileUploader = new FileUploader({url: '/upload', itemAlias: 'photo'});
 
+  @Output() profilePicChanged = new EventEmitter();
+
   constructor(private authService: AuthService, private queryService: QueryService) { }
 
   ngOnInit() {
-    this.user = this.authService.currentUser;
+    this.user = JSON.parse(localStorage.getItem('user'));
 
     this.queryService.getUserQuestions().subscribe((questions) => {
       this.questions = questions;
-      console.log(questions);
     });
 
     this.uploader.onAfterAddingFile = (file) => {
@@ -44,11 +47,15 @@ export class ProfileComponent implements OnInit {
         this.uploader.clearQueue();
         this.uploadMessage = res.msg;
       } else {
-        this.authService.updateUserPicture(this.user.username, {picture: res.file}).subscribe((data) => console.log(data));
+        // Save user picture to local storage
+        let usr = JSON.parse(localStorage.getItem('user'));
+        usr.picture_url = res.file;
+        localStorage.setItem('user', JSON.stringify(usr));
+        this.user = usr;
+        this.authService.picture_url = res.file;
         setTimeout(() => {
           this.fileReady = false;
           this.uploadMessage = res.msg;
-          this.authService.image = res.file;
           this.uploader.clearQueue();
         }, 1000);
       }

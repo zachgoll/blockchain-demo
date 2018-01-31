@@ -1,8 +1,10 @@
+import { User } from './../user.model';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { QueryService } from '../../../services/query.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
   username: String;
   password: String;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private query: QueryService) { }
 
   ngOnInit() {
   }
@@ -29,12 +31,15 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(user).subscribe((userObj: {success: boolean, token: string, user: {id: number, username: string}}) => {
         if (userObj.success) {
           this.authService.storeUserData(userObj.token, userObj.user);
-          this.authService.getProfile().subscribe((profile: {user: {picture_url: ''}}) => {
+          this.authService.getProfile().subscribe((profile: any) => {
             if (profile.user.picture_url) {
-              this.authService.image = profile.user.picture_url;
+              this.authService.picture_url = profile.user.picture_url;
             }
             this.authService.currentUser = profile.user;
             console.log(this.authService.currentUser);
+            this.query.postUtxo(this.authService.currentUser.id).subscribe((utxo) => {
+              this.query.subscribeUtxo(utxo.id).subscribe();
+            });
             this.router.navigate(['/']);
           }, (err) => {
             console.log(err);

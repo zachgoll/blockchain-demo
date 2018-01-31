@@ -1,8 +1,15 @@
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('utxo', function(table){
+    return knex.schema.createTable('user_profile', (table) => {
         table.increments().primary();
-        table.float('value').notNullable();
-      })
+        table.string('email');
+        table.string('username');
+        table.string('f_name');
+        table.string('l_name');
+        table.string('password');
+        table.timestamps(true, true);
+        table.string('picture_url').defaultTo('http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png');
+        table.string('session');
+    })
     .then(() => {
         return knex.schema.createTable('block', (table) => {
             table.increments().primary();
@@ -24,17 +31,11 @@ exports.up = function(knex, Promise) {
         });
     })
     .then(() => {
-        return knex.schema.createTable('user_profile', (table) => {
+        return knex.schema.createTable('utxo', function(table){
             table.increments().primary();
-            table.string('email');
-            table.string('username');
-            table.string('f_name');
-            table.string('l_name');
-            table.string('password');
-            table.timestamps(true, true);
-            table.string('picture_url');
-            table.string('session');
-        });
+            table.float('value').notNullable();
+            table.integer('current_owner').references('id').inTable('user_profile');
+          });
     })
     .then(() => {
         return knex.schema.createTable('user_questions', (table) => {
@@ -74,6 +75,12 @@ exports.up = function(knex, Promise) {
     })
     .then(() => {
         return knex.schema.createTable('block_subscriptions', (table) => {
+            table.integer('user_id').references('id').inTable('user_profile');
+            table.integer('block_id').references('id').inTable('block');
+        });
+    })
+    .then(() => {
+        return knex.schema.createTable('block_rejections', (table) => {
             table.integer('user_id').references('id').inTable('user_profile');
             table.integer('block_id').references('id').inTable('block');
         });
@@ -126,6 +133,9 @@ exports.down = function(knex, Promise) {
         })
         .then(() => {
             return knex.schema.dropTableIfExists('block_subscriptions')
+        })
+        .then(() => {
+            return knex.schema.dropTableIfExists('block_rejections')
         })
         .then(() => {
             return knex.schema.dropTableIfExists('user_questions')

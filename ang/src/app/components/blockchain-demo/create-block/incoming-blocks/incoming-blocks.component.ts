@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Block } from './../../block.model';
+import { AuthService } from './../../../../services/auth.service';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { QueryService } from '../../../../services/query.service';
 
 @Component({
   selector: 'app-incoming-blocks',
@@ -7,19 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IncomingBlocksComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService, private query: QueryService) { }
 
-  items = [
-    /*
-    {hash: '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B', txs: [{hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}]},
-    {hash: '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B', txs: [{hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}]},
-    {hash: '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B', txs: [{hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}]},
-    {hash: '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B', txs: [{hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}, {hash: 'hashshashdfahsdf'}]}
- */
-  ];
+  @Output() blockSubscribed = new EventEmitter();
 
+  user: any;
+
+  blocks: Block[] = [];
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.loadBlocks();
   }
+
+  loadBlocks() {
+    this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
+      console.log(blocks);
+      this.blocks = blocks;
+      console.log(this.blocks);
+    });
+  }
+
+  accept(index: number) {
+    // Emit an event that can be sent to create-tx component
+    this.blockSubscribed.emit();
+  }
+
+  reject(index: number) {
+    // Emit an event that can be sent to create-tx component
+    this.blockSubscribed.emit();
+  }
+
+
 
 }

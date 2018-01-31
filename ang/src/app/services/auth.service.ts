@@ -3,18 +3,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { tokenNotExpired } from 'angular2-jwt';
 import { Router } from '@angular/router';
+import { User } from './../components/user/user.model';
 
 @Injectable()
 export class AuthService {
 
   authToken: any;
-  user: any;
-  currentUser: any;
-  image = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
+  currentUser: User;
+  user = JSON.parse(localStorage.getItem('user'));
+  picture_url = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  registerUser(user){
+  registerUser(user) {
     const headers = new HttpHeaders({'Content-type': 'application/json'});
 
     // Return an observable that can be subscribed to
@@ -37,7 +38,7 @@ export class AuthService {
       'Content-type': 'application/json'
     });
     // Return an observable that can be subscribed to
-    return this.http.get('/users/profile', {headers: headers});
+    return this.http.get<any>('/users/profile', {headers: headers});
   }
 
   // Allow edits to a user
@@ -56,12 +57,29 @@ export class AuthService {
 
     // Set auth service globals so we can pass around our app
     this.authToken = token;
-    this.user = user;
   }
 
   loadToken() {
     const token = localStorage.getItem('id_token');
     this.authToken = token;
+  }
+
+  loadUserProfiles() {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+
+    return this.http.get<User[]>('/api/v1/users', {headers: headers})
+      .map(
+        (response) => {
+          let users = [];
+          response.forEach((user) => {
+            users.push({username: user.username, id: user.id, picture_url: user.picture_url});
+          });
+          return users;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   loggedIn() {
@@ -71,10 +89,10 @@ export class AuthService {
   // Log out logic
   logout() {
     this.authToken = null;
-    this.user = null;
+    this.currentUser = null;
     localStorage.clear();
     this.router.navigate(['/']);
-    this.image = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
+    this.picture_url = 'http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png';
   }
 
 }

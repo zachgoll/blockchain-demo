@@ -1,3 +1,4 @@
+import { User } from './components/user/user.model';
 import { AuthService } from './services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -12,14 +13,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.getProfile().subscribe((profile: {user: {picture_url: ''}}) => {
-      if (profile.user.picture_url) {
-        this.authService.image = profile.user.picture_url;
-      }
-      this.authService.currentUser = profile.user;
-    }, (err) => {
-      console.log(err);
-    });
   }
 
 

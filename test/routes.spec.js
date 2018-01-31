@@ -6,6 +6,8 @@ const chaiHttp = require('chai-http');
 const knex = require('./../db/knex');
 const server = require('../app');
 const bcrypt = require('bcryptjs');
+const utxoQuery = require('../db/utxo_queries');
+const txQuery = require('../db/tx_queries');
 
 chai.use(chaiHttp);
 
@@ -15,6 +17,7 @@ chai.use(chaiHttp);
 
 describe('API Routes', function() {
 
+    /*
     beforeEach(() => knex.migrate.rollback()
         .then(() => knex.migrate.latest())
         .then(() => knex.seed.run())
@@ -26,19 +29,70 @@ describe('API Routes', function() {
                 done();
             });
     });
+    */
 
     describe('GET requests', () => {
-        it('should return all unspent utxos', (done) => {
+        it('should get all utxos', (done) => {
+            chai.request(server)
+            .get('/api/v1/utxos/unspent')
+            .end((err, res) => {
+                console.log(res.body);
+                done();
+            })
+        });
+
+        it('should send a new transaction from zach to steve of 20', (done) => {
+            chai.request(server)
+            .post('/api/v1/txs/new')
+            .send({
+                from: 1,
+                tx: {
+                    tx_hash: "test tx",
+                    fee: 5
+                },
+                inputs: [{
+                    id: 1,
+                    value: 50,
+                    username: "zach",
+                    user_id: 1
+                }],
+                outputs: [{
+                    value: 25,
+                    to: 2
+                },
+                {
+                    value: 20,
+                    to: 1
+                }]
+            })
+            .end((err, res) => {
+                console.log(res.body);
+                
+                /*
+                knex('tx_inputs').select('*').where('tx_id', res.body.tx_id).then((tx_inputs) => {
+                    console.log(tx_inputs);
+                });
+                */
+                
+                done();
+            });
+        });
+    });
+
+
+    /*
+
+    describe('GET requests', () => {
+        xit('should return all unspent utxos', (done) => {
             chai.request(server)
             .get('/api/v1/utxos/unspent')
             .end(function(err, res) {
-                assert(res.body.length === 2);
-                assert(res.body[0].f_name === 'Zach');
+                assert(res.body[0].value === 50);
                 done();
             });
         });
 
-        it('should return all spent utxos', (done) => {
+        xit('should return all spent utxos', (done) => {
             chai.request(server)
             .get('/api/v1/utxos/spent')
             .end(function(err, res) {
@@ -47,7 +101,7 @@ describe('API Routes', function() {
             });
         })
 
-        it('should return a single utxo by id', (done) => {
+        xit('should return a single utxo by id', (done) => {
             chai.request(server)
             .get('/api/v1/utxos/1')
             .end(function(err, res) {
@@ -56,7 +110,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return array of inputs for a given transaction', (done) => {
+        xit('should return array of inputs for a given transaction', (done) => {
             chai.request(server)
             .get('/api/v1/txs/1/inputs')
             .end((err, res) => {
@@ -66,7 +120,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return array of outputs for a given transaction', (done) => {
+        xit('should return array of outputs for a given transaction', (done) => {
             chai.request(server)
             .get('/api/v1/txs/1/outputs')
             .end((err, res) => {
@@ -76,7 +130,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return all txs', (done) => {
+        xit('should return all txs', (done) => {
             chai.request(server)
             .get('/api/v1/txs')
             .end(function(err, res) {
@@ -85,7 +139,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return all incoming txs from other peers', (done) => {
+        xit('should return all incoming txs from other peers', (done) => {
             chai.request(server)
             .get('/api/v1/txs/incoming')
             .end((err, res) => {
@@ -94,7 +148,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return a single tx by id', (done) => {
+        xit('should return a single tx by id', (done) => {
             chai.request(server)
             .get('/api/v1/txs/1')
             .end(function(err, res) {
@@ -103,7 +157,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return all users', (done) => {
+        xit('should return all users', (done) => {
             chai.request(server)
             .get('/api/v1/users')
             .end(function(err, res) {
@@ -114,7 +168,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return a single user by id', (done) => {
+        xit('should return a single user by id', (done) => {
             chai.request(server)
             .get('/api/v1/users/1')
             .end(function(err, res) {
@@ -125,7 +179,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return all blocks', (done) => {
+        xit('should return all blocks', (done) => {
             chai.request(server)
             .get('/api/v1/blocks')
             .end(function(err, res) {
@@ -138,7 +192,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should return a single block by id', (done) => {
+        xit('should return a single block by id', (done) => {
             chai.request(server)
             .get('/api/v1/blocks/1')
             .end(function(err, res) {
@@ -154,7 +208,7 @@ describe('API Routes', function() {
     });
 
     describe('POST requests', () => {
-        it('should add a new utxo', (done) => {
+        xit('should add a new utxo', (done) => {
             chai.request(server)
             .post('/api/v1/utxos/new')
             .send({
@@ -166,19 +220,37 @@ describe('API Routes', function() {
             });
         });
 
-        it('should add a new tx', (done) => {
+        it('should send a new transaction from zach to steve of 20', (done) => {
             chai.request(server)
             .post('/api/v1/txs/new')
             .send({
-                fee: 0.5
+                from: 1,
+                tx: {
+                    tx_hash: "test tx",
+                    fee: 5
+                },
+                inputs: [{
+                    id: 1,
+                    value: 50,
+                    username: "zach",
+                    user_id: 1
+                }],
+                outputs: [{
+                    value: 25,
+                    to: 2
+                },
+                {
+                    value: 20,
+                    to: 1
+                }]
             })
             .end((err, res) => {
-                assert(res.body.fee === 0.5);
+                console.log(res.body);
                 done();
             });
         });
 
-        it('should add a new user', (done) => {
+        xit('should add a new user', (done) => {
 
             chai.request(server)
             .post('/users/new')
@@ -201,7 +273,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should add a new block', (done) => {
+        xit('should add a new block', (done) => {
             chai.request(server)
             .post('/api/v1/blocks/new')
             .send({
@@ -215,7 +287,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should add new utxo and bind the utxo to given user and tx', (done) => {
+        xit('should add new utxo and bind the utxo to given user and tx', (done) => {
             
             let new_utxo = {
                 utxo: {
@@ -241,7 +313,7 @@ describe('API Routes', function() {
 
 
     describe('PUT requests', () => {
-        it('should edit a utxo', (done) => {
+        xit('should edit a utxo', (done) => {
             chai.request(server)
             .put('/api/v1/utxos/1')
             .send({
@@ -253,7 +325,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should edit a tx', (done) => {
+        xit('should edit a tx', (done) => {
             chai.request(server)
             .put('/api/v1/txs/1')
             .send({
@@ -268,7 +340,7 @@ describe('API Routes', function() {
 
     describe('DELETE requests', () => {
         
-        it('should delete a utxo', (done) => {
+        xit('should delete a utxo', (done) => {
             chai.request(server)
             .delete('/api/v1/utxos/1/1/delete')
             .end((err, res) => {
@@ -281,7 +353,7 @@ describe('API Routes', function() {
             });
         });
 
-        it('should add utxo to tx_inputs, delete utxo from utxos, and put it in spent_utxos', (done) => {
+        xit('should add utxo to tx_inputs, delete utxo from utxos, and put it in spent_utxos', (done) => {
             let body = {
                 utxo_id: 5,
                 tx_id: 1,
@@ -301,5 +373,6 @@ describe('API Routes', function() {
             });
         });
     });
-    
+    */
+
 });

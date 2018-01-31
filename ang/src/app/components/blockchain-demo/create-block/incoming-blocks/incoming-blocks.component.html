@@ -1,31 +1,41 @@
-<div *ngIf="items.length === 0" class="helper-text">You are fully synced with the main blockchain.  You may now mine your current block!</div>
-<p-carousel numVisible="1" headerText="Incoming Blocks" [value]="items">
-  <ng-template let-item pTemplate="item">
-    <div class="items">
-      <br>
-      <div class="ui-grid-row">
-        <div class="ui-grid-col-12">
-          <h6>Block Hash</h6>
-          <div class="hash">{{ item.hash }}</div>
-        </div>
-      </div>
-      <div class="ui-grid-row">
-        <div class="ui-grid-col-4">
-          <h6 class="d-inline">Block Confirmations </h6>
-          <div class="hash hash-no-overflow hash-gold">7</div>
-        </div>
-        <div class="ui-grid-col-8">
-          <button class="btn btn-primary blockButton">Accept</button>
-          <button class="btn btn-danger blockButton">Reject</button>
-        </div>
-      </div>
-
-      <div class="ui-grid-row">
-        <div class="ui-grid-col-12">
-          <h6>Transactions</h6>
-          <div class="hash" *ngFor="let tx of item.txs">{{ tx.hash }}</div>
+<div *ngIf="blocks.length === 0" class="helper-text">You are fully synced with the main blockchain. You may now mine your current block!</div>
+<div class="row">
+  <div class="col-12">
+    <h4>Incoming Blocks</h4>
+  </div>
+</div>
+<div class="row d-inline" *ngFor="let block of blocks; let i=index;">
+  <div class="col-12">
+    <h4>Block #{{ block.height }}</h4>
+    <hr>
+    <div class="row">
+      <div class="col-12">
+        <h6>Block Hash</h6>
+        <div class="hash">
+          {{block.block_hash}}
         </div>
       </div>
     </div>
-  </ng-template>
-</p-carousel>
+    <div class="row">
+      <div class="col-6">
+        <h6 class="d-inline">Txs in Block</h6>
+        <div class="col-4 hash hash-no-overflow hash-no-margin">
+          {{block.num_txs}}
+        </div>
+      </div>
+      <div class="col-6">
+        <h6 class="d-inline">Block Confirmations</h6>
+        <div class="col-4 hash hash-no-overflow hash-no-margin">
+          {{'2'}}
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <button type="button" class="btn btn-sm btn-primary txButton ml-auto" (click)="accept(i)">Accept</button>
+        <button type="button" class="btn btn-sm btn-primary txButton mr-auto" (click)="reject(i)">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>

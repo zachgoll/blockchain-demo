@@ -1,0 +1,31 @@
+.terms-grid {
+    padding: 5px;
+}
+
+.inner-box {
+    border: solid rgba(49,42,68,.1);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+
+.term-text {
+    font-family: monospace;
+    font-size: x-large;
+    font-weight: 600;
+    color: #312a44;
+}
+
+.inner-box:hover {
+    background: solid rgba(49,42,68,.1);
+    border: solid #312a44 1px;
+    cursor: pointer;
+}
+
+.term-text:hover {
+    cursor: pointer;
+}
+
+.tooltip {
+    font-family: monospace !important;
+}

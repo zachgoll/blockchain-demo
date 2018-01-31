@@ -24,7 +24,7 @@
       <br>
       <h4>Solution</h4>
       <div class="txt">
-        <span [ngClass]="{'text-success lg': finished, 'text-danger': !finished}">{{ solution.substring(0, 4) }}</span><span>{{ solution.substring(4) }}</span>
+        <span *ngIf="solution" [ngClass]="{'text-success lg': finished, 'text-danger': !finished}">{{ solution.substring(0, 4) }}</span><span *ngIf="solution">{{ solution.substring(4) }}</span>
       </div>
     </div>
     <div class="col-4 text-center">

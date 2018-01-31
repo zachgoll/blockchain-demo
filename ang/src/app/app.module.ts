@@ -34,6 +34,7 @@ import { PresentationResourcesComponent } from './components/presentation-resour
 import { WalletGeneratorComponent } from './components/presentation-resources/wallet-generator/wallet-generator.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { QueryService } from './services/query.service';
+import { GlossaryComponent } from './components/glossary/glossary.component';
 
 /**
  * All child routes protected if canActivate present on parent
@@ -50,6 +51,7 @@ const appRoutes: Routes = [
     { path: 'blockchain', component: BlockchainComponent }
   ]},
   { path: 'certification', canActivate: [AuthGuardService], component: CertificationComponent },
+  { path: 'glossary', /*canActivate: [AuthGuardService],*/ component: GlossaryComponent },
   { path: 'presentation-resources', /*canActivate: [AuthGuardService],*/ component: PresentationResourcesComponent, children: [
     { path: 'hash-demo', component: HashDemoComponent },
     { path: 'pow-demo', component: PowDemoComponent },
@@ -83,7 +85,8 @@ const appRoutes: Routes = [
     HashDemoComponent,
     PowDemoComponent,
     ErrorPageComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    GlossaryComponent
   ],
   imports: [
     BrowserModule,

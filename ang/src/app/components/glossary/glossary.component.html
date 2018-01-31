@@ -1,0 +1,17 @@
+<br>
+<div class="container">
+  <div class="row text-center">
+    <div class="col-12">
+        <h2>Blockchain Terms by Chainworks</h2>
+        <p>Hover over term to see definition</p>
+    </div>
+  </div>
+  <br>
+  <div class="row" >
+    <div class="col-3 text-center terms-grid" *ngFor="let term of terms">
+      <div class="inner-box" placement="bottom" ngbTooltip="{{ term.definition }}">
+          <div class="term-text">{{term.term}}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,8 +12,10 @@ router.get('/spent', (req, res, next) => {
         });
 });
 
-router.get('/unspent', (req, res, next) => {
-    queries.getUnspentUtxos()
+router.get('/unspent/:id', (req, res, next) => {
+    const id = req.params.id;
+    
+    queries.getUnspentUtxos(id)
         .then((utxos) => {
             res.status(200).json(utxos);
         })
@@ -60,13 +62,30 @@ router.post('/new', (req, res, next) => {
         });
 });
 
+router.post('/spend', (req, res, next) => {
+    queries.spendUtxo(req.body)
+        .then((utxo) => {
+            res.status(200).json(utxo);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.post('/bind', (req, res, next) => {
+    queries.bindUtxo(req.body)
+        .then((utxo) => {
+            res.status(200).json(utxo);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
 router.put('/:id', (req, res, next) => {
     const id = req.params.id;
 
     queries.editUtxo(id, req.body)
-        .then((utxoId) => {
-            return queries.getUtxoById(utxoId);
-        })
         .then((utxo) => {
             res.status(200).json(utxo);
         })

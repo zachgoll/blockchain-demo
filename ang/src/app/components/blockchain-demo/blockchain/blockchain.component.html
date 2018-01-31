@@ -44,18 +44,18 @@
       <h5>Transaction #{{ i + 1 }}</h5>
       <hr>
       <h6>Transaction Hash</h6>
-      <div class="hash">{{tx.hash}}</div>
+      <div class="hash">{{tx.tx_hash}}</div>
       <div>
         <h6 class="d-inline">
           Transaction Inputs
-          <div class="utxo" *ngFor="let input of tx.inputs">{{ input }}</div>
+          <div class="utxo" *ngFor="let input of tx.inputs">{{ input.value }}</div>
         </h6>
       </div>
 
       <div>
         <h6 class="d-inline">
           Transaction Outputs
-          <div class="utxo" *ngFor="let output of tx.outputs">{{ output }}</div>
+          <div class="utxo" *ngFor="let output of tx.outputs">{{ output.value }}</div>
         </h6>
       </div>
 

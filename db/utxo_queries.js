@@ -5,17 +5,15 @@ function Utxo() {
 }
 
 function getSpentUtxos() {
-    return knex('spent_utxos')
-        .select('utxo.value', 'user_profile.f_name', 'user_profile.id')
-        .innerJoin('user_profile', 'spent_utxos.user_id', 'user_profile.id')
-        .innerJoin('utxo', 'utxo.id', 'spent_utxos.utxo_id');
+    return knex('spent_utxos').select('*');
 }
 
-function getUnspentUtxos() {
-    return knex('utxos')
-        .select('utxo.value', 'user_profile.f_name', 'user_profile.id')
-        .innerJoin('user_profile', 'utxos.user_id', 'user_profile.id')
-        .innerJoin('utxo', 'utxo.id', 'utxos.utxo_id');
+
+function getUnspentUtxos(userId) {
+
+    return knex('utxos').select('*')
+        .innerJoin('utxo', 'utxos.utxo_id', 'utxo.id')
+        .where('utxos.user_id', userId);
 }
 
 function getUtxoById(id) {

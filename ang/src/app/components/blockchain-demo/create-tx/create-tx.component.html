@@ -3,48 +3,43 @@
     <div class="col-lg-4 col-12 tx-form">
       <div class="row">
         <div class="col-12">
-          <form class="shadowBoxLight" (ngSubmit)="onQuestionSubmit()" #question="ngForm">
+          <form class="shadowBoxLight" (ngSubmit)="onTxSubmit()" #txform="ngForm">
             <h2 class="text-primary">Create Transaction</h2>
             <hr>
             <div class="form-group form-row">
-
-            </div>
-            <div class="form-group form-row">
               <label for="amount" class="col-form-label">Send</label>
               <div class="col-lg-8 col-12">
-                <input type="text" class="form-control" name="amount" placeholder="Amount...">
+                <input type="text" class="form-control" name="amount" placeholder="Amount..." ngModel>
               </div>
             </div>
             <div class="form-group form-row">
               <ng-template #rt let-r="result" let-t="term">
-                <img [src]="r['picture']" width="50"> {{ r.f_name }} {{ r.l_name }}
+                <img [src]="r['picture_url']" width="50"> {{ r.username }}
               </ng-template>
               <label for="typeahead-template" class="col-form-label">User Lookup:</label>
               <div class="col-lg-6 col-12">
                 <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
-                  [inputFormatter]="formatter" />
+                  [inputFormatter]="formatter" name="selectedUser" ngModel>
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <label for="fee" class="col-form-label h6">Add Tx Inputs</label>
+              <div class="col-12">
+                <div class="utxo-box" pDroppable="utxos" (onDrop)="drop($event)">
+                  <div class="utxoSelected">
+                    <div *ngIf="selectedUtxos.length === 0" class="helper-text text-center">Drag UTXOs here</div>
+                    <div class="utxo" pDraggable="selUtxos" (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)" *ngFor="let utxo of selectedUtxos">{{utxo.value.toFixed(1)}}</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-group form-row">
               <label for="fee" class="col-form-label">Add Fee</label>
               <div class="col-lg-3 col-12">
-                <input type="text" class="form-control" name="fee">
+                <input type="text" class="form-control" name="fee" ngModel>
               </div>
               <div class="col-lg-3 col-12">
-                <button class="btn btn-outline-primary">Estimate</button>
-              </div>
-            </div>
-            <div class="form-group form-row">
-              <label for="fee" class="col-form-label h6">Fund Transaction</label>
-              <div class="col-12">
-                <div class="utxo-box" pDroppable="utxos" (onDrop)="drop($event)">
-                  <div class="utxoSelected">
-                      <div *ngIf="selectedUtxos.length === 0" class="helper-text text-center">Drag UTXOs here</div>
-                      <div class="utxo" pDraggable="selUtxos"
-                       (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)" *ngFor="let utxo of selectedUtxos">{{utxo.value}}</div>
-                  </div>
-                  
-                </div>
+                <button class="btn btn-outline-primary" type="button" (click)="estimateFee()">Estimate</button>
               </div>
             </div>
             <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Transaction</button>
@@ -53,18 +48,19 @@
       </div>
     </div>
     <div class="col-lg-8 col-12">
-      <div class="row utxo-set">
+      <div class="row">
         <div class="col-12 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
-          <div class="box-header">UTXO Set</div>
-          <div *ngFor="let utxo of utxos" class="utxo" pDraggable="utxos"
-           (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
-            {{utxo.value}}
+          <h4>UTXO Set <button class="btn btn-primary btn-sm d-inline" (click)="updateUtxos()">Update UTXO Set</button></h4>
+          <div *ngIf="utxos.length === 0" class="helper-text">There are no more UTXOs in the UTXO set!</div>
+          <div *ngFor="let utxo of utxos" class="utxo" [ngClass]="{'my-utxo': utxo.current_owner === user.id }"
+            pDraggable="utxos" (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
+            {{utxo.value.toFixed(1)}}
           </div>
         </div>
       </div>
-      <div class="row mempool">
-        <div class="col-12 shadowBoxLight">
-          <app-mempool></app-mempool>
+      <div class="row">
+        <div class="col-12 shadowBoxLight mempool">
+          <app-mempool (txSubscribed)="onTxSub()"></app-mempool>
         </div>
       </div>
     </div>

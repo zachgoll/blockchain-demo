@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+declare var Web3: any;
+
+const web3 = new Web3();
+
 @Component({
   selector: 'app-hash-demo',
   templateUrl: './hash-demo.component.html',
@@ -18,8 +22,7 @@ export class HashDemoComponent implements OnInit {
   }
 
   onFormSubmit() {
-    //this.hashedData = this.hashForm.value.rawdata;
-    this.hashedData = '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B';
+    this.hashedData = web3.sha3(this.hashForm.value.rawdata);
   }
 
 }

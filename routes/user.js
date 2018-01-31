@@ -17,9 +17,11 @@ router.post('/new', (req, res, next) => {
     
     let user = {
         username: req.body.username,
+        email: req.body.email,
         f_name: req.body.f_name,
         l_name: req.body.l_name,
-        password: req.body.password
+        password: req.body.password,
+        session: req.body.session
     };
 
     return bcrypt.genSalt(10)
@@ -62,7 +64,12 @@ router.post('/authenticate', (req, res, next) => {
                             token: 'Bearer ' + token,
                             user: {
                                 id: user.id,
-                                username: user.username
+                                username: user.username,
+                                f_name: user.f_name,
+                                l_name: user.l_name,
+                                email: user.email, 
+                                session: user.session,
+                                picture_url: user.picture_url
                             }
                         });
                     } else {

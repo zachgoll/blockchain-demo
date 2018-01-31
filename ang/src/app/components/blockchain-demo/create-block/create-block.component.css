@@ -7,6 +7,11 @@
     margin-left: 10px;
 }
 
+.mempool {
+    max-height: 500px;
+    overflow: auto;
+}
+
 .txButton {
     margin-top:15px;
 }
@@ -31,8 +36,6 @@
 }
 
 .drag-container {
-    
-    border: dashed rgba(49,42,68,1) 4px;
     padding: 20px;
     min-height: 100px;
 }
@@ -70,3 +73,49 @@
 .sel-coinbase-container {
     padding: 20px;
 }
+
+.blockpool {
+    max-height: 350px;
+    overflow: auto;
+}
+
+.nonce {
+    font-size: 4.0rem;
+    font-weight: 500;
+    border: solid;
+    display: block;
+    background-color: #ffc200;
+    color: white;
+}
+
+.nonce-finished {
+    color: white;
+    background-color: #ffc200;
+}
+
+.hash-highlight {
+    background-color: #ffc200;
+    color: white;
+}
+
+.pulse-button {
+
+    position: relative;
+    border: none;
+    box-shadow: 0 0 0 0 #ffc200;
+    background-color: #ffc200;
+    cursor: pointer;
+    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);
+    -moz-animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);
+    -ms-animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);
+    animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);
+  }
+  .pulse-button:hover 
+  {
+    -webkit-animation: none;-moz-animation: none;-ms-animation: none;animation: none;
+  }
+  
+  @-webkit-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}
+  @-moz-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}
+  @-ms-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}
+  @keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}
