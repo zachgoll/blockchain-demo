@@ -1,4 +1,3 @@
-
 <div class="blockchain">
   <div class="shadowBox block" *ngFor="let block of blocks">
     <h2 *ngIf="block.blockHeight > 0" class="text-primary d-inline">Block #{{ block.blockHeight }}</h2>
@@ -27,21 +26,9 @@
     <hr>
     <h4 class="d-inline">Block Transactions</h4>
     <hr>
-    <div class="sel-tx-container">
-      <h5 class="text-warning">Coinbase Transaction</h5>
-      <hr>
-      <h6>Transaction Hash</h6>
-      <div class="hash">{{coinbase.hash}}</div>
-      <div>
-        <h6 class="d-inline">
-          Transaction Outputs
-          <div class="utxo" *ngFor="let output of coinbase.outputs">{{ output }}</div>
-        </h6>
-      </div>
-    </div>
-
     <div class="sel-tx-container" *ngFor="let tx of block.txs; let i = index;">
-      <h5>Transaction #{{ i + 1 }}</h5>
+      <h5 *ngIf="tx.coinbase === true">Coinbase Transaction</h5>
+      <h5 *ngIf="tx.coinbase === false">Transaction #{{ i }}</h5>
       <hr>
       <h6>Transaction Hash</h6>
       <div class="hash">{{tx.tx_hash}}</div>

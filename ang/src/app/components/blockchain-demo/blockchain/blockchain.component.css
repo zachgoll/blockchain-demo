@@ -2,12 +2,14 @@
     width: 600px;
     margin: 20px 40px 20px 40px;
     display: inline-block;
+    vertical-align: top;
 }
 
 .block2 {
     width: 40px;
     margin: 20px 40px 20px 40px;
     display: inline-block;
+    vertical-align: top;
 }
 
 .blockchain {

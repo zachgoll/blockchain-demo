@@ -36,10 +36,6 @@ export class LoginComponent implements OnInit {
               this.authService.picture_url = profile.user.picture_url;
             }
             this.authService.currentUser = profile.user;
-            console.log(this.authService.currentUser);
-            this.query.postUtxo(this.authService.currentUser.id).subscribe((utxo) => {
-              this.query.subscribeUtxo(utxo.id).subscribe();
-            });
             this.router.navigate(['/']);
           }, (err) => {
             console.log(err);

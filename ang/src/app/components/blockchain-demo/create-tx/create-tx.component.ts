@@ -65,7 +65,8 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
       from: currentUserId,
       tx: {
         tx_hash: '',
-        fee: fee
+        fee: fee,
+        coinbase: false
       },
       inputs: this.selectedUtxos,
       outputs: [{
@@ -102,12 +103,11 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   }
 
   onTxSub(eventData: Event) {
-    console.log('Bethany sent me money');
+    console.log('event happened');
     this.updateUtxos();
   }
 
   updateUtxos() {
-    console.log('updating utxos...');
     this.query.getUtxos(this.user.id).subscribe((utxos) => {
       this.utxos = utxos;
     });

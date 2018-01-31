@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.picture_url = JSON.parse(localStorage.getItem('user')).picture_url;
   }
 
 

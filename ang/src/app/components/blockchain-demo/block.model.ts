@@ -4,6 +4,7 @@ export class Block {
     public block_hash: string;
     public previous_block: string;
     public merkle_root: string;
+    public timestamp: string;
     public created_at: any;
     public updated_at: any;
     public nonce: number;
@@ -15,6 +16,7 @@ export class Block {
         block_hash: string,
         previous_block: string,
         merkle_root: string,
+        timestamp: string,
         created_at: any,
         updated_at: any,
         nonce: number,
@@ -25,6 +27,7 @@ export class Block {
         block_hash = this.block_hash;
         previous_block = this.previous_block;
         merkle_root = this.merkle_root;
+        timestamp = this.timestamp;
         created_at = this.created_at;
         updated_at = this.updated_at;
         nonce = this.nonce;

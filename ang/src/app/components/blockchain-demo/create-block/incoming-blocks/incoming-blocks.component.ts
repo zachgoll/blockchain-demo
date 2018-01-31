@@ -13,6 +13,7 @@ export class IncomingBlocksComponent implements OnInit {
   constructor(private authService: AuthService, private query: QueryService) { }
 
   @Output() blockSubscribed = new EventEmitter();
+  @Output() noMoreBlocks = new EventEmitter();
 
   user: any;
 
@@ -25,18 +26,49 @@ export class IncomingBlocksComponent implements OnInit {
 
   loadBlocks() {
     this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
-      console.log(blocks);
+      if (blocks.length === 0) {
+        this.noMoreBlocks.emit();
+      }
       this.blocks = blocks;
-      console.log(this.blocks);
     });
   }
 
   accept(index: number) {
+    const block_id = this.blocks[index].id;
+
+    this.query.subscribeBlock(block_id).subscribe(() => {
+      this.loadBlocks();
+    });
+
+    this.query.getBlockTxs(block_id).subscribe((txs) => {
+      console.log('here are all the block transactions');
+      console.log(txs);
+      txs.forEach((tx) => {
+        this.query.getOutputs(tx.id).subscribe((t) => {
+          t.forEach((t_output) => {
+            this.query.subscribeUtxo(t_output.id).subscribe();
+          });
+        });
+        this.query.unsubscribeTx(tx.id).subscribe();
+      });
+    });
     // Emit an event that can be sent to create-tx component
     this.blockSubscribed.emit();
   }
 
   reject(index: number) {
+    const block_id = this.blocks[index].id;
+
+    this.query.rejectBlock(block_id).subscribe(() => {
+      this.loadBlocks();
+    });
+
+    this.query.getBlockTxs(block_id).subscribe((txs) => {
+      txs.forEach((tx) => {
+        this.query.rejectTx(tx.id).subscribe();
+      });
+    });
+
     // Emit an event that can be sent to create-tx component
     this.blockSubscribed.emit();
   }

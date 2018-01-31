@@ -120,7 +120,6 @@ export class QueryService {
     return this.http.post('/api/v1/txs/reject', tx, {headers: headers});
   }
 
-  // TODO
   unsubscribeTx (txId: number) {
     const id = JSON.parse(localStorage.getItem('user')).id;
     const headers = new HttpHeaders({'Content-type': 'application/json'});
@@ -175,6 +174,10 @@ export class QueryService {
     };
 
     return this.http.post('/api/v1/blocks/reject', block, {headers: headers});
+  }
+
+  getBlockById (blockId: number) {
+    return this.http.get<Block>('/api/v1/blocks/' + blockId);
   }
 
   getUserBlockchain(user_id: number) {

@@ -36,6 +36,7 @@ export class MempoolComponent implements OnInit {
           });
         });
       });
+      this.txSubscribed.emit();
     });
   }
 
@@ -43,27 +44,22 @@ export class MempoolComponent implements OnInit {
     const inputs = this.txs[index].inputs;
     const outputs = this.txs[index].outputs;
 
-    console.log(inputs);
-    console.log(outputs);
-
     // Add all tx inputs to spent utxos
     inputs.forEach((input) => {
+      console.log('input spent');
       this.query.spendUtxo(input.id).subscribe();
     });
 
     // Add all tx outputs to unspent utxos
     outputs.forEach((output) => {
+      console.log('output subbed');
       this.query.subscribeUtxo(output.id).subscribe();
     });
 
-    console.log(this.txs[index].id);
     // Add tx to user subscriptions
     this.query.subscribeTx(this.txs[index].id).subscribe(() => {
       this.loadTxs();
     });
-
-    // Emit an event that can be sent to create-tx component
-    this.txSubscribed.emit();
 
   }
 
@@ -73,9 +69,6 @@ export class MempoolComponent implements OnInit {
     this.query.rejectTx(this.txs[index].id).subscribe(() => {
       this.loadTxs();
     });
-
-    // Emit an event that can be sent to create-tx component
-    this.txSubscribed.emit();
   }
 
 }

@@ -2,7 +2,8 @@ export class TxSubmit {
     public from: number;
     public tx: {
         tx_hash: string;
-        fee: number
+        fee: number;
+        coinbase: boolean;
     };
     public inputs: {
         id: number;
@@ -19,7 +20,8 @@ export class TxSubmit {
         from: number,
         tx: {
             tx_hash: string,
-            fee: number
+            fee: number,
+            coinbase: boolean
         },
         inputs: {
             id: number;

@@ -17,7 +17,7 @@ exports.up = function(knex, Promise) {
             table.string('block_hash');
             table.string('previous_block');
             table.string('merkle_root');
-            table.timestamps(true, true);
+            table.string('timestamp');
             table.integer('nonce');
             table.integer('num_txs');
         });

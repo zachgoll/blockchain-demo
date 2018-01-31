@@ -1,5 +1,13 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col-12">
+        <ngb-alert class="helper-text" *ngIf="coinbaseAlert" type="warning" [dismissible]="false">Please add a Coinbase Transaction before mining the block!</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="blockAlert" type="warning" [dismissible]="false">You must either accept or reject all incoming blocks first!</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="broadcastAlert" type="success" [dismissible]="false">Congrats!  You have won the competition and mined the block.</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="blockLoser" type="danger" [dismissible]="false">Sorry!  Another miner has found this block solution already.  Please accept or reject incoming blocks and start mining the next block.</ngb-alert>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-lg-6 col-12 tx-form">
       <div class="row">
         <div class="col-12">
@@ -12,14 +20,12 @@
             <h2 *ngIf="blockHeight === 0" class="text-primary d-inline">Create Genesis Block</h2>
             <button *ngIf="!finished" class="btn btn-warning btn-sm in-btn1 d-inline" (click)="mine()">Mine Block</button>
             <button *ngIf="finished" class="btn btn-warning btn-sm in-btn1 d-inline pulse-button" (click)="broadcast()">Broadcast Block</button>
-            <h4 *ngIf="coinbaseAlert" class="helper-text">Please add a Coinbase Transaction before mining the block!</h4>
             <div class="hash hash-no-margin">{{ blockHash }}</div>
             <hr>
             <h4>Block Header</h4>
             <hr>
             <h6>Previous Block Hash</h6>
-            <div *ngIf="blockHeight === 0" class="hash">0x0000000000000000000000000000000000000000000000000000000000000000</div>
-            <div *ngIf="blockHeight > 0" class="hash">{{ prevBlockHash }}</div>
+            <div class="hash">{{ prevBlockHash }}</div>
             <h6>Merkle Root</h6>
             <div class="hash hash-highlight" [ngClass]="{'hash-highlight': merkleHighlight }">{{ merkleRoot }}</div>
             <div>
@@ -48,8 +54,8 @@
                 <div class="hash hash-inverse">{{coinbase.tx_hash}}</div>
                 <div>
                   <h6 class="d-inline">
-                    Transaction Outputs
-                    <div class="utxo" *ngFor="let output of coinbase.outputs">{{ output }}</div>
+                    Transaction Outputs (block reward, block tx fees)
+                    <div class="utxo" *ngFor="let output of coinbase.outputs">{{ output.value }}</div>
                   </h6>
                 </div>
               </div>
@@ -124,7 +130,7 @@
       
       <div class="row incoming-blocks">
         <div class="col-12 shadowBoxLight mempool">
-            <app-incoming-blocks (blockSubscribed)="onBlockSub()"></app-incoming-blocks>
+            <app-incoming-blocks (mined)="onMine()" (blockSubscribed)="onBlockSub()" (noMoreBlocks)="noMoreBlocks()" #mem></app-incoming-blocks>
         </div>
       </div>
     </div>

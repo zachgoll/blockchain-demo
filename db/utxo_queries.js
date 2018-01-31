@@ -11,7 +11,7 @@ function getSpentUtxos() {
 
 function getUnspentUtxos(userId) {
 
-    return knex('utxos').select('*')
+    return knex('utxos').distinct('utxos.utxo_id').select('*')
         .innerJoin('utxo', 'utxos.utxo_id', 'utxo.id')
         .where('utxos.user_id', userId);
 }

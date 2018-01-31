@@ -40,7 +40,7 @@ export class BlockchainComponent implements OnInit {
           blockHeight: block.height,
           prevBlockHash: block.previous_block,
           merkleRoot: block.merkle_root,
-          timestamp: 'To be updated',
+          timestamp: block.timestamp,
           nonce: block.nonce,
           numberTxsInBlock: block.num_txs,
           blockHash: block.block_hash,

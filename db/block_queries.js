@@ -34,7 +34,8 @@ function getUserBlockchain(userId) {
 function getBlockTxs(blockId) {
     return knex('block_txs')
         .innerJoin('tx', 'block_txs.tx_id', 'tx.id')
-        .where('block_txs.block_id', blockId);
+        .where('block_txs.block_id', blockId)
+        .orderBy('tx.coinbase', 'desc');
 }
 
 function getBlockById(id) {

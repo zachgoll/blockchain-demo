@@ -1,7 +1,10 @@
 const Router = require('express').Router;
 const router = Router();
+const Web3 = require('web3');
 const queries = require('./../db/tx_queries');
 const utxoQueries = require('./../db/utxo_queries');
+
+const sha3 = new Web3().extend.utils.sha3;
 
 router.get('/:id/inputs', (req, res, next) => {
     const id = req.params.id;
@@ -154,7 +157,7 @@ router.post('/new', (req, res, next) => {
             return queries.getTxById(tId);
         })
         .then((tx) => {
-            const hash = {tx_hash: 'testing this hash change function'};
+            const hash = {tx_hash: sha3(tx.id.toString())};
             return queries.editTx(tx.id, hash);
         })
         .then((tx) => {
@@ -174,6 +177,7 @@ router.post('/new', (req, res, next) => {
             next(err);
         });
 });
+
 
 router.post('/newinput', (req, res, next) => {
     queries.createTxInput(req.body)
@@ -225,6 +229,9 @@ router.post('/delete', (req, res, next) => {
     const tx_id = req.body.tx_id;
 
     queries.deleteTx(user_id, tx_id)
+        .then((tx) => {
+            res.status(200).json(tx);
+        })
         .catch((err) => {
             next(err);
         });

@@ -28,7 +28,8 @@ function getIncomingTxs(userId) {
     return knex('tx')
         .whereNotIn('tx.id', tx_subs)
         .whereNotIn('tx.id', tx_rej)
-        .whereNotIn('tx.id', txs_in_blocks);
+        .whereNotIn('tx.id', txs_in_blocks)
+        .where('tx.coinbase', false);
 }
 
 function getAllTxs() {
@@ -53,6 +54,10 @@ function createTxInput(tx_input) {
 }
 
 function postTx(tx) {
+    return Tx().insert(tx, 'id');
+}
+
+function addCoinbase(tx) {
     return Tx().insert(tx, 'id');
 }
 
@@ -116,5 +121,6 @@ module.exports = {
     createTxInput: createTxInput,
     bindTx: bindTx,
     rejectTx: rejectTx,
-    deleteTx: deleteTx
+    deleteTx: deleteTx,
+    addCoinbase: addCoinbase
 }
