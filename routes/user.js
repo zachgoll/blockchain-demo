@@ -4,7 +4,6 @@ const queries = require('./../db/user_queries');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('./../secrets/pw_config');
 
 function comparePw(password, hash, callback) {
     bcrypt.compare(password, hash, (err, isMatch) => {
@@ -55,7 +54,7 @@ router.post('/authenticate', (req, res, next) => {
                 comparePw(password, user.password, (err, isMatch) => {
                     if (err) throw err;
                     if(isMatch){
-                        const token = jwt.sign({data: user}, config.secret, {
+                        const token = jwt.sign({data: user}, process.env.USERSECRET, {
                             expiresIn: 604800
                         });
 
