@@ -4,7 +4,7 @@ const queries = require('./../db/user_queries');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('./../secrets/db_config');
+const config = require('./../secrets/pw_config');
 
 function comparePw(password, hash, callback) {
     bcrypt.compare(password, hash, (err, isMatch) => {

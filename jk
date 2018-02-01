@@ -1,6 +1,0 @@
-#!/user/bin
-
-knex migrate:rollback
-knex migrate:latest
-knex seed:run
-npm run test

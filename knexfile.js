@@ -3,7 +3,7 @@ module.exports = {
     client: 'pg',
     connection: 'postgres://localhost/blockchain_test',
     migrations: {
-      directory: __dirname + '/db/migrations'
+      directory: __dirname + '/db/migrations/test'
     },
     seeds: {
       directory: __dirname + '/db/seeds/test'
@@ -13,7 +13,7 @@ module.exports = {
     client: 'pg',
     connection: 'postgres://localhost/blockchain',
     migrations: {
-      directory: __dirname + '/db/migrations'
+      directory: __dirname + '/db/migrations/development'
     },
     seeds: {
       directory: __dirname + '/db/seeds/development'
