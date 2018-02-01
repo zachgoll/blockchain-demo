@@ -45,14 +45,14 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', canActivate: [AuthGuardService], component: ProfileComponent },
-  { path: 'blockchain-demo', /*canActivate: [AuthGuardService],*/ component: BlockchainDemoComponent, children: [
+  { path: 'blockchain-demo', canActivate: [AuthGuardService], component: BlockchainDemoComponent, children: [
     { path: 'create-tx', component: CreateTxComponent, canDeactivate: [CanDeactivateGuard] },
     { path: 'create-block', component: CreateBlockComponent },
     { path: 'blockchain', component: BlockchainComponent }
   ]},
   { path: 'certification', canActivate: [AuthGuardService], component: CertificationComponent },
-  { path: 'glossary', /*canActivate: [AuthGuardService],*/ component: GlossaryComponent },
-  { path: 'presentation-resources', /*canActivate: [AuthGuardService],*/ component: PresentationResourcesComponent, children: [
+  { path: 'glossary', canActivate: [AuthGuardService], component: GlossaryComponent },
+  { path: 'presentation-resources', canActivate: [AuthGuardService], component: PresentationResourcesComponent, children: [
     { path: 'hash-demo', component: HashDemoComponent },
     { path: 'pow-demo', component: PowDemoComponent },
     { path: 'wallet-generator', component: WalletGeneratorComponent }

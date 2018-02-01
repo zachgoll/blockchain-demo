@@ -177,14 +177,14 @@ var appRoutes = [
     { path: 'login', component: __WEBPACK_IMPORTED_MODULE_17__components_user_login_login_component__["a" /* LoginComponent */] },
     { path: 'register', component: __WEBPACK_IMPORTED_MODULE_16__components_user_register_register_component__["a" /* RegisterComponent */] },
     { path: 'profile', canActivate: [__WEBPACK_IMPORTED_MODULE_1__services_auth_guard_service__["a" /* AuthGuardService */]], component: __WEBPACK_IMPORTED_MODULE_18__components_user_profile_profile_component__["a" /* ProfileComponent */] },
-    { path: 'blockchain-demo', /*canActivate: [AuthGuardService],*/ component: __WEBPACK_IMPORTED_MODULE_28__components_blockchain_demo_blockchain_demo_component__["a" /* BlockchainDemoComponent */], children: [
+    { path: 'blockchain-demo', canActivate: [__WEBPACK_IMPORTED_MODULE_1__services_auth_guard_service__["a" /* AuthGuardService */]], component: __WEBPACK_IMPORTED_MODULE_28__components_blockchain_demo_blockchain_demo_component__["a" /* BlockchainDemoComponent */], children: [
             { path: 'create-tx', component: __WEBPACK_IMPORTED_MODULE_20__components_blockchain_demo_create_tx_create_tx_component__["a" /* CreateTxComponent */], canDeactivate: [__WEBPACK_IMPORTED_MODULE_0__services_can_deactivate_service__["a" /* CanDeactivateGuard */]] },
             { path: 'create-block', component: __WEBPACK_IMPORTED_MODULE_23__components_blockchain_demo_create_block_create_block_component__["a" /* CreateBlockComponent */] },
             { path: 'blockchain', component: __WEBPACK_IMPORTED_MODULE_22__components_blockchain_demo_blockchain_blockchain_component__["a" /* BlockchainComponent */] }
         ] },
     { path: 'certification', canActivate: [__WEBPACK_IMPORTED_MODULE_1__services_auth_guard_service__["a" /* AuthGuardService */]], component: __WEBPACK_IMPORTED_MODULE_30__components_certification_certification_component__["a" /* CertificationComponent */] },
-    { path: 'glossary', /*canActivate: [AuthGuardService],*/ component: __WEBPACK_IMPORTED_MODULE_35__components_glossary_glossary_component__["a" /* GlossaryComponent */] },
-    { path: 'presentation-resources', /*canActivate: [AuthGuardService],*/ component: __WEBPACK_IMPORTED_MODULE_31__components_presentation_resources_presentation_resources_component__["a" /* PresentationResourcesComponent */], children: [
+    { path: 'glossary', canActivate: [__WEBPACK_IMPORTED_MODULE_1__services_auth_guard_service__["a" /* AuthGuardService */]], component: __WEBPACK_IMPORTED_MODULE_35__components_glossary_glossary_component__["a" /* GlossaryComponent */] },
+    { path: 'presentation-resources', canActivate: [__WEBPACK_IMPORTED_MODULE_1__services_auth_guard_service__["a" /* AuthGuardService */]], component: __WEBPACK_IMPORTED_MODULE_31__components_presentation_resources_presentation_resources_component__["a" /* PresentationResourcesComponent */], children: [
             { path: 'hash-demo', component: __WEBPACK_IMPORTED_MODULE_3__components_presentation_resources_hash_demo_hash_demo_component__["a" /* HashDemoComponent */] },
             { path: 'pow-demo', component: __WEBPACK_IMPORTED_MODULE_2__components_presentation_resources_pow_demo_pow_demo_component__["a" /* PowDemoComponent */] },
             { path: 'wallet-generator', component: __WEBPACK_IMPORTED_MODULE_32__components_presentation_resources_wallet_generator_wallet_generator_component__["a" /* WalletGeneratorComponent */] }
