@@ -49,6 +49,7 @@ export class ProfileComponent implements OnInit {
       } else {
         // Save user picture to local storage
         let usr = JSON.parse(localStorage.getItem('user'));
+        this.queryService.updateUserPic(usr.username, {picture: res.file}).subscribe();
         usr.picture_url = res.file;
         localStorage.setItem('user', JSON.stringify(usr));
         this.user = usr;

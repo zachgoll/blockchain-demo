@@ -184,4 +184,9 @@ export class QueryService {
     return this.http.get<Block[]>('/api/v1/blocks/user/' + user_id);
   }
 
+  updateUserPic(username: string, update) {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+    return this.http.put('api/v1/' + username + '/image', update, {headers: headers});
+  }
+
 }

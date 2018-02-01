@@ -27,6 +27,13 @@ function editUser(username, update) {
         .update(update);
 }
 
+function editUserById(user_id, update) {
+    return User()
+        .where('id', user_id)
+        .first()
+        .update(update);
+}
+
 function postUserQuestion(id, question) {
     return knex('user_questions').insert({
         user_id: id,
@@ -44,6 +51,7 @@ module.exports = {
     postUser: postUser,
     getUserByUsername: getUserByUsername,
     editUser: editUser,
+    editUserById: editUserById,
     postUserQuestion: postUserQuestion,
     getQuestionsById: getQuestionsById
 }
