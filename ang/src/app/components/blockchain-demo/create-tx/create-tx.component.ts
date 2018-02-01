@@ -36,6 +36,10 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   usersWithPics: {username: string, id: number, picture_url: string}[] = [];
 
   public model: any;
+  invalidUtxo: boolean;
+  invalidTx: boolean;
+  notEnoughFunds: boolean;
+  invalidForm: boolean;
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
@@ -52,43 +56,64 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
 
   onTxSubmit() {
 
-    const sendAmount = +this.txForm.value.amount;
-    const currentUserId = this.user.id;
-    const fee = +this.txForm.value.fee;
-    let totalInputs = 0;
+    console.log(this.txForm.valid);
+    if (!this.txForm.valid) {
+      this.invalidForm = true;
+      setTimeout(() => {
+        this.invalidForm = false;
+      }, 6000);
+    } else {
+      if (this.txForm.value.selectedUser.id === this.user.id) {
+        this.invalidTx = true;
+        setTimeout(() => {
+          this.invalidTx = false;
+        }, 5000);
+      } else {
+        const sendAmount = +this.txForm.value.amount;
+        const currentUserId = this.user.id;
+        const fee = +this.txForm.value.fee;
+        let totalInputs = 0;
 
-    for (let i = 0; i < this.selectedUtxos.length; i++) {
-      totalInputs = totalInputs + this.selectedUtxos[i].value;
+        for (let i = 0; i < this.selectedUtxos.length; i++) {
+          totalInputs = totalInputs + this.selectedUtxos[i].value;
+        }
+
+        if (totalInputs < fee + sendAmount) {
+          this.notEnoughFunds = true;
+          setTimeout(() => {
+            this.notEnoughFunds = false;
+          }, 6000);
+        } else {
+          const txToSubmit: TxSubmit = {
+            from: currentUserId,
+            tx: {
+              tx_hash: '',
+              fee: fee,
+              coinbase: false
+            },
+            inputs: this.selectedUtxos,
+            outputs: [{
+              value: sendAmount,
+              to: this.txForm.value.selectedUser.id
+            },
+            {
+              value: totalInputs - (sendAmount + fee),
+              to: currentUserId
+            }]
+          };
+
+          console.log(txToSubmit);
+          this.query.postTx(txToSubmit).subscribe((tx) => {
+            // Reload UTXOs, reset form, reset selected UTXOs
+            this.updateUtxos();
+            this.txForm.reset();
+            this.selectedUtxos = [];
+          }, (err) => {
+            console.log(err);
+          });
+        }
+      }
     }
-
-    const txToSubmit: TxSubmit = {
-      from: currentUserId,
-      tx: {
-        tx_hash: '',
-        fee: fee,
-        coinbase: false
-      },
-      inputs: this.selectedUtxos,
-      outputs: [{
-        value: sendAmount,
-        to: this.txForm.value.selectedUser.id
-      },
-      {
-        value: totalInputs - (sendAmount + fee),
-        to: currentUserId
-      }]
-    };
-
-    console.log(txToSubmit);
-    this.query.postTx(txToSubmit).subscribe((tx) => {
-      // Reload UTXOs, reset form, reset selected UTXOs
-      this.updateUtxos();
-      this.txForm.reset();
-      this.selectedUtxos = [];
-    }, (err) => {
-      console.log(err);
-    });
-
   }
 
   /**
@@ -103,8 +128,9 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   }
 
   onTxSub(eventData: Event) {
-    console.log('event happened');
-    this.updateUtxos();
+    if (this.selectedUtxos.length === 0){
+      this.updateUtxos();
+    }
   }
 
   updateUtxos() {
@@ -120,14 +146,22 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
  */
 
   dragStart(event, utxo) {
+    this.invalidUtxo = false;
     this.draggedUtxo = utxo;
   }
 
   drop(event) {
       if (this.draggedUtxo) {
           const draggedUtxoIndex = this.findIndex(this.draggedUtxo);
-          this.selectedUtxos = [...this.selectedUtxos, this.draggedUtxo];
-          this.utxos = this.utxos.filter((val, i) => i !== draggedUtxoIndex);
+          if (this.draggedUtxo.current_owner !== this.user.id) {
+            this.invalidUtxo = true;
+            setTimeout(() => {
+              this.invalidUtxo = false;
+            }, 6000);
+          } else {
+            this.selectedUtxos = [...this.selectedUtxos, this.draggedUtxo];
+            this.utxos = this.utxos.filter((val, i) => i !== draggedUtxoIndex);
+          }
           this.draggedUtxo = null;
       }
   }
@@ -182,7 +216,7 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   formatter = (x: {username: string}) => x.username;
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (!this.changes) {
+    if (this.selectedUtxos.length === 0) {
       return true;
     } else {
       return confirm('Are you sure you want to navigate away?  All changes will be lost!');

@@ -6,6 +6,7 @@
 </div>
 <div class="row d-inline" *ngFor="let block of blocks; let i=index;">
   <div class="col-12">
+    <h4 *ngIf="block.height === 0">Genesis Block</h4>
     <h4>Block #{{ block.height }}</h4>
     <hr>
     <div class="row">

@@ -41,8 +41,6 @@ export class IncomingBlocksComponent implements OnInit {
     });
 
     this.query.getBlockTxs(block_id).subscribe((txs) => {
-      console.log('here are all the block transactions');
-      console.log(txs);
       txs.forEach((tx) => {
         this.query.getOutputs(tx.id).subscribe((t) => {
           t.forEach((t_output) => {

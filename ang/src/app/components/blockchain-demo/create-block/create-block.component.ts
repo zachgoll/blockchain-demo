@@ -53,7 +53,7 @@ export class CreateBlockComponent implements OnInit {
   coinbaseAlert = false;
   blocksLeft = true;
   blockAlert = false;
-  difficultyTarget = 1;
+  difficultyTarget = 2;
   blockLoser = false;
 
   // Mining difficulty
@@ -72,10 +72,14 @@ export class CreateBlockComponent implements OnInit {
     this.selectedTxs = [];
     this.getUserBlockchain();
     this.loadTxs();
+    setInterval(() => {
+      if (!this.mining) {
+        this.mem.loadBlocks();
+      }
+    }, 5000);
   }
 
   noMoreBlocks() {
-    console.log('got an alert that there are no more blocks');
     this.blockAlert = false;
     this.blocksLeft = false;
   }
@@ -97,6 +101,7 @@ export class CreateBlockComponent implements OnInit {
 
   getUserBlockchain() {
     this.query.getUserBlockchain(this.user.id).subscribe((blocks) => {
+      this.resetBlock();
       this.blockHeight = blocks.length;
       if (blocks.length !== 0) {
         this.prevBlockHash = blocks[blocks.length - 1].block_hash;
@@ -108,8 +113,6 @@ export class CreateBlockComponent implements OnInit {
 
   onBlockSub() {
     this.loadTxs();
-    this.blockHeight++;
-    this.resetBlock();
     this.getUserBlockchain();
   }
 
@@ -173,11 +176,9 @@ export class CreateBlockComponent implements OnInit {
           this.query.addTxToBlock(coinbase_tx.id, blk.id).subscribe();
         });
 
-        this.resetBlock();
-        this.mem.loadBlocks();
-
         this.query.subscribeBlock(blk.id).subscribe(() => {
           this.getUserBlockchain();
+          this.mem.loadBlocks();
         });
 
         this.loadTxs();
@@ -246,13 +247,31 @@ export class CreateBlockComponent implements OnInit {
     this.nonce = 0;
   }
 
+  loseMiningStatus() {
+    this.blockLoser = true;
+    setTimeout(() => {
+      this.blockLoser = false;
+    }, 8000);
+    this.mining = false;
+    this.mem.loadBlocks();
+  }
+
   increment(data, difficulty): void {
     setTimeout(() => {
       if (web3.sha3(this.nonce + data) >= this.difficulty[difficulty]) {
+        if (this.nonce % 100 === 0) {
+          this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
+            if (blocks.length !== 0) {
+              this.loseMiningStatus();
+            }
+          });
+        }
         this.mining = true;
         this.nonce = this.nonce + 1;
         this.blockHash = web3.sha3(this.nonce + data);
-        this.increment(data, difficulty);
+        if (!this.blockLoser) {
+          this.increment(data, difficulty);
+        }
       } else {
         // Check to make sure that current user won the mining race
         this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
@@ -261,16 +280,11 @@ export class CreateBlockComponent implements OnInit {
             this.blockHash = web3.sha3(this.nonce + data);
             this.finished = true;
           } else {
-            this.blockLoser = true;
-            setTimeout(() => {
-              this.blockLoser = false;
-            }, 8000);
-            this.mining = false;
-            this.mem.loadBlocks();
+            this.loseMiningStatus();
           }
         });
       }
-    }, 200);
+    }, 0.1);
   }
 
 /**

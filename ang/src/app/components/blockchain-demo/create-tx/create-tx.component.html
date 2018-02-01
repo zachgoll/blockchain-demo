@@ -1,5 +1,13 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col-12">
+        <ngb-alert class="helper-text" *ngIf="invalidUtxo" type="warning" [dismissible]="false">Your private key did not unlock this UTXO.  Please select a gold UTXO.</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="invalidTx" type="warning" [dismissible]="false">You cannot send funds to yourself!  Select a different user!</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="notEnoughFunds" type="warning" [dismissible]="false">You do not have enough funds for this transaction.  Add more UTXOs or decrease the fee!</ngb-alert>
+        <ngb-alert class="helper-text" *ngIf="invalidForm" type="warning" [dismissible]="false">You must fill out all fields before submitting the transaction!</ngb-alert>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-lg-4 col-12 tx-form">
       <div class="row">
         <div class="col-12">
@@ -9,7 +17,7 @@
             <div class="form-group form-row">
               <label for="amount" class="col-form-label">Send</label>
               <div class="col-lg-8 col-12">
-                <input type="text" class="form-control" name="amount" placeholder="Amount..." ngModel>
+                <input type="text" class="form-control" name="amount" placeholder="Amount..." ngModel required>
               </div>
             </div>
             <div class="form-group form-row">
@@ -19,7 +27,7 @@
               <label for="typeahead-template" class="col-form-label">User Lookup:</label>
               <div class="col-lg-6 col-12">
                 <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
-                  [inputFormatter]="formatter" name="selectedUser" ngModel>
+                  [inputFormatter]="formatter" name="selectedUser" ngModel required>
               </div>
             </div>
             <div class="form-group form-row">
@@ -36,7 +44,7 @@
             <div class="form-group form-row">
               <label for="fee" class="col-form-label">Add Fee</label>
               <div class="col-lg-3 col-12">
-                <input type="text" class="form-control" name="fee" ngModel>
+                <input type="text" class="form-control" name="fee" ngModel required>
               </div>
               <div class="col-lg-3 col-12">
                 <button class="btn btn-outline-primary" type="button" (click)="estimateFee()">Estimate</button>
