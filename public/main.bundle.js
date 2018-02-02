@@ -129,6 +129,7 @@ var wallet_generator_component_1 = __webpack_require__("../../../../../src/app/c
 var error_page_component_1 = __webpack_require__("../../../../../src/app/components/error-page/error-page.component.ts");
 var query_service_1 = __webpack_require__("../../../../../src/app/services/query.service.ts");
 var glossary_component_1 = __webpack_require__("../../../../../src/app/components/glossary/glossary.component.ts");
+var faq_component_1 = __webpack_require__("../../../../../src/app/components/faq/faq.component.ts");
 /**
  * All child routes protected if canActivate present on parent
  * To allow the parent but not the children, use canActivateChild: [AuthGuardService] instead
@@ -145,6 +146,7 @@ var appRoutes = [
         ] },
     { path: 'certification', canActivate: [auth_guard_service_1.AuthGuardService], component: certification_component_1.CertificationComponent },
     { path: 'glossary', canActivate: [auth_guard_service_1.AuthGuardService], component: glossary_component_1.GlossaryComponent },
+    { path: 'faq', canActivate: [auth_guard_service_1.AuthGuardService], component: faq_component_1.FaqComponent },
     { path: 'presentation-resources', canActivate: [auth_guard_service_1.AuthGuardService], component: presentation_resources_component_1.PresentationResourcesComponent, children: [
             { path: 'hash-demo', component: hash_demo_component_1.HashDemoComponent },
             { path: 'pow-demo', component: pow_demo_component_1.PowDemoComponent },
@@ -181,7 +183,8 @@ var AppModule = (function () {
                 pow_demo_component_1.PowDemoComponent,
                 error_page_component_1.ErrorPageComponent,
                 ng2_file_upload_1.FileSelectDirective,
-                glossary_component_1.GlossaryComponent
+                glossary_component_1.GlossaryComponent,
+                faq_component_1.FaqComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,
@@ -1580,6 +1583,77 @@ exports.ErrorPageComponent = ErrorPageComponent;
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/faq/faq.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/faq/faq.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<br>\n<div class=\"container\">\n  <h2>Training Session Questions</h2>\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ul class=\"list-group\">\n        <li *ngFor=\"let q of sessionQuestions\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ q.question }}</span>\n          <span class=\"text-primary justify-content-end p-2\"> Asked by: {{ q.user }}</span>\n          <span class=\"badge badge-warning badge-pill text-white p-2\"> {{ q.subscriptions }}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n  <br>\n  <h2>FAQ</h2>\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ul class=\"list-group\">\n        <li *ngFor=\"let q of topQuestions\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ q.question }}</span>\n          <span class=\"text-primary justify-content-end p-2\"> Asked by: {{ q.user }}</span>\n          <span class=\"badge badge-warning badge-pill text-white p-2\"> {{ q.subscriptions }}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/faq/faq.component.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("../../../core/esm5/core.js");
+var FaqComponent = (function () {
+    function FaqComponent() {
+        this.sessionQuestions = [
+            { question: 'When I am looking at a block explorer, what does the term gas mean?', subscriptions: 2, user: 'Joe' },
+            { question: 'blah blah', subscriptions: 2, user: 'Joe' },
+            { question: 'blah blah', subscriptions: 2, user: 'Joe' },
+            { question: 'blah blah', subscriptions: 2, user: 'Joe' }
+        ];
+        this.topQuestions = [
+            { question: 'When I am looking at a block explorer, what does the term gas mean?', subscriptions: 2, user: 'Joe' },
+            { question: 'blah blah', subscriptions: 2, user: 'Joe' }
+        ];
+    }
+    FaqComponent.prototype.ngOnInit = function () {
+    };
+    FaqComponent = __decorate([
+        core_1.Component({
+            selector: 'app-faq',
+            template: __webpack_require__("../../../../../src/app/components/faq/faq.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/faq/faq.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], FaqComponent);
+    return FaqComponent;
+}());
+exports.FaqComponent = FaqComponent;
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/glossary/glossary.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1955,7 +2029,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-white\" id=\"appNav\">\n  <div class=\"container-fluid\">\n    <a class=\"navbar-brand\" href=\"#\">\n      <img src=\"../../assets/chainworks-logo.png\" class=\"img-rounded\" style=\"margin-left: 20px;\">\n    </a>\n    <button class=\"navbar-toggler\" type=\"button\" (click)=\"isNavbarCollapsed = !isNavbarCollapsed\" aria-controls=\"navCollapse\"\n      aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"isNavbarCollapsed\" class=\"navbar-collapse justify-content-end\" id=\"navCollapse\">\n      <ul class=\"navbar-nav\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" routerLink=\"/\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Home</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/certification\" routerLinkActive=\"active\" class=\"nav-link\">Certification</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/glossary\" routerLinkActive=\"active\" class=\"nav-link\">Glossary</a>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"presentation-resources\" class=\"nav-link dd\" ngbDropdownToggle>Presentation Resources</a>\n          <div ngbDropdownMenu aria-labelledby=\"presentation-resources\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/hash-demo']\">Hash Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/pow-demo']\">POW Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/wallet-generator']\">Wallet Generator</button>\n          </div>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"blockchain-demo\" ngbDropdownToggle class=\"nav-link dd\">Blockchain Demo</a>\n          <div ngbDropdownMenu aria-labelledby=\"blockchain-demo\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-tx']\">Create Transaction</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-block']\">Create Block</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/blockchain']\">View Blockchain</button>\n          </div>\n        </li>\n        <div *ngIf=\"authService.loggedIn()\" ngbDropdown placement=\"bottom-right\" class=\"nav-item d-inline-block\">\n          <a class=\"nav-link dd\" id=\"basicdrop\" ngbDropdownToggle>\n            <!-- The Profile picture inserted via div class below, with shaping provided by Bootstrap -->\n            <div class=\"profile-img dd\">\n              <img class=\"roundImg dd\" src=\"{{ this.authService.picture_url }}\">\n            </div>\n            <span class=\"caret dd\"></span>\n          </a>\n          <div ngbDropdownMenu aria-labelledby=\"basicdrop\">\n            <h4 *ngIf=\"user\" class=\"dropdown-item text-capitalize navli\">{{ user.f_name }}</h4>\n            <hr>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/profile']\">Profile</button>\n            <button class=\"dropdown-item dd\" href=\"#\" (click)=\"onLogout()\">Logout</button>\n          </div>\n        </div>\n      </ul>\n    </div>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-white\" id=\"appNav\">\n  <div class=\"container-fluid\">\n    <a class=\"navbar-brand\" href=\"#\">\n      <img src=\"../../assets/chainworks-logo.png\" class=\"img-rounded\" style=\"margin-left: 20px;\">\n    </a>\n    <button class=\"navbar-toggler\" type=\"button\" (click)=\"isNavbarCollapsed = !isNavbarCollapsed\" aria-controls=\"navCollapse\"\n      aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"isNavbarCollapsed\" class=\"navbar-collapse justify-content-end\" id=\"navCollapse\">\n      <ul class=\"navbar-nav\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" routerLink=\"/\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Home</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/certification\" routerLinkActive=\"active\" class=\"nav-link\">Certification</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/glossary\" routerLinkActive=\"active\" class=\"nav-link\">Glossary</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/faq\" routerLinkActive=\"active\" class=\"nav-link\">FAQ</a>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"presentation-resources\" class=\"nav-link dd\" ngbDropdownToggle>Presentation Resources</a>\n          <div ngbDropdownMenu aria-labelledby=\"presentation-resources\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/hash-demo']\">Hash Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/pow-demo']\">POW Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/wallet-generator']\">Wallet Generator</button>\n          </div>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"blockchain-demo\" ngbDropdownToggle class=\"nav-link dd\">Blockchain Demo</a>\n          <div ngbDropdownMenu aria-labelledby=\"blockchain-demo\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-tx']\">Create Transaction</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-block']\">Create Block</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/blockchain']\">View Blockchain</button>\n          </div>\n        </li>\n        <div *ngIf=\"authService.loggedIn()\" ngbDropdown placement=\"bottom-right\" class=\"nav-item d-inline-block\">\n          <a class=\"nav-link dd\" id=\"basicdrop\" ngbDropdownToggle>\n            <!-- The Profile picture inserted via div class below, with shaping provided by Bootstrap -->\n            <div class=\"profile-img dd\">\n              <img class=\"roundImg dd\" src=\"{{ this.authService.picture_url }}\">\n            </div>\n            <span class=\"caret dd\"></span>\n          </a>\n          <div ngbDropdownMenu aria-labelledby=\"basicdrop\">\n            <h4 *ngIf=\"user\" class=\"dropdown-item text-capitalize navli\">{{ user.f_name }}</h4>\n            <hr>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/profile']\">Profile</button>\n            <button class=\"dropdown-item dd\" href=\"#\" (click)=\"onLogout()\">Logout</button>\n          </div>\n        </div>\n      </ul>\n    </div>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -2247,7 +2321,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".shadow-box {\n    box-shadow: 1px 2px 10px -3px #312a44;\n    padding: 5px;\n    min-height: 50px;\n    word-wrap: break-word;\n    margin-bottom: 40px;\n    padding-left: 20px;\n  }\n\n  .txt {\n      line-height: 40px;\n      font-family: monospace;\n      font-size: large;\n  }", ""]);
 
 // exports
 
@@ -2260,7 +2334,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/presentation-resources/wallet-generator/wallet-generator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  wallet-generator works!\n</p>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div *ngIf=\"keypair\" class=\"col-5\">\n      <h2>Ether Faucet (Rinkeby Testnet)</h2>\n      <p>Paste your public Ethereum address here to receive 1 ether</p>\n      <form (ngSubmit)=\"getEther()\" #ether=\"ngForm\">\n        <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" name=\"address\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Get Ether</button>\n      </form>\n    </div>\n    <div *ngIf=\"keypair\" class=\"col-7\">\n      <h2>Your Tasks</h2>\n      <hr>\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\">Send 0.001 ether to <span class=\"helper-text hash\">{{ demoAccount }}</span> using <a href=\"https://www.myetherwallet.com/\" target=\"_blank\" style=\"text-decoration: underline;\">My Ether Wallet</a></li>\n        <li class=\"list-group-item\">Find which block your transaction was added to using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n        <li class=\"list-group-item\">Find the number of transactions you have made with your account using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n        <li class=\"list-group-item\">with your account using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n      </ul>\n    </div>\n    <div  *ngIf=\"!keypair\" class=\"col-8\">\n      <h2>Ethereum Keypair Generator</h2>\n      <br>\n      <button class=\"btn btn-primary btn-lg\" (click)=\"genKeypair()\">Generate an Ethereum Keypair</button>\n    </div>\n  </div>\n  <br><hr><br>\n  <h2 *ngIf=\"generating\">Generating Keypair...</h2>\n  <div *ngIf=\"keypair\" class=\"row\">\n    <div class=\"col-12 mr-auto ml-auto\">\n      <h4>Your Public Address</h4>\n      <div class=\"shadow-box\">\n        <div class=\"txt\">{{ keypair.pub_key }}</div>\n      </div>\n      <h4>Your Private Key</h4>\n      <button class=\"btn btn-primary\" *ngIf=\"!privShow\" (click)=\"privShow = true;\">Show Private Key</button>\n      <div *ngIf=\"privShow\" class=\"shadow-box\" style=\"margin-bottom: 5px;\">\n        <div class=\"txt\">{{ keypair.priv_key }}</div>\n      </div>\n      <p *ngIf=\"privShow\" class=\"helper-text\" style=\"color: red;\">In real life, you would never see or store your private key in plain site!  We are using the Ethereum testnet for this demo and all funds are completely fake!</p>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2279,19 +2353,59 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var query_service_1 = __webpack_require__("../../../../../src/app/services/query.service.ts");
+var forms_1 = __webpack_require__("../../../forms/esm5/forms.js");
 var core_1 = __webpack_require__("../../../core/esm5/core.js");
 var WalletGeneratorComponent = (function () {
-    function WalletGeneratorComponent() {
+    function WalletGeneratorComponent(query) {
+        this.query = query;
+        this.demoAccount = '0xEA1380bcFd38A69E820C47e7DC45740d1025f63F';
+        this.privShow = false;
     }
     WalletGeneratorComponent.prototype.ngOnInit = function () {
+        this.user = JSON.parse(localStorage.getItem('user'));
+        this.getKeypair();
     };
+    WalletGeneratorComponent.prototype.getEther = function () {
+        console.log('got ether');
+    };
+    WalletGeneratorComponent.prototype.genKeypair = function () {
+        var _this = this;
+        this.generating = true;
+        this.query.generateKeypair().subscribe(function () {
+            _this.query.getKeypair(_this.user.id).subscribe(function (keypair) {
+                if (keypair) {
+                    _this.keypair = {
+                        priv_key: keypair.priv_key,
+                        pub_key: keypair.pub_key
+                    };
+                    _this.generating = false;
+                }
+            });
+        });
+    };
+    WalletGeneratorComponent.prototype.getKeypair = function () {
+        var _this = this;
+        this.query.getKeypair(this.user.id).subscribe(function (keypair) {
+            if (keypair) {
+                _this.keypair = {
+                    priv_key: keypair.priv_key,
+                    pub_key: keypair.pub_key
+                };
+            }
+        });
+    };
+    __decorate([
+        core_1.ViewChild('ether'),
+        __metadata("design:type", forms_1.NgForm)
+    ], WalletGeneratorComponent.prototype, "etherForm", void 0);
     WalletGeneratorComponent = __decorate([
         core_1.Component({
             selector: 'app-wallet-generator',
             template: __webpack_require__("../../../../../src/app/components/presentation-resources/wallet-generator/wallet-generator.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/presentation-resources/wallet-generator/wallet-generator.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [query_service_1.QueryService])
     ], WalletGeneratorComponent);
     return WalletGeneratorComponent;
 }());
@@ -2321,7 +2435,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/user/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <br><br><br><br><br><br><br>\n  <div class=\"row\">\n    <div class=\"col-12 col-xl-5 col-lg-6 col-md-8 col-sm-10 mr-auto ml-auto\">\n      <form class=\"shadowBox\" (ngSubmit)=\"onLoginSubmit()\" #login=\"ngForm\">\n        <h2>Login</h2>\n        <hr>\n        <div class=\"form-group\">\n          <label for=\"f_name\">Username</label>\n          <input type=\"text\" class=\"form-control\" name=\"username\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"l_name\">Password</label>\n          <input type=\"password\" class=\"form-control\" name=\"password\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit</button>\n      </form>     \n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <br><br><br><br><br><br><br>\n  <div class=\"row\">\n    <div class=\"col-12 col-xl-5 col-lg-6 col-md-8 col-sm-10 mr-auto ml-auto\">\n      <form class=\"shadowBox\" (ngSubmit)=\"onLoginSubmit()\" #login=\"ngForm\">\n        <h2>Login</h2>\n        <hr>\n        <div class=\"form-group\">\n          <label for=\"f_name\">Username</label>\n          <input type=\"text\" class=\"form-control\" name=\"username\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"l_name\">Password</label>\n          <input type=\"password\" class=\"form-control\" name=\"password\" ngModel>\n          <p *ngIf=\"pwError\" class=\"helper-text\" style=\"color:red;\">Sorry, your username or password is incorrect.</p>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit</button>\n      </form>     \n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -2356,6 +2470,7 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.onLoginSubmit = function () {
         var _this = this;
+        this.pwError = false;
         var user = {
             username: this.loginForm.value.username,
             password: this.loginForm.value.password
@@ -2368,16 +2483,16 @@ var LoginComponent = (function () {
                         _this.authService.picture_url = profile.user.picture_url;
                     }
                     _this.authService.currentUser = profile.user;
+                    _this.loginForm.reset();
                     _this.router.navigate(['/']);
                 }, function (err) {
                     console.log(err);
                 });
             }
             else {
-                _this.router.navigate(['/register']);
+                _this.pwError = true;
             }
         });
-        this.loginForm.reset();
     };
     __decorate([
         core_2.ViewChild('login'),
@@ -2533,7 +2648,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/user/register/register.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <br>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 col-xl-5 col-lg-6 col-md-8 col-sm-10 mr-auto ml-auto\">\n      <form class=\"shadowBox\" (ngSubmit)=\"onRegisterSubmit()\" #register=\"ngForm\">\n        <h2>Register</h2>\n        <hr>\n        <div class=\"form-group\">\n          <label for=\"f_name\">First Name</label>\n          <input type=\"text\" class=\"form-control\" name=\"f_name\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"l_name\">Last Name</label>\n          <input type=\"text\" class=\"form-control\" name=\"l_name\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"userEmail\">Email</label>\n          <input type=\"email\" class=\"form-control\" name=\"userEmail\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"username\">Username</label>\n          <input type=\"text\" class=\"form-control\" name=\"username\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"password\">Password</label>\n          <input type=\"password\" class=\"form-control\" name=\"password\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"session\">Training Session Id</label>\n          <input type=\"text\" class=\"form-control\" name=\"session\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit</button>\n      </form>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <br>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 col-xl-5 col-lg-6 col-md-8 col-sm-10 mr-auto ml-auto\">\n      <form class=\"shadowBox\" (ngSubmit)=\"onRegisterSubmit()\" #register=\"ngForm\">\n        <h2>Register</h2>\n        <hr>\n        <div class=\"form-group\">\n          <label for=\"f_name\">First Name</label>\n          <input type=\"text\" class=\"form-control\" name=\"f_name\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"l_name\">Last Name</label>\n          <input type=\"text\" class=\"form-control\" name=\"l_name\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"userEmail\">Email</label>\n          <input type=\"email\" class=\"form-control\" name=\"userEmail\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"username\">Username</label>\n          <input type=\"text\" class=\"form-control\" name=\"username\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"password\">Password</label>\n          <input type=\"password\" class=\"form-control\" name=\"password\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"session\">Training Session Id</label>\n          <input type=\"text\" class=\"form-control\" name=\"session\" ngModel>\n          <p *ngIf=\"sessionError\" class=\"helper-text\" style=\"color:red;\">Please enter a valid training session ID</p>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit</button>\n      </form>\n    </div>\n  </div>\n  <br><br>\n</div>\n"
 
 /***/ }),
 
@@ -2565,6 +2680,7 @@ var RegisterComponent = (function () {
     };
     RegisterComponent.prototype.onRegisterSubmit = function () {
         var _this = this;
+        this.sessionError = false;
         var username = this.registerForm.value.username;
         var password = this.registerForm.value.password;
         var user = {
@@ -2579,12 +2695,14 @@ var RegisterComponent = (function () {
         this.authService.registerUser(user).subscribe(function (data) {
             if (data) {
                 _this.router.navigate(['/login']);
+                _this.registerForm.reset();
             }
             else {
                 _this.router.navigate(['/register']);
             }
+        }, function (err) {
+            _this.sessionError = true;
         });
-        this.registerForm.reset();
     };
     __decorate([
         core_1.ViewChild('register'),
@@ -2797,6 +2915,10 @@ var QueryService = (function () {
         var id = JSON.parse(localStorage.getItem('user')).id;
         return this.http.get('/api/v1/' + id + '/questions');
     };
+    QueryService.prototype.getUserById = function () {
+        var id = JSON.parse(localStorage.getItem('user')).id;
+        return this.http.get('/api/v1/users/' + id);
+    };
     QueryService.prototype.getUtxos = function (user_id) {
         return this.http.get('/api/v1/utxos/unspent/' + user_id);
     };
@@ -2918,6 +3040,17 @@ var QueryService = (function () {
     QueryService.prototype.updateUserPic = function (username, update) {
         var headers = new http_1.HttpHeaders({ 'Content-type': 'application/json' });
         return this.http.put('api/v1/' + username + '/image', update, { headers: headers });
+    };
+    QueryService.prototype.generateKeypair = function () {
+        var headers = new http_1.HttpHeaders({ 'Content-type': 'application/json' });
+        var id = JSON.parse(localStorage.getItem('user')).id;
+        var user = {
+            user_id: id
+        };
+        return this.http.post('api/v1/generate-keypair', user, { headers: headers });
+    };
+    QueryService.prototype.getKeypair = function (user_id) {
+        return this.http.get('/api/v1/keypair/' + user_id);
     };
     QueryService = __decorate([
         core_1.Injectable(),

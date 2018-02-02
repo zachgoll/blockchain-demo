@@ -1,0 +1,28 @@
+<br>
+<div class="container">
+  <h2>Training Session Questions</h2>
+  <div class="row">
+    <div class="col-12">
+      <ul class="list-group">
+        <li *ngFor="let q of sessionQuestions" class="list-group-item d-flex align-items-center">
+          <span class="mr-auto p-8 text-primary">{{ q.question }}</span>
+          <span class="text-primary justify-content-end p-2"> Asked by: {{ q.user }}</span>
+          <span class="badge badge-warning badge-pill text-white p-2"> {{ q.subscriptions }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br>
+  <h2>FAQ</h2>
+  <div class="row">
+    <div class="col-12">
+      <ul class="list-group">
+        <li *ngFor="let q of topQuestions" class="list-group-item d-flex align-items-center">
+          <span class="mr-auto p-8 text-primary">{{ q.question }}</span>
+          <span class="text-primary justify-content-end p-2"> Asked by: {{ q.user }}</span>
+          <span class="badge badge-warning badge-pill text-white p-2"> {{ q.subscriptions }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

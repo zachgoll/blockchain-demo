@@ -45,6 +45,14 @@ function getQuestionsById(id) {
     return knex('user_questions').where('user_id', id);
 }
 
+function generateKeypair(keypair) {
+    return knex('user_keypairs').insert(keypair);
+}
+
+function getKeypair(id) {
+    return knex('user_keypairs').where('user_id', id).first();
+}
+
 module.exports = {
     getAllUsers: getAllUsers,
     getUserById: getUserById,
@@ -53,5 +61,7 @@ module.exports = {
     editUser: editUser,
     editUserById: editUserById,
     postUserQuestion: postUserQuestion,
-    getQuestionsById: getQuestionsById
+    getQuestionsById: getQuestionsById,
+    generateKeypair: generateKeypair,
+    getKeypair: getKeypair
 }

@@ -17,6 +17,11 @@ export class QueryService {
     return this.http.get('/api/v1/' + id + '/questions');
   }
 
+  getUserById() {
+    const id = JSON.parse(localStorage.getItem('user')).id;
+    return this.http.get('/api/v1/users/' + id);
+  }
+
   getUtxos(user_id: number) {
     return this.http.get<Utxo[]>('/api/v1/utxos/unspent/' + user_id);
   }
@@ -187,6 +192,21 @@ export class QueryService {
   updateUserPic(username: string, update) {
     const headers = new HttpHeaders({'Content-type': 'application/json'});
     return this.http.put('api/v1/' + username + '/image', update, {headers: headers});
+  }
+
+  generateKeypair() {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+    const id = JSON.parse(localStorage.getItem('user')).id;
+
+    const user = {
+      user_id: id
+    };
+
+    return this.http.post('api/v1/generate-keypair', user, {headers: headers});
+  }
+
+  getKeypair(user_id: number) {
+    return this.http.get<any>('/api/v1/keypair/' + user_id);
   }
 
 }

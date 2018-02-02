@@ -12,6 +12,7 @@
         <div class="form-group">
           <label for="l_name">Password</label>
           <input type="password" class="form-control" name="password" ngModel>
+          <p *ngIf="pwError" class="helper-text" style="color:red;">Sorry, your username or password is incorrect.</p>
         </div>
         <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
       </form>     

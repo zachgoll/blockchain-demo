@@ -1,3 +1,45 @@
-<p>
-  wallet-generator works!
-</p>
+<div class="container">
+  <div class="row">
+    <div *ngIf="keypair" class="col-5">
+      <h2>Ether Faucet (Rinkeby Testnet)</h2>
+      <p>Paste your public Ethereum address here to receive 1 ether</p>
+      <form (ngSubmit)="getEther()" #ether="ngForm">
+        <div class="form-group">
+            <input type="text" class="form-control" name="address" ngModel>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Ether</button>
+      </form>
+    </div>
+    <div *ngIf="keypair" class="col-7">
+      <h2>Your Tasks</h2>
+      <hr>
+      <ul class="list-group">
+        <li class="list-group-item">Send 0.001 ether to <span class="helper-text hash">{{ demoAccount }}</span> using <a href="https://www.myetherwallet.com/" target="_blank" style="text-decoration: underline;">My Ether Wallet</a></li>
+        <li class="list-group-item">Find which block your transaction was added to using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
+        <li class="list-group-item">Find the number of transactions you have made with your account using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
+        <li class="list-group-item">with your account using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
+      </ul>
+    </div>
+    <div  *ngIf="!keypair" class="col-8">
+      <h2>Ethereum Keypair Generator</h2>
+      <br>
+      <button class="btn btn-primary btn-lg" (click)="genKeypair()">Generate an Ethereum Keypair</button>
+    </div>
+  </div>
+  <br><hr><br>
+  <h2 *ngIf="generating">Generating Keypair...</h2>
+  <div *ngIf="keypair" class="row">
+    <div class="col-12 mr-auto ml-auto">
+      <h4>Your Public Address</h4>
+      <div class="shadow-box">
+        <div class="txt">{{ keypair.pub_key }}</div>
+      </div>
+      <h4>Your Private Key</h4>
+      <button class="btn btn-primary" *ngIf="!privShow" (click)="privShow = true;">Show Private Key</button>
+      <div *ngIf="privShow" class="shadow-box" style="margin-bottom: 5px;">
+        <div class="txt">{{ keypair.priv_key }}</div>
+      </div>
+      <p *ngIf="privShow" class="helper-text" style="color: red;">In real life, you would never see or store your private key in plain site!  We are using the Ethereum testnet for this demo and all funds are completely fake!</p>
+    </div>
+  </div>
+</div>

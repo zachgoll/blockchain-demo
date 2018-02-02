@@ -14,10 +14,14 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router) { }
 
+  sessionError: boolean;
+
   ngOnInit() {
   }
 
   onRegisterSubmit() {
+
+    this.sessionError = false;
 
     const username = this.registerForm.value.username;
     const password = this.registerForm.value.password;
@@ -35,11 +39,14 @@ export class RegisterComponent {
     this.authService.registerUser(user).subscribe((data) => {
       if (data) {
         this.router.navigate(['/login']);
+        this.registerForm.reset();
       } else {
         this.router.navigate(['/register']);
       }
+    },
+    (err) => {
+      this.sessionError = true;
     });
-    this.registerForm.reset();
 
   }
 

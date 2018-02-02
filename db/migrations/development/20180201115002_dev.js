@@ -1,14 +1,21 @@
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('user_profile', (table) => {
+    return knex.schema.createTable('companies', (table) => {
         table.increments().primary();
-        table.string('email');
-        table.string('username');
-        table.string('f_name');
-        table.string('l_name');
-        table.string('password');
-        table.timestamps(true, true);
-        table.string('picture_url').defaultTo('http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png');
-        table.string('session');
+        table.string('secret_phrase').unique();
+        table.string('name');
+    })
+    .then(() => {
+        return knex.schema.createTable('user_profile', (table) => {
+            table.increments().primary();
+            table.string('email');
+            table.string('username');
+            table.string('f_name');
+            table.string('l_name');
+            table.string('password');
+            table.timestamps(true, true);
+            table.string('picture_url').defaultTo('http://www.tadamun.so/wp-content/uploads/2016/09/blank-avatar.png');
+            table.string('session').references('secret_phrase').inTable('companies');
+        });
     })
     .then(() => {
         return knex.schema.createTable('block', (table) => {
@@ -41,6 +48,13 @@ exports.up = function(knex, Promise) {
         return knex.schema.createTable('user_questions', (table) => {
             table.integer('user_id').references('id').inTable('user_profile');
             table.text('question');
+        });
+    })
+    .then(() => {
+        return knex.schema.createTable('user_keypairs', (table) => {
+            table.integer('user_id').references('id').inTable('user_profile');
+            table.text('pub_key');
+            table.text('priv_key');
         });
     })
     .then(() => {
@@ -147,6 +161,12 @@ exports.down = function(knex, Promise) {
         return knex.schema.dropTableIfExists('block')
     })
     .then(() => {
+        return knex.schema.dropTableIfExists('user_keypairs')
+    })
+    .then(() => {
         return knex.schema.dropTableIfExists('user_profile')
+    })
+    .then(() => {
+        return knex.schema.dropTableIfExists('companies')
     });
 };

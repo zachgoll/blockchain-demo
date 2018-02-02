@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   @ViewChild ('login') loginForm: NgForm;
   username: String;
   password: String;
+  pwError: boolean;
 
   constructor(private authService: AuthService, private router: Router, private query: QueryService) { }
 
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit() {
+    this.pwError = false;
     const user = {
       username: this.loginForm.value.username,
       password: this.loginForm.value.password
@@ -36,16 +38,15 @@ export class LoginComponent implements OnInit {
               this.authService.picture_url = profile.user.picture_url;
             }
             this.authService.currentUser = profile.user;
+            this.loginForm.reset();
             this.router.navigate(['/']);
           }, (err) => {
             console.log(err);
           });
         } else {
-          this.router.navigate(['/register']);
+          this.pwError = true;
         }
       });
-
-    this.loginForm.reset();
   }
 
 }
