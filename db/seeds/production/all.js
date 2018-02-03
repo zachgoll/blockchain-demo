@@ -3,6 +3,6 @@ exports.seed = function(knex, Promise) {
     return Promise.join(
         knex('user_profile').del(),
         knex('companies').del(),
-        knex('companies').insert({secret_phrase: 'ul2018', name: 'Underwriters Laboratories'}),
+        knex('companies').insert({secret_phrase: 'chainworksul2018', name: 'Underwriters Laboratories'}),
         () => {});
   };

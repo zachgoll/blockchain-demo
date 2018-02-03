@@ -123,4 +123,109 @@ router.post('/generate-keypair', (req, res, next) => {
         });
 });
 
+router.delete('/questions/delete/:id', (req, res, next) => {
+    const id = req.params.id;
+
+    queries.getQuestionSubscriptionsAll()
+        .then((subs) => {
+            subs.forEach((sub) => {
+                if (sub.question_id == id) {
+                    queries.deleteQuestionSubAll(id)
+                        .then((del) => {
+                            return del;
+                        })
+                        .catch((err) => next(err));
+                }
+            })
+            return queries.deleteQuestion(id)
+                .then((question) => {
+                    res.status(200).json(question);
+                })
+                .catch((err) => {
+                    next(err);
+                });
+        })
+        .catch((err) => next(err));
+});
+
+router.get('/all-questions', (req, res, next) => {
+    queries.getAllQuestions()
+        .then((questions) => {
+            res.status(200).json(questions);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.get('/session-questions/:id', (req, res, next) => {
+    const sessionId = req.params.id;
+    queries.getSessionQuestions(sessionId)
+        .then((questions) => {
+            res.status(200).json(questions);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.get('/questions/:id', (req, res, next) => {
+    const questionId = req.params.id;
+    
+    queries.incrementUpvote(questionId)
+        .then((question) => {
+            res.status(200).json(question);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.get('/questions/decrement/:id', (req, res, next) => {
+    const questionId = req.params.id;
+    
+    queries.decrementUpvote(questionId)
+        .then((question) => {
+            res.status(200).json(question);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.get('/questions/subs/:id', (req, res, next) => {
+    const userId = req.params.id;
+    
+    queries.getQuestionSubscriptions(userId)
+        .then((questions) => {
+            res.status(200).json(questions);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.delete('/questions/:user_id/:question_id/delete', (req, res, next) => {
+    const uid = req.params.user_id;
+    const qid = req.params.question_id;
+
+    queries.deleteQuestionSub(uid, qid)
+        .then((deleted) => {
+            res.status(200).json(deleted);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.post('/questions/subscribe', (req, res, next) => {
+    queries.subscribeQuestion(req.body)
+        .then((question) => {
+            res.status(200).json(question);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
 module.exports = router;

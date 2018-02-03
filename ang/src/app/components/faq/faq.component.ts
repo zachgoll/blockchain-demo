@@ -1,3 +1,4 @@
+import { QueryService } from './../../services/query.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,21 +8,64 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FaqComponent implements OnInit {
 
-  constructor() { }
+  constructor(private query: QueryService) { }
 
-  sessionQuestions = [
-    {question: 'When I am looking at a block explorer, what does the term gas mean?', subscriptions: 2, user: 'Joe'},
-    {question: 'blah blah', subscriptions: 2, user: 'Joe'},
-    {question: 'blah blah', subscriptions: 2, user: 'Joe'},
-    {question: 'blah blah', subscriptions: 2, user: 'Joe'}
-  ];
+  sessionQuestions = [];
 
-  topQuestions = [
-    {question: 'When I am looking at a block explorer, what does the term gas mean?', subscriptions: 2, user: 'Joe'},
-    {question: 'blah blah', subscriptions: 2, user: 'Joe'}
-  ];
+  user: any;
+  loaded = false;
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.getSessionQuestions();
+    this.wait();
+  }
+
+  wait() {
+    this.loaded = false;
+    setTimeout(() => {
+      this.loaded = true;
+    }, 1000);
+  }
+  // if (this.txs.findIndex(el => el.id === element.id) === -1)
+  getSessionQuestions() {
+    this.wait();
+    this.sessionQuestions = [];
+    this.query.getQuestionSubs().subscribe((subs) => {
+      this.query.getSessionQuestions(this.user.session).subscribe((questions) => {
+        questions.forEach((q) => {
+          if (subs) {
+            if (subs.findIndex(s => s.user_id == this.user.id && s.question_id == q.id) !== -1) {
+              q.subbed = true;
+            } else {
+              q.subbed = false;
+            }
+          }
+          this.sessionQuestions.push(q);
+        });
+      });
+    });
+  }
+
+  voteSession(index) {
+    const questionId = this.sessionQuestions[index].id;
+    this.query.incrementQuestion(questionId).subscribe(() => {
+      this.query.subQuestion(questionId).subscribe(() => {
+        this.sessionQuestions[index].upvotes++;
+        this.sessionQuestions[index].subbed = true;
+      });
+    });
+  }
+
+  unsub(index) {
+    const questionId = this.sessionQuestions[index].id;
+    this.query.decrementQuestion(questionId).subscribe(() => {
+      this.query.unsubQuestion(questionId).subscribe((res) => {
+        console.log(res);
+        this.sessionQuestions[index].upvotes--;
+        this.sessionQuestions[index].subbed = false;
+      });
+    });
   }
 
 }

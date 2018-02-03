@@ -209,4 +209,46 @@ export class QueryService {
     return this.http.get<any>('/api/v1/keypair/' + user_id);
   }
 
+  deleteQuestion(question_id: number) {
+    return this.http.delete('/api/v1/questions/delete/' + question_id);
+  }
+
+  getSessionQuestions(session_id: string) {
+    return this.http.get<any>('/api/v1/session-questions/' + session_id);
+  }
+
+  getAllQuestions() {
+    return this.http.get<any>('/api/v1/all-questions');
+  }
+
+  incrementQuestion(questionId: number) {
+    return this.http.get('/api/v1/questions/' + questionId);
+  }
+
+  decrementQuestion(questionId: number) {
+    return this.http.get('/api/v1/questions/decrement/' + questionId);
+  }
+
+  getQuestionSubs() {
+    const id = JSON.parse(localStorage.getItem('user')).id;
+    return this.http.get<any[]>('/api/v1/questions/subs/' + id);
+  }
+
+  subQuestion(questionId: number) {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+    const id = JSON.parse(localStorage.getItem('user')).id;
+
+    const question = {
+      user_id: id,
+      question_id: questionId
+    };
+
+    return this.http.post('api/v1/questions/subscribe', question, {headers: headers});
+  }
+
+  unsubQuestion(questionId: number) {
+    const id = JSON.parse(localStorage.getItem('user')).id;
+    return this.http.delete('/api/v1/questions/' + id + '/' + questionId + '/delete');
+  }
+
 }

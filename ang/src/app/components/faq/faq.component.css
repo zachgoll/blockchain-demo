@@ -1,0 +1,7 @@
+.vote:hover {
+  color: #ffc200;
+}
+
+.voted {
+    color: #ffc200;
+}

@@ -39,9 +39,19 @@
       </div>
     </div>
     <div class="col-7 ml-auto">
-      <h2 class="display-4">My Questions</h2><hr>
+      <h2 class="display-4">My Questions</h2>
+      <form (ngSubmit)="onQuestionSubmit()" #question="ngForm">
+          <div class="form-group">
+            <input class="form-control" name="question" placeholder="Enter your question here..." ngModel>
+          </div>
+          <button type="submit" class="btn btn-primary d-inline">Submit Question</button>
+        </form>
+      <hr>
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let question of questions">{{ question.question }}</li>
+          <li *ngFor="let question of questions; let i = index;" class="list-group-item d-flex align-items-center">
+              <span class="mr-auto p-8 text-primary">{{ question.question }}</span>
+              <button class="btn btn-danger btn-sm justify-content-end p-2 text-white" (click)="deleteQuestion(i)">Delete</button>
+            </li>
       </ul>
     </div>
   </div>

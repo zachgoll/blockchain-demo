@@ -46,8 +46,18 @@ exports.up = function(knex, Promise) {
     })
     .then(() => {
         return knex.schema.createTable('user_questions', (table) => {
+            table.increments().primary();
             table.integer('user_id').references('id').inTable('user_profile');
             table.text('question');
+            table.text('answer');
+            table.integer('answered_by').references('id').inTable('user_profile');
+            table.integer('upvotes').defaultTo(0);
+        });
+    })
+    .then(() => {
+        return knex.schema.createTable('votes', (table) => {
+            table.integer('user_id').references('id').inTable('user_profile');
+            table.integer('question_id').references('id').inTable('user_questions');
         });
     })
     .then(() => {
@@ -162,6 +172,9 @@ exports.down = function(knex, Promise) {
     })
     .then(() => {
         return knex.schema.dropTableIfExists('user_keypairs')
+    })
+    .then(() => {
+        return knex.schema.dropTableIfExists('votes')
     })
     .then(() => {
         return knex.schema.dropTableIfExists('user_profile')

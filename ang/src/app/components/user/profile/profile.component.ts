@@ -1,9 +1,11 @@
 import { User } from './../user.model';
 import { QueryService } from './../../../services/query.service';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -22,15 +24,14 @@ export class ProfileComponent implements OnInit {
   public uploader: FileUploader = new FileUploader({url: '/upload', itemAlias: 'photo'});
 
   @Output() profilePicChanged = new EventEmitter();
+  @ViewChild('question') questionForm: NgForm;
 
-  constructor(private authService: AuthService, private queryService: QueryService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private queryService: QueryService) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
 
-    this.queryService.getUserQuestions().subscribe((questions) => {
-      this.questions = questions;
-    });
+    this.updateQuestions();
 
     this.uploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
@@ -61,6 +62,34 @@ export class ProfileComponent implements OnInit {
         }, 1000);
       }
     };
+  }
+
+  updateQuestions() {
+    this.queryService.getUserQuestions().subscribe((questions) => {
+      this.questions = questions;
+    });
+  }
+
+  deleteQuestion(index) {
+    const questionId = this.questions[index].id;
+
+    this.queryService.deleteQuestion(questionId).subscribe(() => {
+      this.updateQuestions();
+    });
+  }
+
+  onQuestionSubmit() {
+
+    const id = this.user.id;
+    const question = { question: this.questionForm.value.question };
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+
+    this.http.post('/api/v1/' + id + '/question', question, {headers: headers})
+      .subscribe(() => {
+        this.updateQuestions();
+        this.questionForm.reset();
+      });
+
   }
 
   emitUploader() {

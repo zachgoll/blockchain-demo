@@ -1,26 +1,15 @@
 <br>
 <div class="container">
-  <h2>Training Session Questions</h2>
+  <h2 *ngIf="sessionQuestions.length > 0">Training Session Questions</h2><br>
+  <h2 *ngIf="sessionQuestions.length === 0 && loaded">There are no questions in your training session yet!</h2>
   <div class="row">
     <div class="col-12">
       <ul class="list-group">
-        <li *ngFor="let q of sessionQuestions" class="list-group-item d-flex align-items-center">
+        <li *ngFor="let q of sessionQuestions; let i = index;" class="list-group-item d-flex align-items-center">
           <span class="mr-auto p-8 text-primary">{{ q.question }}</span>
-          <span class="text-primary justify-content-end p-2"> Asked by: {{ q.user }}</span>
-          <span class="badge badge-warning badge-pill text-white p-2"> {{ q.subscriptions }}</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <br>
-  <h2>FAQ</h2>
-  <div class="row">
-    <div class="col-12">
-      <ul class="list-group">
-        <li *ngFor="let q of topQuestions" class="list-group-item d-flex align-items-center">
-          <span class="mr-auto p-8 text-primary">{{ q.question }}</span>
-          <span class="text-primary justify-content-end p-2"> Asked by: {{ q.user }}</span>
-          <span class="badge badge-warning badge-pill text-white p-2"> {{ q.subscriptions }}</span>
+          <span class="badge badge-primary badge-pill text-white p-2"> {{ q.upvotes }}</span>
+          <span *ngIf="!sessionQuestions[i].subbed" class="text-secondary p-2"><i class="fa fa-chevron-up upvote" (click)="voteSession(i)"></i></span>
+          <span *ngIf="sessionQuestions[i].subbed" class="text-secondary p-2"><i class="fa fa-chevron-up upvote voted" (click)="unsub(i)"></i></span>
         </li>
       </ul>
     </div>

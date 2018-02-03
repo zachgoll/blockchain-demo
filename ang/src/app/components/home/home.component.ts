@@ -12,15 +12,19 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('question') questionForm: NgForm;
   questionSuccess = false;
+  questionError = false;
 
   constructor(private authService: AuthService, private http: HttpClient) { }
 
+  user:any;
+
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
   onQuestionSubmit() {
 
-    const id = this.authService.currentUser.id;
+    const id = this.user.id;
 
     const question = { question: this.questionForm.value.question };
 
@@ -30,12 +34,13 @@ export class HomeComponent implements OnInit {
 
     this.http.post('/api/v1/' + id + '/question', question, {headers: headers})
       .subscribe((res) => {
-        this.questionForm.reset();
         this.questionSuccess = true;
+        this.questionForm.reset();
         setTimeout(() => { this.questionSuccess = false; }, 2000);
       },
       (err) => {
         console.log(err);
+        this.questionError = true;
       });
 
   }

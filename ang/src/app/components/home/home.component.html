@@ -26,14 +26,12 @@
             <form class="shadowBox" (ngSubmit)="onQuestionSubmit()" #question="ngForm">
               <h2 class="text-primary">Ask a Question</h2>
               <hr>
+              <p *ngIf="questionSuccess" class="text-success">Your question has been submitted!</p>
+              <p *ngIf="questionError" class="text-danger">Something went wrong. Try again.</p>
               <div class="form-group">
                 <textarea type="text" class="form-control" name="question" placeholder="Enter your question here..." ngModel></textarea>
               </div>
               <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Question</button>
-              <div *ngIf="questionSuccess" class="form-group">
-                <br>
-                <p class="text-success">Your question has been submitted!</p>
-              </div>
             </form>
           </div>
         </div>
