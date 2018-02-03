@@ -796,12 +796,12 @@ var CreateBlockComponent = (function () {
                     _this.query.postTx(coinbaseToSubmit).subscribe(function (coinbase_tx) {
                         _this.query.unsubscribeTx(coinbase_tx.id).subscribe();
                         _this.query.addTxToBlock(coinbase_tx.id, blk.id).subscribe();
+                        _this.loadTxs();
                     });
                     _this.query.subscribeBlock(blk.id).subscribe(function () {
                         _this.getUserBlockchain();
                         _this.mem.loadBlocks();
                     });
-                    _this.loadTxs();
                 });
             }
             else {
@@ -1096,9 +1096,9 @@ var IncomingBlocksComponent = (function () {
                 });
                 _this.query.unsubscribeTx(tx.id).subscribe();
             });
+            // Emit an event that can be sent to create-tx component
+            _this.blockSubscribed.emit();
         });
-        // Emit an event that can be sent to create-tx component
-        this.blockSubscribed.emit();
     };
     IncomingBlocksComponent.prototype.reject = function (index) {
         var _this = this;

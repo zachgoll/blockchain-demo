@@ -49,9 +49,9 @@ export class IncomingBlocksComponent implements OnInit {
         });
         this.query.unsubscribeTx(tx.id).subscribe();
       });
+      // Emit an event that can be sent to create-tx component
+      this.blockSubscribed.emit();
     });
-    // Emit an event that can be sent to create-tx component
-    this.blockSubscribed.emit();
   }
 
   reject(index: number) {

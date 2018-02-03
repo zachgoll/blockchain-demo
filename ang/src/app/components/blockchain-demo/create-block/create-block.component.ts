@@ -174,14 +174,13 @@ export class CreateBlockComponent implements OnInit {
         this.query.postTx(coinbaseToSubmit).subscribe((coinbase_tx) => {
           this.query.unsubscribeTx(coinbase_tx.id).subscribe();
           this.query.addTxToBlock(coinbase_tx.id, blk.id).subscribe();
+          this.loadTxs();
         });
 
         this.query.subscribeBlock(blk.id).subscribe(() => {
           this.getUserBlockchain();
           this.mem.loadBlocks();
         });
-
-        this.loadTxs();
       });
     } else {
       this.blockLoser = true;
