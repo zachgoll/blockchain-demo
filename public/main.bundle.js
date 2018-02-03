@@ -1473,16 +1473,17 @@ var MempoolComponent = (function () {
         var outputs = this.txs[index].outputs;
         // Add all tx inputs to spent utxos
         inputs.forEach(function (input) {
-            console.log('input spent');
-            _this.query.spendUtxo(input.id).subscribe();
+            _this.query.spendUtxo(input.id).subscribe(function () {
+                _this.query.unsubUtxo(input.id).subscribe();
+            });
         });
         // Add all tx outputs to unspent utxos
         outputs.forEach(function (output) {
-            console.log('output subbed');
             _this.query.subscribeUtxo(output.id).subscribe();
         });
         // Add tx to user subscriptions
         this.query.subscribeTx(this.txs[index].id).subscribe(function () {
+            _this.txs.splice(index, 1);
             _this.loadTxs();
         });
     };
@@ -3139,6 +3140,10 @@ var QueryService = (function () {
             utxo_id: utxoId
         };
         return this.http.post('/api/v1/utxos/bind', utxo, { headers: headers });
+    };
+    QueryService.prototype.unsubUtxo = function (utxoId) {
+        var id = JSON.parse(localStorage.getItem('user')).id;
+        return this.http.delete('/api/v1/utxos/' + id + '/' + utxoId + '/delete');
     };
     QueryService.prototype.postTx = function (tx) {
         var headers = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpHeaders */]({ 'Content-type': 'application/json' });

@@ -91,6 +91,12 @@ export class QueryService {
     return this.http.post('/api/v1/utxos/bind', utxo, {headers: headers});
   }
 
+  unsubUtxo(utxoId: number) {
+    const id = JSON.parse(localStorage.getItem('user')).id;
+
+    return this.http.delete('/api/v1/utxos/' + id + '/' + utxoId + '/delete');
+  }
+
   postTx(tx: TxSubmit) {
 
     const headers = new HttpHeaders({'Content-type': 'application/json'});

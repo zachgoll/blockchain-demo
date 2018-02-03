@@ -51,18 +51,19 @@ export class MempoolComponent implements OnInit {
 
     // Add all tx inputs to spent utxos
     inputs.forEach((input) => {
-      console.log('input spent');
-      this.query.spendUtxo(input.id).subscribe();
+      this.query.spendUtxo(input.id).subscribe(() => {
+        this.query.unsubUtxo(input.id).subscribe();
+      });
     });
 
     // Add all tx outputs to unspent utxos
     outputs.forEach((output) => {
-      console.log('output subbed');
       this.query.subscribeUtxo(output.id).subscribe();
     });
 
     // Add tx to user subscriptions
     this.query.subscribeTx(this.txs[index].id).subscribe(() => {
+      this.txs.splice(index, 1);
       this.loadTxs();
     });
 
