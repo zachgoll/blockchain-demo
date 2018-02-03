@@ -1661,6 +1661,7 @@ var FaqComponent = (function () {
                     }
                     _this.sessionQuestions.push(q);
                 });
+                console.log(_this.sessionQuestions);
             });
         });
     };

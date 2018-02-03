@@ -43,6 +43,7 @@ export class FaqComponent implements OnInit {
           }
           this.sessionQuestions.push(q);
         });
+        console.log(this.sessionQuestions);
       });
     });
   }
