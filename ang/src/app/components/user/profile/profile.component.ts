@@ -78,6 +78,10 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  resetBlockchain() {
+    this.queryService.resetBlockchain().subscribe();
+  }
+
   onQuestionSubmit() {
 
     const id = this.user.id;

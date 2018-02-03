@@ -1,4 +1,5 @@
 var knex = require('./knex');
+var Promise = require('bluebird');
 
 function Block() {
     return knex('block')
@@ -58,6 +59,49 @@ function bindTxToBlock(tx) {
     return knex('block_txs').insert(tx);
 }
 
+function resetBlockchain() {
+    return knex('block_txs').del()
+        .then(() => {
+            return knex('tx_inputs').del();
+        })
+        .then(() => {
+            return knex('tx_outputs').del();
+        })
+        .then(() => {
+            return knex('tx_subscriptions').del();
+        })
+        .then(() => {
+            return knex('tx_rejections').del();
+        })
+        .then(() => {
+            return knex('utxos').del();
+        })
+        .then(() => {
+            return knex('spent_utxos').del();
+        })
+        .then(() => {
+            return knex('block_subscriptions').del();
+        })
+        .then(() => {
+            return knex('block_rejections').del();
+        })
+        .then(() => {
+            return knex('blockchain').del();
+        })   
+        .then(() => {
+            return knex('utxo').del();
+        })
+        .then(() => {
+            return knex('tx').del();
+        })
+        .then(() => {
+            return knex('block').del();
+        })
+        .catch((err) => {
+            next(err);
+        });
+}
+
 module.exports = {
     getAllBlocks: getAllBlocks,
     getIncomingBlocks: getIncomingBlocks,
@@ -67,5 +111,6 @@ module.exports = {
     postBlock: postBlock,
     bindBlock: bindBlock,
     rejectBlock: rejectBlock,
-    bindTxToBlock: bindTxToBlock
+    bindTxToBlock: bindTxToBlock,
+    resetBlockchain: resetBlockchain
 }

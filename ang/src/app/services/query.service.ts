@@ -251,4 +251,8 @@ export class QueryService {
     return this.http.delete('/api/v1/questions/' + id + '/' + questionId + '/delete');
   }
 
+  resetBlockchain() {
+    return this.http.delete('/api/v1/reset-all');
+  }
+
 }

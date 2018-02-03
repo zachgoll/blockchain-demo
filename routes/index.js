@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const router = Router();
 const queries = require('./../db/user_queries');
+const blockQueries = require('./../db/block_queries');
 const utxos = require('./utxo');
 const blocks = require('./block');
 const txs = require('./tx');
@@ -10,6 +11,16 @@ const keythereum = require('keythereum');
 router.use('/utxos', utxos);
 router.use('/txs', txs);
 router.use('/blocks', blocks);
+
+router.delete('/reset-all', (req, res, next) => {
+    blockQueries.resetBlockchain()
+        .then((r) => {
+            res.status(200).json(r);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
 
 router.get('/users', (req, res, next) => {
     queries.getAllUsers()
