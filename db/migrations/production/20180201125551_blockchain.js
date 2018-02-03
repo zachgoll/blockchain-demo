@@ -162,9 +162,6 @@ exports.down = function(knex, Promise) {
         return knex.schema.dropTableIfExists('block_rejections')
     })
     .then(() => {
-        return knex.schema.dropTableIfExists('user_questions')
-    })
-    .then(() => {
         return knex.schema.dropTableIfExists('blockchain')
     })
     .then(() => {
@@ -175,6 +172,9 @@ exports.down = function(knex, Promise) {
     })
     .then(() => {
         return knex.schema.dropTableIfExists('votes')
+    })
+    .then(() => {
+        return knex.schema.dropTableIfExists('user_questions')
     })
     .then(() => {
         return knex.schema.dropTableIfExists('user_profile')
