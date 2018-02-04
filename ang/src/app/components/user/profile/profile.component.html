@@ -2,13 +2,15 @@
 <br>
 <div class="container">
   <div class="row">
+    <div class="col-12">
+      <ngb-alert class="helper-text" *ngIf="companyAlert" type="success" [dismissible]="false">Company Added!</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="blockchainCleared" type="success" [dismissible]="false">Blockchain data cleared!</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="adminAlert" type="success" [dismissible]="false">Admin Privileges added!</ngb-alert>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-xl-4 col-md-5">
       <div *ngIf="uploadMessage == '' && fileReady">
-        <button type="button" class="btn btn-primary" (click)="uploader.uploadAll()">
-          Upload Image
-        </button>
-        <br>
-        <br>
         <div class="progress">
           <div class="progress-bar progress-bar-striped progress-bar-animated" [ngStyle]="{ 'width': uploader.progress + '%' }" role="progressbar">{{ uploader.progress }}%</div>
         </div>
@@ -39,20 +41,53 @@
       </div>
     </div>
     <div class="col-7 ml-auto">
-      <button class="btn btn-primary" (click)="resetBlockchain()">Reset Blockchain Data</button>
+      <div *ngIf="user.admin === true" class="row">
+        <div class="col-12">
+          <h2 class="display-4">Admin Controls</h2>
+          <hr>
+          <div class="btn-group">
+            <button class="btn btn-outline-primary" (click)="resetBlockchain()">Reset Blockchain Data</button>
+            <button class="btn btn-outline-primary" (click)="addingCompany = !addingCompany">Add Corporate Training Session</button>
+            <button class="btn btn-outline-primary" (click)="addingAdmin = !addingAdmin">Add Administrator</button>
+          </div>
+          <form *ngIf="addingAdmin" (ngSubmit)="onAdminSubmit()" #admin="ngForm">
+            <br>
+            <div class="form-group">
+              <ng-template #rt let-r="result" let-t="term">
+                <img [src]="r['picture_url']" width="50"> {{ r.username }}
+              </ng-template>
+              <label for="typeahead-template" class="form-label">User Lookup:</label>
+              <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
+                  [inputFormatter]="formatter" name="selectedUser" ngModel required>
+            </div>
+            <button type="submit" class="btn btn-primary d-inline">Add Admin</button>
+          </form>
+          <form *ngIf="addingCompany" (ngSubmit)="onCompanySubmit()" #company="ngForm">
+            <br>
+            <div class="form-group">
+              <input class="form-control" name="sessionId" placeholder="Enter session id" ngModel>
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="companyName" placeholder="Enter company name" ngModel>
+            </div>
+            <button type="submit" class="btn btn-primary d-inline">Add Company</button>
+          </form>
+        </div>
+      </div>
+      <br>
       <h2 class="display-4">My Questions</h2>
       <form (ngSubmit)="onQuestionSubmit()" #question="ngForm">
-          <div class="form-group">
-            <input class="form-control" name="question" placeholder="Enter your question here..." ngModel>
-          </div>
-          <button type="submit" class="btn btn-primary d-inline">Submit Question</button>
-        </form>
+        <div class="form-group">
+          <input class="form-control" name="question" placeholder="Enter your question here..." ngModel>
+        </div>
+        <button type="submit" class="btn btn-primary d-inline">Submit Question</button>
+      </form>
       <hr>
       <ul class="list-group">
-          <li *ngFor="let question of questions; let i = index;" class="list-group-item d-flex align-items-center">
-              <span class="mr-auto p-8 text-primary">{{ question.question }}</span>
-              <button class="btn btn-danger btn-sm justify-content-end p-2 text-white" (click)="deleteQuestion(i)">Delete</button>
-            </li>
+        <li *ngFor="let question of questions; let i = index;" class="list-group-item d-flex align-items-center">
+          <span class="mr-auto p-8 text-primary">{{ question.question }}</span>
+          <button class="btn btn-danger btn-sm justify-content-end p-2 text-white" (click)="deleteQuestion(i)">Delete</button>
+        </li>
       </ul>
     </div>
   </div>

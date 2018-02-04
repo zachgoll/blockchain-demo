@@ -58,11 +58,20 @@
     <div class="col-lg-8 col-12">
       <div class="row">
         <div class="col-12 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
-          <h4>UTXO Set</h4>
-          <div *ngIf="utxos.length === 0" class="helper-text">There are no UTXOs in the UTXO set! <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Create a Genesis Block first!</a></div>
-          <div *ngFor="let utxo of utxos" class="utxo" [ngClass]="{'my-utxo': utxo.current_owner === user.id }"
-            pDraggable="utxos" (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
-            {{utxo.value.toFixed(1)}}
+          <div class="row" style="margin-bottom: 10px;">
+            <div class="col-12">
+                <h4 class="d-inline">UTXO Set </h4>
+                <p class="d-inline" style="margin-left: 10px"> You own <span class="hash helper-text">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div *ngIf="utxos.length === 0" class="helper-text">There are no UTXOs in the UTXO set! <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Create a Genesis Block first!</a></div>
+              <div *ngFor="let utxo of utxos" class="utxo" [ngClass]="{'my-utxo': utxo.current_owner === user.id }"
+                pDraggable="utxos" (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
+                {{utxo.value.toFixed(1)}}
+              </div>
+            </div>
           </div>
         </div>
       </div>

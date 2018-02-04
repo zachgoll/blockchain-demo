@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     .then(() => {
         return knex.schema.createTable('user_profile', (table) => {
             table.increments().primary();
+            table.boolean('admin').defaultTo(false);
             table.string('email');
             table.string('username');
             table.string('f_name');

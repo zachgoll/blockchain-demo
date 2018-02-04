@@ -239,4 +239,24 @@ router.post('/questions/subscribe', (req, res, next) => {
         });
 });
 
+router.post('/add-company', (req, res, next) => {
+    queries.addCompany(req.body)
+        .then((company) => {
+            res.status(200).json(company);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
+router.put('/add-admin/:id', (req, res, next) => {
+    queries.editUserById(req.params.id, req.body)
+        .then((user) => {
+            res.status(200).json(user);
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
+
 module.exports = router;

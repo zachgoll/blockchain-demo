@@ -106,6 +106,10 @@ function decrementUpvote(questionId) {
     return knex('user_questions').where('id', questionId).decrement('upvotes', 1);
 }
 
+function addCompany(company) {
+    return knex('companies').insert(company);
+}
+
 module.exports = {
     getAllUsers: getAllUsers,
     getUserById: getUserById,
@@ -126,5 +130,6 @@ module.exports = {
     deleteQuestionSub: deleteQuestionSub,
     getQuestionSubscriptionsAll: getQuestionSubscriptionsAll,
     deleteQuestionSubAll: deleteQuestionSubAll,
-    decrementUpvote: decrementUpvote
+    decrementUpvote: decrementUpvote,
+    addCompany: addCompany
 }

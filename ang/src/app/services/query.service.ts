@@ -261,4 +261,14 @@ export class QueryService {
     return this.http.delete('/api/v1/reset-all');
   }
 
+  addCompany(company: any) {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+    return this.http.post('/api/v1/add-company', company, {headers: headers});
+  }
+
+  addAdmin(userId: number) {
+    const headers = new HttpHeaders({'Content-type': 'application/json'});
+    return this.http.put('/api/v1/add-admin/' + userId, {admin: true}, {headers: headers});
+  }
+
 }

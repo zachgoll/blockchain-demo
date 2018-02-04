@@ -32,6 +32,7 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
   utxos: Utxo[] = [];
   txUtxos: Utxo[] = [];
   selectedUtxos: Utxo[] = [];
+  totalUtxo: number = 0;
   user: any;
   usersWithPics: {username: string, id: number, picture_url: string}[] = [];
 
@@ -133,9 +134,26 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
+  countUtxos() {
+    let counter = 0;
+    this.utxos.forEach((utxo) => {
+      if (utxo.current_owner === this.user.id) {
+        counter += utxo.value;
+      }
+    });
+    this.totalUtxo = counter;
+  }
+
   updateUtxos() {
     this.query.getUtxos(this.user.id).subscribe((utxos) => {
-      this.utxos = utxos;
+      this.utxos = utxos.sort((a, b) => {
+        if (a.current_owner === this.user.id) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      this.countUtxos();
     });
   }
 

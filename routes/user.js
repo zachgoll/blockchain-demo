@@ -68,7 +68,8 @@ router.post('/authenticate', (req, res, next) => {
                                 l_name: user.l_name,
                                 email: user.email, 
                                 session: user.session,
-                                picture_url: user.picture_url
+                                picture_url: user.picture_url,
+                                admin: user.admin
                             }
                         });
                     } else {

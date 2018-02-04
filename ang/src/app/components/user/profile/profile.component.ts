@@ -1,3 +1,4 @@
+import { TxSubmit } from './../../blockchain-demo/tx-submit.model';
 import { User } from './../user.model';
 import { QueryService } from './../../../services/query.service';
 import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
@@ -15,21 +16,38 @@ import { NgForm } from '@angular/forms';
 export class ProfileComponent implements OnInit {
 
   user: any;
+  usersWithPics: {username: string, id: number, picture_url: string}[] = [];
   image: string;
   display = '';
   fileReady = false;
   uploaded = '';
   uploadMessage = '';
   questions: any;
+  addingCompany = false;
+  addingAdmin = false;
+  companyAlert = false;
+  adminAlert = false;
+  blockchainCleared = false;
   public uploader: FileUploader = new FileUploader({url: '/upload', itemAlias: 'photo'});
 
   @Output() profilePicChanged = new EventEmitter();
   @ViewChild('question') questionForm: NgForm;
+  @ViewChild('company') companyForm: NgForm;
+  @ViewChild('admin') adminForm: NgForm;
 
   constructor(private http: HttpClient, private authService: AuthService, private queryService: QueryService) { }
 
   ngOnInit() {
+    this.authService.getProfile().subscribe((profile) => {
+      if (profile.user.admin === true) {
+        let usr = JSON.parse(localStorage.getItem('user'));
+        usr.admin = true;
+        localStorage.setItem('user', JSON.stringify(usr));
+        this.user = usr;
+      }
+    });
     this.user = JSON.parse(localStorage.getItem('user'));
+    this.loadUsers();
 
     this.updateQuestions();
 
@@ -37,6 +55,7 @@ export class ProfileComponent implements OnInit {
       file.withCredentials = false;
       this.fileReady = true;
       this.uploadMessage = '';
+      this.uploader.uploadAll();
     };
 
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
@@ -64,6 +83,12 @@ export class ProfileComponent implements OnInit {
     };
   }
 
+  loadUsers() {
+    this.authService.loadUserProfiles().subscribe((users) => {
+      this.usersWithPics = users;
+    });
+  }
+
   updateQuestions() {
     this.queryService.getUserQuestions().subscribe((questions) => {
       this.questions = questions;
@@ -79,7 +104,12 @@ export class ProfileComponent implements OnInit {
   }
 
   resetBlockchain() {
-    this.queryService.resetBlockchain().subscribe();
+    this.queryService.resetBlockchain().subscribe(() => {
+      this.blockchainCleared = true;
+      setTimeout(() => {
+        this.blockchainCleared = false;
+      }, 6000);
+    });
   }
 
   onQuestionSubmit() {
@@ -96,6 +126,35 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  onCompanySubmit() {
+    const companyName = this.companyForm.value.companyName;
+    const sessionId = this.companyForm.value.sessionId;
+
+    const company = {
+      secret_phrase: sessionId,
+      name: companyName
+    };
+
+    this.queryService.addCompany(company).subscribe(() => {
+      this.companyAlert = true;
+      setTimeout(() => {
+        this.companyAlert = false;
+      }, 6000);
+      this.addingCompany = false;
+    });
+  }
+
+  onAdminSubmit() {
+    const userId = this.adminForm.value.selectedUser.id;
+    this.queryService.addAdmin(userId).subscribe(() => {
+      this.adminAlert = true;
+      setTimeout(() => {
+        this.adminAlert = false;
+      }, 6000);
+      this.addingAdmin = false;
+    });
+  }
+
   emitUploader() {
     console.log(this.uploader);
   }
@@ -103,5 +162,13 @@ export class ProfileComponent implements OnInit {
   changeStyle($event) {
     this.display = $event.type === 'mouseover' ? 'db' : '';
   }
+
+  search = (text$: Observable<string>) =>
+  text$
+    .debounceTime(200)
+    .map(term => term === '' ? []
+      : this.usersWithPics.filter(v => v.username.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+
+  formatter = (x: {username: string}) => x.username;
 
 }
