@@ -17,9 +17,9 @@
         <br>
       </div>
       <p *ngIf="!fileReady && uploadMessage != ''">{{ uploadMessage }}</p>
-      <div class="card">
-        <div class="pic card-img-top" (mouseover)="changeStyle($event)" (mouseout)="changeStyle($event)">
-          <img class="img-fluid" src="{{ user.picture_url }}">
+      <div class="card carder">
+        <div class=" card-img-top text-center" (mouseover)="changeStyle($event)" (mouseout)="changeStyle($event)">
+          <img class="img-fluid pic" style="border-radius: 10px;" src="{{ user.picture_url }}">
           <div class="overlay"></div>
           <div class="info" [ngClass]="display">
             <input *ngIf="!uploader.isReady && !uploader.isUploading && !uploader.isSuccess && !fileReady" type="file" name="photo" ng2FileSelect
@@ -27,7 +27,7 @@
           </div>
         </div>
         <div class="card-body">
-          <h5 class="card-title text-capitalize">{{ user.f_name }}'s Profile</h5>
+          <h5 class="card-title text-capitalize text-center">{{ user.f_name }}'s Profile</h5>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
