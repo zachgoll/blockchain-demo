@@ -71,7 +71,11 @@ export class CreateBlockComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('user'));
     this.selectedTxs = [];
     this.getUserBlockchain();
-    this.loadTxs();
+    setInterval(() => {
+      if (!this.mining) {
+        this.loadTxs();
+      }
+    }, 10000);
     setInterval(() => {
       if (!this.mining) {
         this.mem.loadBlocks();

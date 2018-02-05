@@ -668,7 +668,11 @@ var CreateBlockComponent = (function () {
         this.user = JSON.parse(localStorage.getItem('user'));
         this.selectedTxs = [];
         this.getUserBlockchain();
-        this.loadTxs();
+        setInterval(function () {
+            if (!_this.mining) {
+                _this.loadTxs();
+            }
+        }, 10000);
         setInterval(function () {
             if (!_this.mining) {
                 _this.mem.loadBlocks();
