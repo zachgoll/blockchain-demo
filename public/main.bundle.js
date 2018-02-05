@@ -1652,7 +1652,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/faq/faq.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n<div class=\"container\">\n  <h2 *ngIf=\"sessionQuestions.length > 0\">Training Session Questions</h2><br>\n  <h2 *ngIf=\"sessionQuestions.length === 0 && loaded\">There are no questions in your training session yet!</h2>\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ul class=\"list-group\">\n        <li *ngFor=\"let q of sessionQuestions; let i = index;\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ q.question }}</span>\n          <span class=\"badge badge-primary badge-pill text-white p-2\"> {{ q.upvotes }}</span>\n          <span *ngIf=\"!sessionQuestions[i].subbed\" class=\"text-secondary p-2\"><i class=\"fa fa-chevron-up upvote\" (click)=\"voteSession(i)\"></i></span>\n          <span *ngIf=\"sessionQuestions[i].subbed\" class=\"text-secondary p-2\"><i class=\"fa fa-chevron-up upvote voted\" (click)=\"unsub(i)\"></i></span>\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<br>\n<div class=\"container\">\n  <h2 *ngIf=\"sessionQuestions.length > 0\">Training Session Questions</h2><br>\n  <h2 *ngIf=\"sessionQuestions.length === 0 && loaded\">There are no questions in your training session yet!</h2>\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ul class=\"list-group\">\n        <li *ngFor=\"let q of sessionQuestions; let i = index;\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ q.question }}</span>\n          <span *ngIf=\"user.admin === true\" class=\"p-4 text-primary\">{{ q.userName }}</span>\n          <span class=\"badge badge-primary badge-pill text-white p-2\"> {{ q.upvotes }}</span>\n          <span *ngIf=\"!sessionQuestions[i].subbed\" class=\"text-secondary p-2\"><i class=\"fa fa-chevron-up upvote\" (click)=\"voteSession(i)\"></i></span>\n          <span *ngIf=\"sessionQuestions[i].subbed\" class=\"text-secondary p-2\"><i class=\"fa fa-chevron-up upvote voted\" (click)=\"unsub(i)\"></i></span>\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1707,7 +1707,10 @@ var FaqComponent = (function () {
                             q.subbed = false;
                         }
                     }
-                    _this.sessionQuestions.push(q);
+                    _this.query.getUserById2(q.user_id).subscribe(function (user) {
+                        q.userName = user.f_name + ' ' + user.l_name;
+                        _this.sessionQuestions.push(q);
+                    });
                 });
                 console.log(_this.sessionQuestions);
             });

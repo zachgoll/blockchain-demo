@@ -41,7 +41,11 @@ export class FaqComponent implements OnInit {
               q.subbed = false;
             }
           }
-          this.sessionQuestions.push(q);
+          this.query.getUserById2(q.user_id).subscribe((user) => {
+            q.userName = user.f_name + ' ' + user.l_name;
+            this.sessionQuestions.push(q);
+          });
+
         });
         console.log(this.sessionQuestions);
       });
