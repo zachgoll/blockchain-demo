@@ -17,23 +17,23 @@
             ====================================-->
           <div class="shadowBoxLight" pDroppable="txs" (onDrop)="drop($event)">
             <h2 *ngIf="blockHeight > 0" class="text-primary d-inline">Create Block #{{ blockHeight }}</h2>
-            <h2 *ngIf="blockHeight === 0" class="text-primary d-inline">Create Genesis Block</h2>
+            <h2 *ngIf="blockHeight === 0" class="text-primary d-inline">Create Genesis Block <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1." popoverTitle="Genesis Block"></i></h2>
             <button *ngIf="!finished" class="btn btn-warning btn-sm in-btn1 d-inline" (click)="mine()">Mine Block</button>
             <button *ngIf="finished" class="btn btn-warning btn-sm in-btn1 d-inline pulse-button" (click)="broadcast()">Broadcast Block</button>
             <div class="hash hash-no-margin">{{ blockHash }}</div>
             <hr>
-            <h4>Block Header</h4>
+            <h4>Block Header <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="An 80-byte header belonging to a single block storing metadata pertaining to that block which includes the previous block hash, the merkle root hash, the timestamp, nonce, and number of transactions in the block." popoverTitle="Block Header"></i></h4>
             <hr>
-            <h6>Previous Block Hash</h6>
+            <h6>Previous Block Hash <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together." popoverTitle="Previous Block Hash"></i></h6>
             <div class="hash">{{ prevBlockHash }}</div>
-            <h6>Merkle Root</h6>
+            <h6>Merkle Root <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The topmost (root) leaf of a merkle tree which is stored in the block header and which changes anytime a transaction in a block is altered in any way." popoverTitle="Merkle Root"></i></h6>
             <div class="hash hash-highlight" [ngClass]="{'hash-highlight': merkleHighlight }">{{ merkleRoot }}</div>
             <div>
-              <h6 class="d-inline">Timestamp</h6>
+              <h6 class="d-inline">Timestamp <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The timestamp indicates exactly when the block was mined.  This allows the miners in the network to determine if a block is outdated." popoverTitle="Block Timestamp"></i></h6>
               <div class="hash hash-no-overflow">{{ timestamp }}</div>
             </div>
             <div>
-              <h6 class="d-inline">Nonce</h6>
+              <h6 class="d-inline">Nonce <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining." popoverTitle="Nonce"></i></h6>
               <div class="hash hash-no-overflow" [ngClass]="{'nonce': mining, 'nonce-finished': finished}">{{ nonce }}</div>
             </div>
             <div>
@@ -48,9 +48,9 @@
             <div class="utxo-box" pDroppable="txs" (onDrop)="drop($event)">
               <div *ngIf="selectedTxs.length === 0 && !coinbaseAdded" class="helper-text text-center utxoSelected">Drag Transactions here</div>
               <div *ngIf="coinbaseAdded" class="sel-coinbase-container">
-                <h4>Coinbase Transaction</h4>
+                <h4>Coinbase Transaction <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The first transaction in a block. Always created by a miner, this transaction includes the current block reward and the sum of the transaction fees as outputs sent back to the miner.  There are no inputs in the coinbase transaction." popoverTitle="Coinbase Transaction"></i></h4> 
                 <hr>
-                <h6>Transaction Hash</h6>
+                <h6>Transaction Hash <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="An identifier used to uniquely identify a particular transaction on the blockchain." popoverTitle="Transaction Hash"></i></h6>
                 <div class="hash hash-inverse">{{coinbase.tx_hash}}</div>
                 <div>
                   <h6 class="d-inline">
@@ -95,7 +95,7 @@
       <div class="row">
         <div class="col-12 shadowBoxLight blockpool" pDroppable="selTxs" (onDrop)="dropSel($event)">
           <div *ngIf="txs.length === 0" class="helper-text">There are no more transactions in your Mempool!</div>
-          <h4>Mempool</h4>  
+          <h4>Mempool <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The mempool is a fancy term for the 'pool of transactions'.  All transactions floating around in the Bitcoin network that are not included in blocks are considered to be in the mempool and are available for miners to add to their blocks." popoverTitle="Mempool"></i></h4>  
           <div class="items drag-container" *ngFor="let tx of txs" pDroppable="selTxs" (onDrop)="dropSel($event)" pDraggable="txs" (onDragStart)="dragStart($event, tx)"
             (onDragEnd)="dragEnd($event)">
             <div class="row">

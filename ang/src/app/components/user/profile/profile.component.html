@@ -46,9 +46,23 @@
           <h2 class="display-4">Admin Controls</h2>
           <hr>
           <div class="btn-group">
-            <button class="btn btn-outline-primary" (click)="resetBlockchain()">Reset Blockchain Data</button>
+            <button class="btn btn-outline-primary" (click)="open(content)">Reset Blockchain Data</button>
+            <ng-template #content let-c="close" let-d="dismiss">
+              <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to do this?</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" (click)="resetBlockchain()">Yes, I am sure</button>
+                <button class="btn btn-primary" (click)="c('Close click')">Cancel</button>
+              </div>
+            </ng-template>
             <button class="btn btn-outline-primary" (click)="addingCompany = !addingCompany">Add Corporate Training Session</button>
-            <button class="btn btn-outline-primary" (click)="addingAdmin = !addingAdmin">Add Administrator</button>
+            <button class="btn btn-outline-primary" (click)="loadUsers()" (click)="addingAdmin = !addingAdmin">Add Administrator</button>
           </div>
           <form *ngIf="addingAdmin" (ngSubmit)="onAdminSubmit()" #admin="ngForm">
             <br>

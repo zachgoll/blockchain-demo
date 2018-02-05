@@ -7,13 +7,13 @@
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div [ngbCollapse]="isNavbarCollapsed" class="navbar-collapse justify-content-end" id="navCollapse">
+    <div [ngbCollapse]="!isNavbarCollapsed" class="navbar-collapse justify-content-end" id="navCollapse">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/certification" routerLinkActive="active" class="nav-link">Certification</a>
+            <a class="nav-link" href="http://cwlabs.eastus.cloudapp.azure.com" target="_new" routerLinkActive="active">UL Certificate Demo</a>
         </li>
         <li class="nav-item">
           <a routerLink="/glossary" routerLinkActive="active" class="nav-link">Glossary</a>

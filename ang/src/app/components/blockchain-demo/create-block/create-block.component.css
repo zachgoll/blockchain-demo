@@ -76,6 +76,7 @@
 
 .blockpool {
     max-height: 350px;
+    min-height: 150px;
     overflow: auto;
 }
 

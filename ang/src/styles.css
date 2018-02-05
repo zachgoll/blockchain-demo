@@ -93,3 +93,11 @@
 .tx-form {
   margin-bottom: 40px;
 }
+
+.info-icon-sm {
+  font-size: large;
+}
+
+.info-icon {
+  color: #ffc200;
+}

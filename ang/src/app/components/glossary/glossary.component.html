@@ -9,11 +9,11 @@
   <br>
   <div class="row">
     <div class="col-12 mr-auto ml-auto text-center">
-      <div class="btn-group text-center " *ngFor="let term of terms; let i = index;">
+      <div class="btn-group text-center " *ngFor="let term of glossary.terms; let i = index;">
         <button class="btn btn-primary" style="margin: 15px;" (click)="open(content)">{{ term.term }}</button>
         <ng-template #content let-c="close" let-d="dismiss">
           <div class="modal-header">
-            <h4 class="modal-title">{{term.term}}</h4>
+            <h4 class="modal-title">{{ term.term}}</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
               <span aria-hidden="true">&times;</span>
             </button>

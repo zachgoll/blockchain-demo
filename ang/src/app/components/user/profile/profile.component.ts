@@ -7,6 +7,7 @@ import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +17,7 @@ import { NgForm } from '@angular/forms';
 export class ProfileComponent implements OnInit {
 
   user: any;
+  closeResult: string;
   usersWithPics: {username: string, id: number, picture_url: string}[] = [];
   image: string;
   display = '';
@@ -35,7 +37,8 @@ export class ProfileComponent implements OnInit {
   @ViewChild('company') companyForm: NgForm;
   @ViewChild('admin') adminForm: NgForm;
 
-  constructor(private http: HttpClient, private authService: AuthService, private queryService: QueryService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private queryService: QueryService, 
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.authService.getProfile().subscribe((profile) => {
@@ -170,5 +173,23 @@ export class ProfileComponent implements OnInit {
       : this.usersWithPics.filter(v => v.username.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
 
   formatter = (x: {username: string}) => x.username;
+
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
 
 }

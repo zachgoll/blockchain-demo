@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div *ngIf="keypair" class="col-5">
-      <h2>Ether Faucet (Rinkeby Testnet)</h2>
+      <h2>Ether Faucet (Ropsten Testnet) <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="An ether faucet is simply a smart contract which sends a pre-defined amount of ether to the specified address.  This is common with testnets.  The Ropsten testnet is one of several testnets for the main Ethereum blockchain.  It functions identically to the Ethereum blockchain, but the ether on it are fake.  This is a great tool for developers to test their programs on." popoverTitle="Faucets and Testnets"></i></h2>
       <p>Paste your public Ethereum address here to receive 1 ether</p>
       <form (ngSubmit)="getEther()" #ether="ngForm">
         <div class="form-group">
@@ -17,7 +17,6 @@
         <li class="list-group-item">Send 0.001 ether to <span class="helper-text hash">{{ demoAccount }}</span> using <a href="https://www.myetherwallet.com/" target="_blank" style="text-decoration: underline;">My Ether Wallet</a></li>
         <li class="list-group-item">Find which block your transaction was added to using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
         <li class="list-group-item">Find the number of transactions you have made with your account using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
-        <li class="list-group-item">with your account using <a href="https://ropsten.etherscan.io" target="_blank" style="text-decoration: underline;">etherscan</a></li>
       </ul>
     </div>
     <div  *ngIf="!keypair" class="col-8">
@@ -30,7 +29,7 @@
   <h2 *ngIf="generating">Generating Keypair...</h2>
   <div *ngIf="keypair" class="row">
     <div class="col-12 mr-auto ml-auto">
-      <h4>Your Public Address</h4>
+      <h4>Your Public Address <i class="fa fa-info-circle info-icon" placement="top" ngbPopover="This is a real, valid Ethereum address.  We could technically use this on the main Ethereum blockchain, but it would be insecure to do so since the private key is stored on our servers.  You wouldn't want Chainworks taking your money right?!  The public address is the last 40 characters of the public key generated from the private key shown below." popoverTitle="Public Address"></i></h4>
       <div class="shadow-box">
         <div class="txt">{{ keypair.pub_key }}</div>
       </div>

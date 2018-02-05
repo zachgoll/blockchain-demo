@@ -17,7 +17,7 @@
   <br>
   <div class="row  shadowBoxLight">
     <div class="col-8">
-      <h4>Target</h4>
+      <h4>Target <i class="fa fa-info-circle info-icon" placement="top" ngbPopover="The 'target' refers to a 64 character hexadecimal number.  In a POW algorithm, your computer takes a hash of the data plus an incrementing nonce until the hash is less than the difficulty number.  The '0x' at the beginning of both hashes are not actually part of the hash.  This indicates to computers that we are dealing with a hexadecimal number rather than an ordinary decimal." popoverTitle="UTXO Set"></i></h4>
       <div class="txt">
         <span [ngClass]="{'text-success lg': finished, 'text-danger': !finished}">{{ difficulty[0].substring(0, 4) }}</span><span>{{ difficulty[0].substring(4) }}</span>
       </div>
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="col-4 text-center">
-      <h4>Nonce</h4>
+      <h4>Nonce <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining." popoverTitle="Nonce"></i></h4>
       <div class="noncetext">{{ nonce }}</div>
     </div>
   </div>

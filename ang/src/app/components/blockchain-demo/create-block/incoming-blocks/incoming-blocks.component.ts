@@ -16,6 +16,7 @@ export class IncomingBlocksComponent implements OnInit {
   @Output() noMoreBlocks = new EventEmitter();
 
   user: any;
+  rejectAllowed = false;
 
   blocks: Block[] = [];
 

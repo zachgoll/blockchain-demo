@@ -90,7 +90,7 @@ function getOutputs(tx_id) {
     let vals = [];
 
     return inputs = knex.from('tx')
-        .select('utxo.id', 'utxo.value')
+        .select('utxo.id', 'utxo.value', 'utxo.current_owner')
         .innerJoin('tx_outputs', 'tx_outputs.tx_id', 'tx.id')
         .innerJoin('utxo', 'tx_outputs.utxo_id', 'utxo.id')
         .where('tx.id', tx_id)

@@ -6,12 +6,12 @@
 </div>
 <div class="row d-inline" *ngFor="let block of blocks; let i=index;">
   <div class="col-12">
-    <h4 *ngIf="block.height === 0">Genesis Block</h4>
-    <h4>Block #{{ block.height }}</h4>
+    <h4 *ngIf="block.height === 0">Genesis Block <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1." popoverTitle="Genesis Block"></i></h4>
+    <h4 *ngIf="block.height > 0">Block #{{ block.height }}</h4>
     <hr>
     <div class="row">
       <div class="col-12">
-        <h6>Block Hash</h6>
+        <h6>Block Hash <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together." popoverTitle="Block Hash"></i></h6>
         <div class="hash">
           {{block.block_hash}}
         </div>
@@ -25,17 +25,19 @@
         </div>
       </div>
       <div class="col-6">
+        <!-- Version 2 feature
         <h6 class="d-inline">Block Confirmations</h6>
         <div class="col-4 hash hash-no-overflow hash-no-margin">
           {{'2'}}
         </div>
+        -->
       </div>
     </div>
     <br>
     <div class="row">
       <div class="col-12">
         <button type="button" class="btn btn-sm btn-primary txButton ml-auto" (click)="accept(i)">Accept</button>
-        <button type="button" class="btn btn-sm btn-primary txButton mr-auto" (click)="reject(i)">Reject</button>
+        <button *ngIf="rejectAllowed" type="button" class="btn btn-sm btn-primary txButton mr-auto" (click)="reject(i)">Reject</button>
       </div>
     </div>
   </div>

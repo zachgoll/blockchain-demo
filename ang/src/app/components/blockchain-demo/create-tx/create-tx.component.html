@@ -24,7 +24,7 @@
               <ng-template #rt let-r="result" let-t="term">
                 <img [src]="r['picture_url']" width="50"> {{ r.username }}
               </ng-template>
-              <label for="typeahead-template" class="col-form-label">User Lookup:</label>
+              <label for="typeahead-template" class="col-form-label">User Lookup: <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Type the username of the user that you want to send a transaction to." popoverTitle="User Lookup"></i></label>
               <div class="col-lg-6 col-12">
                 <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
                   [inputFormatter]="formatter" name="selectedUser" ngModel required>
@@ -42,11 +42,11 @@
               </div>
             </div>
             <div class="form-group form-row">
-              <label for="fee" class="col-form-label">Add Fee</label>
+              <label for="fee" class="col-form-label">Add Fee <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="We need to include a fee with our transaction because this incentivizes miners who will be adding transactions to their blocks to add your transaction.  If you include a fee of 0, miners will not include the transaction because they make no money off of it.  This fee estimator is not completely accurate with Bitcoin, but demonstrates how Bitcoin estimates fees.  For every UTXO you add as an input to your transaction, the fee will increase by 0.2 because each UTXO takes up memory in the transaction.  The more UTXOs you have in your transaction, the more memory it requires, and thus, miners will demand a higher fee as compensation for including your large transaction in their block." popoverTitle="Fees in Bitcoin"></i></label>
               <div class="col-lg-3 col-12">
                 <input type="text" class="form-control" name="fee" ngModel required>
               </div>
-              <div class="col-lg-3 col-12">
+              <div class="col-lg-4 col-12">
                 <button class="btn btn-outline-primary" type="button" (click)="estimateFee()">Estimate</button>
               </div>
             </div>
@@ -60,7 +60,7 @@
         <div class="col-12 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-12">
-                <h4 class="d-inline">UTXO Set </h4>
+                <h4 class="d-inline">UTXO Set <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's 'balance' of Bitcoin." popoverTitle="UTXO Set"></i></h4>
                 <p class="d-inline" style="margin-left: 10px"> You own <span class="hash helper-text">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>
             </div>
           </div>

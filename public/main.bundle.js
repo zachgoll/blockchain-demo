@@ -108,6 +108,7 @@ var ng2_file_upload_1 = __webpack_require__("../../../../ng2-file-upload/index.j
 var ng2_carouselamos_1 = __webpack_require__("../../../../ng2-carouselamos/dist/index.js");
 var carousel_1 = __webpack_require__("../../../../primeng/carousel.js");
 var dragdrop_1 = __webpack_require__("../../../../primeng/dragdrop.js");
+var ng2_page_scroll_1 = __webpack_require__("../../../../ng2-page-scroll/ng2-page-scroll.js");
 var app_component_1 = __webpack_require__("../../../../../src/app/app.component.ts");
 var register_component_1 = __webpack_require__("../../../../../src/app/components/user/register/register.component.ts");
 var login_component_1 = __webpack_require__("../../../../../src/app/components/user/login/login.component.ts");
@@ -130,6 +131,7 @@ var error_page_component_1 = __webpack_require__("../../../../../src/app/compone
 var query_service_1 = __webpack_require__("../../../../../src/app/services/query.service.ts");
 var glossary_component_1 = __webpack_require__("../../../../../src/app/components/glossary/glossary.component.ts");
 var faq_component_1 = __webpack_require__("../../../../../src/app/components/faq/faq.component.ts");
+var glossary_service_1 = __webpack_require__("../../../../../src/app/services/glossary.service.ts");
 /**
  * All child routes protected if canActivate present on parent
  * To allow the parent but not the children, use canActivateChild: [AuthGuardService] instead
@@ -194,9 +196,10 @@ var AppModule = (function () {
                 ng_bootstrap_1.NgbModule.forRoot(),
                 ng2_carouselamos_1.Ng2CarouselamosModule,
                 carousel_1.CarouselModule,
-                dragdrop_1.DragDropModule
+                dragdrop_1.DragDropModule,
+                ng2_page_scroll_1.Ng2PageScrollModule
             ],
-            providers: [auth_service_1.AuthService, auth_guard_service_1.AuthGuardService, can_deactivate_service_1.CanDeactivateGuard, query_service_1.QueryService],
+            providers: [auth_service_1.AuthService, auth_guard_service_1.AuthGuardService, can_deactivate_service_1.CanDeactivateGuard, query_service_1.QueryService, glossary_service_1.GlossaryService],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);
@@ -398,7 +401,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".block {\n    width: 600px;\n    margin: 20px 40px 20px 40px;\n    display: inline-block;\n    vertical-align: top;\n}\n\n.block2 {\n    width: 40px;\n    margin: 20px 40px 20px 40px;\n    display: inline-block;\n    vertical-align: top;\n}\n\n.blockchain {\n    overflow: scroll;\n    width: 100%;\n    overflow-x: auto;\n    white-space: nowrap;\n}\n\n.sel-tx-container {\n    padding: 20px;\n    border: dashed rgba(49,42,68,1) 1px;\n}\n\n", ""]);
+exports.push([module.i, ".block {\n    width: 600px;\n    margin: 20px 40px 20px 40px;\n    display: inline-block;\n    vertical-align: top;\n}\n\n.block2 {\n    width: 40px;\n    margin: 20px 40px 20px 40px;\n    display: inline-block;\n    vertical-align: top;\n}\n\n.blockchain {\n    overflow: scroll;\n    width: 100%;\n    overflow-x: auto;\n    white-space: nowrap;\n}\n\n.sel-tx-container {\n    padding: 20px;\n    border: dashed rgba(49,42,68,1) 1px;\n}\n\n.mined-by {\n    display: inline-block;\n    margin-left: 20px;\n}\n\n.mined-by-image {\n    border-radius: 50%;\n    width: 50px;\n    height: 50px;\n}\n\n", ""]);
 
 // exports
 
@@ -411,7 +414,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/blockchain-demo/blockchain/blockchain.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"blockchain\">\n  <h1 *ngIf=\"blocks.length === 0\">There are no blocks in the blockchain.  <a style=\"text-decoration: underline;\" routerLink=\"/blockchain-demo/create-block\">Mine the Genesis Block now!</a></h1>\n  <div class=\"shadowBox block\" *ngFor=\"let block of blocks\">\n    <h2 *ngIf=\"block.blockHeight > 0\" class=\"text-primary d-inline\">Block #{{ block.blockHeight }}</h2>\n    <h2 *ngIf=\"block.blockHeight === 0\" class=\"text-primary d-inline\">Genesis Block</h2>\n    <div class=\"hash hash-margin-top\">{{ block.blockHash }}</div>\n    <hr>\n    <h4>Block Header</h4>\n    <hr>\n    <h6>Previous Block Hash</h6>\n    <div *ngIf=\"block.blockHeight === 0\" class=\"hash\">0x0000000000000000000000000000000000000000000000000000000000000000</div>\n    <div *ngIf=\"block.blockHeight > 0\" class=\"hash\">{{ block.prevBlockHash }}</div>\n    <h6>Merkle Root</h6>\n    <div class=\"hash\">{{ block.merkleRoot }}</div>\n    <div>\n      <h6 class=\"d-inline\">Timestamp</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.timestamp }}</div>\n    </div>\n    <div>\n      <h6 class=\"d-inline\">Nonce</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.nonce }}</div>\n    </div>\n    <div>\n      <h6 class=\"d-inline\">Number of Transactions in Block</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.numberTxsInBlock }}</div>\n    </div>\n    <hr>\n    <h4 class=\"d-inline\">Block Transactions</h4>\n    <hr>\n    <div class=\"sel-tx-container\" *ngFor=\"let tx of block.txs; let i = index;\">\n      <h5 *ngIf=\"tx.coinbase === true\">Coinbase Transaction</h5>\n      <h5 *ngIf=\"tx.coinbase === false\">Transaction #{{ i }}</h5>\n      <hr>\n      <h6>Transaction Hash</h6>\n      <div class=\"hash\">{{tx.tx_hash}}</div>\n      <div>\n        <h6 class=\"d-inline\">\n          Transaction Inputs\n          <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{ input.value }}</div>\n        </h6>\n      </div>\n\n      <div>\n        <h6 class=\"d-inline\">\n          Transaction Outputs\n          <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{ output.value }}</div>\n        </h6>\n      </div>\n\n    </div>\n\n  </div>\n  <div class=\"block2\"></div>\n</div>\n"
+module.exports = "<h2 *ngIf=\"loading\">Loading the blockchain...</h2>\n<div *ngIf=\"!loading\" class=\"blockchain\">\n  <h1 *ngIf=\"blocks.length === 0 && !loading\">There are no blocks in the blockchain.  <a style=\"text-decoration: underline;\" routerLink=\"/blockchain-demo/create-block\">Mine the Genesis Block now!</a></h1>\n  <div class=\"shadowBox block\" *ngFor=\"let block of blocks; let i = index;\">\n    <div class=\"header-contain\">\n      <h2 *ngIf=\"block.blockHeight > 0\" class=\"text-primary d-inline\" style=\"vertical-align: middle;\">Block #{{ block.blockHeight }}</h2>\n      <h2 *ngIf=\"block.blockHeight === 0\" class=\"text-primary d-inline\" style=\"vertical-align: middle;\">Genesis Block</h2>\n      <div class=\"mined-by\"><p class=\"d-inline helper-text\" style=\"vertical-align: middle;\">Mined by {{ block.minedByName }}  </p><img class=\"mined-by-image\" src=\"{{ block.minedByPicture }}\"></div>\n    </div>\n    <div class=\"hash hash-margin-top\">{{ block.blockHash }}</div>\n    <hr>\n    <h4>Block Header</h4>\n    <hr>\n    <h6>Previous Block Hash</h6>\n    <div *ngIf=\"block.blockHeight === 0\" class=\"hash\">0x0000000000000000000000000000000000000000000000000000000000000000</div>\n    <div *ngIf=\"block.blockHeight > 0\" class=\"hash\">{{ block.prevBlockHash }}</div>\n    <h6>Merkle Root</h6>\n    <div class=\"hash\">{{ block.merkleRoot }}</div>\n    <div>\n      <h6 class=\"d-inline\">Timestamp</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.timestamp }}</div>\n    </div>\n    <div>\n      <h6 class=\"d-inline\">Nonce</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.nonce }}</div>\n    </div>\n    <div>\n      <h6 class=\"d-inline\">Number of Transactions in Block</h6>\n      <div class=\"hash hash-no-overflow\">{{ block.numberTxsInBlock }}</div>\n    </div>\n    <hr>\n    <h4 class=\"d-inline\">Block Transactions</h4>\n    <hr>\n    <div class=\"sel-tx-container\" *ngFor=\"let tx of block.txs; let i = index;\">\n      <h5 *ngIf=\"tx.coinbase === true\">Coinbase Transaction</h5>\n      <h5 *ngIf=\"tx.coinbase === false\">Transaction #{{ i }}</h5>\n      <hr>\n      <h6>Transaction Hash</h6>\n      <div class=\"hash\">{{tx.tx_hash}}</div>\n      <div>\n        <h6 class=\"d-inline\">\n          Transaction Inputs\n          <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{ input.value }}</div>\n        </h6>\n      </div>\n\n      <div>\n        <h6 class=\"d-inline\">\n          Transaction Outputs\n          <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{ output.value }}</div>\n        </h6>\n      </div>\n\n    </div>\n\n  </div>\n  <div class=\"block2\"></div>\n</div>\n"
 
 /***/ }),
 
@@ -440,6 +443,7 @@ var BlockchainComponent = (function () {
         this.authService = authService;
         this.query = query;
         this.coinbaseAdded = false;
+        this.loading = true;
         this.blocks = [];
         this.coinbase = {
             hash: '0xF0E4C2F76C58916EC258F246851BEA091D14D4247A2FC3E18694461B1816E13B',
@@ -454,9 +458,15 @@ var BlockchainComponent = (function () {
     };
     BlockchainComponent.prototype.loadBlocks = function () {
         var _this = this;
+        this.loading = true;
+        setTimeout(function () {
+            _this.loading = false;
+        }, 4000);
         this.query.getUserBlockchain(this.user.id).subscribe(function (blocks) {
             blocks.forEach(function (block) {
                 var b = {
+                    minedByName: '',
+                    minedByPicture: '',
                     blockHeight: block.height,
                     prevBlockHash: block.previous_block,
                     merkleRoot: block.merkle_root,
@@ -467,6 +477,13 @@ var BlockchainComponent = (function () {
                     txs: []
                 };
                 _this.query.getBlockTxs(block.id).subscribe(function (block_txs) {
+                    _this.query.getOutputs(block_txs[0].id).subscribe(function (coinbase_outputs) {
+                        var minedBy = coinbase_outputs[0].current_owner;
+                        _this.query.getUserById2(minedBy).subscribe(function (user) {
+                            b.minedByName = user.f_name + ' ' + user.l_name;
+                            b.minedByPicture = user.picture_url;
+                        });
+                    });
                     block_txs.forEach(function (t) {
                         var tx_temp = {
                             tx_hash: t.tx_hash,
@@ -477,12 +494,11 @@ var BlockchainComponent = (function () {
                         _this.query.getInputs(t.id).subscribe(function (inputs) {
                             inputs.forEach(function (input) { return tx_temp.inputs.push(input); });
                             _this.query.getOutputs(t.id).subscribe(function (outputs) {
-                                outputs.forEach(function (output) { return tx_temp.outputs.push(output); });
+                                outputs.forEach(function (output) { tx_temp.outputs.push(output); });
                                 b.txs.push(tx_temp);
                             });
                         });
                     });
-                    console.log(b);
                 });
                 _this.blocks.push(b);
             });
@@ -572,7 +588,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".carou {\n    border-radius: 0px;\n}\n\n.utxoSelected {\n    line-height: 60px;\n    margin-left: 10px;\n}\n\n.mempool {\n    max-height: 500px;\n    overflow: auto;\n}\n\n.txButton {\n    margin-top:15px;\n}\n\n.utxo-box {\n    border: dashed rgba(49,42,68,.1) 4px;\n    background: #eeedf7;\n    margin-top: 10px;\n    min-height: 60px;\n    width: 100%;\n}\n\n\n.in-btn1 {\n    margin: -5px 0px 10px 10px;\n    color: white;\n}\n\n.in-btn2 {\n    margin: -5px 0px 1px 10px;\n    color: white;\n}\n\n.drag-container {\n    padding: 20px;\n    min-height: 100px;\n}\n\n.drag-container:hover {\n    border: dashed rgba(49,42,68,1) 5px;\n    cursor: -webkit-grab;\n    cursor: grab;\n}\n\n.utxo {\n    font-size: 0.7rem;\n    border: solid black 1px;\n    border-radius: 50%;\n    display: inline-block;\n    width: 35px;\n    height: 35px;\n    line-height: 35px;\n    text-align: center;\n    margin: 5px;\n}\n\n.inout {\n    margin-bottom: 20px;\n}\n\n.sel-tx-container {\n    padding: 20px;\n}\n\n.sel-tx-container:hover {\n    border: dashed rgba(49,42,68,1) 4px;\n    cursor: -webkit-grab;\n    cursor: grab;\n}\n\n.sel-coinbase-container {\n    padding: 20px;\n}\n\n.blockpool {\n    max-height: 350px;\n    overflow: auto;\n}\n\n.nonce {\n    font-size: 4.0rem;\n    font-weight: 500;\n    border: solid;\n    display: block;\n    background-color: #ffc200;\n    color: white;\n}\n\n.nonce-finished {\n    color: white;\n    background-color: #ffc200;\n}\n\n.hash-highlight {\n    background-color: #ffc200;\n    color: white;\n}\n\n.pulse-button {\n\n    position: relative;\n    border: none;\n    box-shadow: 0 0 0 0 #ffc200;\n    background-color: #ffc200;\n    cursor: pointer;\n    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);\n    animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);\n  }\n  .pulse-button:hover \n  {\n    -webkit-animation: none;animation: none;\n  }\n  \n  @-webkit-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}\n  @keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}", ""]);
+exports.push([module.i, ".carou {\n    border-radius: 0px;\n}\n\n.utxoSelected {\n    line-height: 60px;\n    margin-left: 10px;\n}\n\n.mempool {\n    max-height: 500px;\n    overflow: auto;\n}\n\n.txButton {\n    margin-top:15px;\n}\n\n.utxo-box {\n    border: dashed rgba(49,42,68,.1) 4px;\n    background: #eeedf7;\n    margin-top: 10px;\n    min-height: 60px;\n    width: 100%;\n}\n\n\n.in-btn1 {\n    margin: -5px 0px 10px 10px;\n    color: white;\n}\n\n.in-btn2 {\n    margin: -5px 0px 1px 10px;\n    color: white;\n}\n\n.drag-container {\n    padding: 20px;\n    min-height: 100px;\n}\n\n.drag-container:hover {\n    border: dashed rgba(49,42,68,1) 5px;\n    cursor: -webkit-grab;\n    cursor: grab;\n}\n\n.utxo {\n    font-size: 0.7rem;\n    border: solid black 1px;\n    border-radius: 50%;\n    display: inline-block;\n    width: 35px;\n    height: 35px;\n    line-height: 35px;\n    text-align: center;\n    margin: 5px;\n}\n\n.inout {\n    margin-bottom: 20px;\n}\n\n.sel-tx-container {\n    padding: 20px;\n}\n\n.sel-tx-container:hover {\n    border: dashed rgba(49,42,68,1) 4px;\n    cursor: -webkit-grab;\n    cursor: grab;\n}\n\n.sel-coinbase-container {\n    padding: 20px;\n}\n\n.blockpool {\n    max-height: 350px;\n    min-height: 150px;\n    overflow: auto;\n}\n\n.nonce {\n    font-size: 4.0rem;\n    font-weight: 500;\n    border: solid;\n    display: block;\n    background-color: #ffc200;\n    color: white;\n}\n\n.nonce-finished {\n    color: white;\n    background-color: #ffc200;\n}\n\n.hash-highlight {\n    background-color: #ffc200;\n    color: white;\n}\n\n.pulse-button {\n\n    position: relative;\n    border: none;\n    box-shadow: 0 0 0 0 #ffc200;\n    background-color: #ffc200;\n    cursor: pointer;\n    -webkit-animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);\n    animation: pulse 1.25s infinite cubic-bezier(0.31, 0, 0, 1);\n  }\n  .pulse-button:hover \n  {\n    -webkit-animation: none;animation: none;\n  }\n  \n  @-webkit-keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}\n  @keyframes pulse {to {box-shadow: 0 0 0 20px rgba(232, 76, 61, 0);}}", ""]);
 
 // exports
 
@@ -585,7 +601,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/blockchain-demo/create-block/create-block.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n        <ngb-alert class=\"helper-text\" *ngIf=\"coinbaseAlert\" type=\"warning\" [dismissible]=\"false\">Please add a Coinbase Transaction before mining the block!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"blockAlert\" type=\"warning\" [dismissible]=\"false\">You must either accept or reject all incoming blocks first!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"broadcastAlert\" type=\"success\" [dismissible]=\"false\">Congrats!  You have won the competition and mined the block.  You have received the block reward for this round!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"blockLoser\" type=\"danger\" [dismissible]=\"false\">Sorry!  Another miner has found this block solution already.  Please accept or reject incoming blocks and start mining the next block.</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-6 col-12 tx-form\">\n      <div class=\"row\">\n        <div class=\"col-12\">\n\n          <!--==================================\n            Create Block Form\n            ====================================-->\n          <div class=\"shadowBoxLight\" pDroppable=\"txs\" (onDrop)=\"drop($event)\">\n            <h2 *ngIf=\"blockHeight > 0\" class=\"text-primary d-inline\">Create Block #{{ blockHeight }}</h2>\n            <h2 *ngIf=\"blockHeight === 0\" class=\"text-primary d-inline\">Create Genesis Block</h2>\n            <button *ngIf=\"!finished\" class=\"btn btn-warning btn-sm in-btn1 d-inline\" (click)=\"mine()\">Mine Block</button>\n            <button *ngIf=\"finished\" class=\"btn btn-warning btn-sm in-btn1 d-inline pulse-button\" (click)=\"broadcast()\">Broadcast Block</button>\n            <div class=\"hash hash-no-margin\">{{ blockHash }}</div>\n            <hr>\n            <h4>Block Header</h4>\n            <hr>\n            <h6>Previous Block Hash</h6>\n            <div class=\"hash\">{{ prevBlockHash }}</div>\n            <h6>Merkle Root</h6>\n            <div class=\"hash hash-highlight\" [ngClass]=\"{'hash-highlight': merkleHighlight }\">{{ merkleRoot }}</div>\n            <div>\n              <h6 class=\"d-inline\">Timestamp</h6>\n              <div class=\"hash hash-no-overflow\">{{ timestamp }}</div>\n            </div>\n            <div>\n              <h6 class=\"d-inline\">Nonce</h6>\n              <div class=\"hash hash-no-overflow\" [ngClass]=\"{'nonce': mining, 'nonce-finished': finished}\">{{ nonce }}</div>\n            </div>\n            <div>\n              <h6 class=\"d-inline\">Number of Transactions in Block</h6>\n              <div class=\"hash hash-no-overflow\">{{ numberTxsInBlock }}</div>\n            </div>\n            <hr>\n            <h4 class=\"d-inline\">Block Transactions</h4>\n            <button *ngIf=\"!coinbaseAdded\" class=\"btn btn-sm btn-warning in-btn2 d-inline\" (click)=\"createCoinbase()\">Add Coinbase Transaction</button>\n            <button *ngIf=\"coinbaseAdded && !mining\" class=\"btn btn-sm btn-danger in-btn2 d-inline\" (click)=\"removeCoinbase()\">Remove Coinbase Transaction</button>\n            <hr>\n            <div class=\"utxo-box\" pDroppable=\"txs\" (onDrop)=\"drop($event)\">\n              <div *ngIf=\"selectedTxs.length === 0 && !coinbaseAdded\" class=\"helper-text text-center utxoSelected\">Drag Transactions here</div>\n              <div *ngIf=\"coinbaseAdded\" class=\"sel-coinbase-container\">\n                <h4>Coinbase Transaction</h4>\n                <hr>\n                <h6>Transaction Hash</h6>\n                <div class=\"hash hash-inverse\">{{coinbase.tx_hash}}</div>\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Outputs (block reward, block tx fees)\n                    <div class=\"utxo\" *ngFor=\"let output of coinbase.outputs\">{{ output.value }}</div>\n                  </h6>\n                </div>\n              </div>\n              <div *ngFor=\"let selTx of selectedTxs; let i = index;\" class=\"sel-tx-container\" pDraggable=\"selTxs\" (onDragStart)=\"dragStart($event, selTx)\" (onDragEnd)=\"dragEnd($event)\">\n                <h4>Transaction #{{ i + 1 }}</h4>\n                <h4 *ngIf=\"selTx.coinbase === true\">Coinbase Transaction</h4>\n                <hr>\n                <h6>Transaction Hash</h6>\n                <div class=\"hash hash-inverse\">{{selTx.tx_hash}}</div>\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Inputs\n                    <div class=\"utxo\" *ngFor=\"let input of selTx.inputs\">{{ input.value.toFixed(1) }}</div>\n                  </h6>\n                </div>\n\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Outputs\n                    <div class=\"utxo\" *ngFor=\"let output of selTx.outputs\">{{ output.value.toFixed(1) }}</div>\n                  </h6>\n                </div>\n\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-lg-6 col-12\">\n\n      <!--==================================\n          Mempool\n      ======================================-->\n\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight blockpool\" pDroppable=\"selTxs\" (onDrop)=\"dropSel($event)\">\n          <div *ngIf=\"txs.length === 0\" class=\"helper-text\">There are no more transactions in your Mempool!</div>\n          <h4>Mempool</h4>  \n          <div class=\"items drag-container\" *ngFor=\"let tx of txs\" pDroppable=\"selTxs\" (onDrop)=\"dropSel($event)\" pDraggable=\"txs\" (onDragStart)=\"dragStart($event, tx)\"\n            (onDragEnd)=\"dragEnd($event)\">\n            <div class=\"row\">\n              <div class=\"col-12\">\n                <h6>Tx Hash</h6>\n                <div class=\"hash\">{{tx.tx_hash}}</div>\n              </div>\n            </div>\n            <div class=\"row\">\n              <div class=\"col-3 inout\">\n                <div>\n                  <h6>Inputs</h6>\n                </div>\n                <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{ input.value.toFixed(1) }}</div>\n              </div>\n              <div class=\"col-3 inout\">\n                <div>\n                  <h6>Outputs</h6>\n                </div>\n                <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{ output.value.toFixed(1) }}</div>\n              </div>\n              <div class=\"col-6\">\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <!--==================================\n      Incoming Blocks\n      ====================================-->\n      \n      <div class=\"row incoming-blocks\">\n        <div class=\"col-12 shadowBoxLight mempool\">\n            <app-incoming-blocks (mined)=\"onMine()\" (blockSubscribed)=\"onBlockSub()\" (noMoreBlocks)=\"noMoreBlocks()\" #mem></app-incoming-blocks>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n        <ngb-alert class=\"helper-text\" *ngIf=\"coinbaseAlert\" type=\"warning\" [dismissible]=\"false\">Please add a Coinbase Transaction before mining the block!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"blockAlert\" type=\"warning\" [dismissible]=\"false\">You must either accept or reject all incoming blocks first!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"broadcastAlert\" type=\"success\" [dismissible]=\"false\">Congrats!  You have won the competition and mined the block.  You have received the block reward for this round!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"blockLoser\" type=\"danger\" [dismissible]=\"false\">Sorry!  Another miner has found this block solution already.  Please accept or reject incoming blocks and start mining the next block.</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-6 col-12 tx-form\">\n      <div class=\"row\">\n        <div class=\"col-12\">\n\n          <!--==================================\n            Create Block Form\n            ====================================-->\n          <div class=\"shadowBoxLight\" pDroppable=\"txs\" (onDrop)=\"drop($event)\">\n            <h2 *ngIf=\"blockHeight > 0\" class=\"text-primary d-inline\">Create Block #{{ blockHeight }}</h2>\n            <h2 *ngIf=\"blockHeight === 0\" class=\"text-primary d-inline\">Create Genesis Block <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1.\" popoverTitle=\"Genesis Block\"></i></h2>\n            <button *ngIf=\"!finished\" class=\"btn btn-warning btn-sm in-btn1 d-inline\" (click)=\"mine()\">Mine Block</button>\n            <button *ngIf=\"finished\" class=\"btn btn-warning btn-sm in-btn1 d-inline pulse-button\" (click)=\"broadcast()\">Broadcast Block</button>\n            <div class=\"hash hash-no-margin\">{{ blockHash }}</div>\n            <hr>\n            <h4>Block Header <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"An 80-byte header belonging to a single block storing metadata pertaining to that block which includes the previous block hash, the merkle root hash, the timestamp, nonce, and number of transactions in the block.\" popoverTitle=\"Block Header\"></i></h4>\n            <hr>\n            <h6>Previous Block Hash <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together.\" popoverTitle=\"Previous Block Hash\"></i></h6>\n            <div class=\"hash\">{{ prevBlockHash }}</div>\n            <h6>Merkle Root <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The topmost (root) leaf of a merkle tree which is stored in the block header and which changes anytime a transaction in a block is altered in any way.\" popoverTitle=\"Merkle Root\"></i></h6>\n            <div class=\"hash hash-highlight\" [ngClass]=\"{'hash-highlight': merkleHighlight }\">{{ merkleRoot }}</div>\n            <div>\n              <h6 class=\"d-inline\">Timestamp <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The timestamp indicates exactly when the block was mined.  This allows the miners in the network to determine if a block is outdated.\" popoverTitle=\"Block Timestamp\"></i></h6>\n              <div class=\"hash hash-no-overflow\">{{ timestamp }}</div>\n            </div>\n            <div>\n              <h6 class=\"d-inline\">Nonce <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining.\" popoverTitle=\"Nonce\"></i></h6>\n              <div class=\"hash hash-no-overflow\" [ngClass]=\"{'nonce': mining, 'nonce-finished': finished}\">{{ nonce }}</div>\n            </div>\n            <div>\n              <h6 class=\"d-inline\">Number of Transactions in Block</h6>\n              <div class=\"hash hash-no-overflow\">{{ numberTxsInBlock }}</div>\n            </div>\n            <hr>\n            <h4 class=\"d-inline\">Block Transactions</h4>\n            <button *ngIf=\"!coinbaseAdded\" class=\"btn btn-sm btn-warning in-btn2 d-inline\" (click)=\"createCoinbase()\">Add Coinbase Transaction</button>\n            <button *ngIf=\"coinbaseAdded && !mining\" class=\"btn btn-sm btn-danger in-btn2 d-inline\" (click)=\"removeCoinbase()\">Remove Coinbase Transaction</button>\n            <hr>\n            <div class=\"utxo-box\" pDroppable=\"txs\" (onDrop)=\"drop($event)\">\n              <div *ngIf=\"selectedTxs.length === 0 && !coinbaseAdded\" class=\"helper-text text-center utxoSelected\">Drag Transactions here</div>\n              <div *ngIf=\"coinbaseAdded\" class=\"sel-coinbase-container\">\n                <h4>Coinbase Transaction <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The first transaction in a block. Always created by a miner, this transaction includes the current block reward and the sum of the transaction fees as outputs sent back to the miner.  There are no inputs in the coinbase transaction.\" popoverTitle=\"Coinbase Transaction\"></i></h4> \n                <hr>\n                <h6>Transaction Hash <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"An identifier used to uniquely identify a particular transaction on the blockchain.\" popoverTitle=\"Transaction Hash\"></i></h6>\n                <div class=\"hash hash-inverse\">{{coinbase.tx_hash}}</div>\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Outputs (block reward, block tx fees)\n                    <div class=\"utxo\" *ngFor=\"let output of coinbase.outputs\">{{ output.value }}</div>\n                  </h6>\n                </div>\n              </div>\n              <div *ngFor=\"let selTx of selectedTxs; let i = index;\" class=\"sel-tx-container\" pDraggable=\"selTxs\" (onDragStart)=\"dragStart($event, selTx)\" (onDragEnd)=\"dragEnd($event)\">\n                <h4>Transaction #{{ i + 1 }}</h4>\n                <h4 *ngIf=\"selTx.coinbase === true\">Coinbase Transaction</h4>\n                <hr>\n                <h6>Transaction Hash</h6>\n                <div class=\"hash hash-inverse\">{{selTx.tx_hash}}</div>\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Inputs\n                    <div class=\"utxo\" *ngFor=\"let input of selTx.inputs\">{{ input.value.toFixed(1) }}</div>\n                  </h6>\n                </div>\n\n                <div>\n                  <h6 class=\"d-inline\">\n                    Transaction Outputs\n                    <div class=\"utxo\" *ngFor=\"let output of selTx.outputs\">{{ output.value.toFixed(1) }}</div>\n                  </h6>\n                </div>\n\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"col-lg-6 col-12\">\n\n      <!--==================================\n          Mempool\n      ======================================-->\n\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight blockpool\" pDroppable=\"selTxs\" (onDrop)=\"dropSel($event)\">\n          <div *ngIf=\"txs.length === 0\" class=\"helper-text\">There are no more transactions in your Mempool!</div>\n          <h4>Mempool <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The mempool is a fancy term for the 'pool of transactions'.  All transactions floating around in the Bitcoin network that are not included in blocks are considered to be in the mempool and are available for miners to add to their blocks.\" popoverTitle=\"Mempool\"></i></h4>  \n          <div class=\"items drag-container\" *ngFor=\"let tx of txs\" pDroppable=\"selTxs\" (onDrop)=\"dropSel($event)\" pDraggable=\"txs\" (onDragStart)=\"dragStart($event, tx)\"\n            (onDragEnd)=\"dragEnd($event)\">\n            <div class=\"row\">\n              <div class=\"col-12\">\n                <h6>Tx Hash</h6>\n                <div class=\"hash\">{{tx.tx_hash}}</div>\n              </div>\n            </div>\n            <div class=\"row\">\n              <div class=\"col-3 inout\">\n                <div>\n                  <h6>Inputs</h6>\n                </div>\n                <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{ input.value.toFixed(1) }}</div>\n              </div>\n              <div class=\"col-3 inout\">\n                <div>\n                  <h6>Outputs</h6>\n                </div>\n                <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{ output.value.toFixed(1) }}</div>\n              </div>\n              <div class=\"col-6\">\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <!--==================================\n      Incoming Blocks\n      ====================================-->\n      \n      <div class=\"row incoming-blocks\">\n        <div class=\"col-12 shadowBoxLight mempool\">\n            <app-incoming-blocks (mined)=\"onMine()\" (blockSubscribed)=\"onBlockSub()\" (noMoreBlocks)=\"noMoreBlocks()\" #mem></app-incoming-blocks>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -989,7 +1005,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/blockchain-demo/create-block/incoming-blocks/incoming-blocks.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"blocks.length === 0\" class=\"helper-text\">You are fully synced with the main blockchain. You may now mine your current block!</div>\n<div class=\"row\">\n  <div class=\"col-12\">\n    <h4>Incoming Blocks</h4>\n  </div>\n</div>\n<div class=\"row d-inline\" *ngFor=\"let block of blocks; let i=index;\">\n  <div class=\"col-12\">\n    <h4 *ngIf=\"block.height === 0\">Genesis Block</h4>\n    <h4>Block #{{ block.height }}</h4>\n    <hr>\n    <div class=\"row\">\n      <div class=\"col-12\">\n        <h6>Block Hash</h6>\n        <div class=\"hash\">\n          {{block.block_hash}}\n        </div>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-6\">\n        <h6 class=\"d-inline\">Txs in Block</h6>\n        <div class=\"col-4 hash hash-no-overflow hash-no-margin\">\n          {{block.num_txs}}\n        </div>\n      </div>\n      <div class=\"col-6\">\n        <h6 class=\"d-inline\">Block Confirmations</h6>\n        <div class=\"col-4 hash hash-no-overflow hash-no-margin\">\n          {{'2'}}\n        </div>\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-12\">\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton ml-auto\" (click)=\"accept(i)\">Accept</button>\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton mr-auto\" (click)=\"reject(i)\">Reject</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"blocks.length === 0\" class=\"helper-text\">You are fully synced with the main blockchain. You may now mine your current block!</div>\n<div class=\"row\">\n  <div class=\"col-12\">\n    <h4>Incoming Blocks</h4>\n  </div>\n</div>\n<div class=\"row d-inline\" *ngFor=\"let block of blocks; let i=index;\">\n  <div class=\"col-12\">\n    <h4 *ngIf=\"block.height === 0\">Genesis Block <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1.\" popoverTitle=\"Genesis Block\"></i></h4>\n    <h4 *ngIf=\"block.height > 0\">Block #{{ block.height }}</h4>\n    <hr>\n    <div class=\"row\">\n      <div class=\"col-12\">\n        <h6>Block Hash <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together.\" popoverTitle=\"Block Hash\"></i></h6>\n        <div class=\"hash\">\n          {{block.block_hash}}\n        </div>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-6\">\n        <h6 class=\"d-inline\">Txs in Block</h6>\n        <div class=\"col-4 hash hash-no-overflow hash-no-margin\">\n          {{block.num_txs}}\n        </div>\n      </div>\n      <div class=\"col-6\">\n        <!-- Version 2 feature\n        <h6 class=\"d-inline\">Block Confirmations</h6>\n        <div class=\"col-4 hash hash-no-overflow hash-no-margin\">\n          {{'2'}}\n        </div>\n        -->\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-12\">\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton ml-auto\" (click)=\"accept(i)\">Accept</button>\n        <button *ngIf=\"rejectAllowed\" type=\"button\" class=\"btn btn-sm btn-primary txButton mr-auto\" (click)=\"reject(i)\">Reject</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1017,6 +1033,7 @@ var IncomingBlocksComponent = (function () {
         this.query = query;
         this.blockSubscribed = new core_1.EventEmitter();
         this.noMoreBlocks = new core_1.EventEmitter();
+        this.rejectAllowed = false;
         this.blocks = [];
     }
     IncomingBlocksComponent.prototype.ngOnInit = function () {
@@ -1114,7 +1131,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/blockchain-demo/create-tx/create-tx.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidUtxo\" type=\"warning\" [dismissible]=\"false\">Your private key did not unlock this UTXO.  Please select a gold UTXO.</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidTx\" type=\"warning\" [dismissible]=\"false\">You cannot send funds to yourself!  Select a different user!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"notEnoughFunds\" type=\"warning\" [dismissible]=\"false\">You do not have enough funds for this transaction.  Add more UTXOs or decrease the fee!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidForm\" type=\"warning\" [dismissible]=\"false\">You must fill out all fields before submitting the transaction!</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-4 col-12 tx-form\">\n      <div class=\"row\">\n        <div class=\"col-12\">\n          <form class=\"shadowBoxLight\" (ngSubmit)=\"onTxSubmit()\" #txform=\"ngForm\">\n            <h2 class=\"text-primary\">Create Transaction</h2>\n            <hr>\n            <div class=\"form-group form-row\">\n              <label for=\"amount\" class=\"col-form-label\">Send</label>\n              <div class=\"col-lg-8 col-12\">\n                <input type=\"text\" class=\"form-control\" name=\"amount\" placeholder=\"Amount...\" ngModel required>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <ng-template #rt let-r=\"result\" let-t=\"term\">\n                <img [src]=\"r['picture_url']\" width=\"50\"> {{ r.username }}\n              </ng-template>\n              <label for=\"typeahead-template\" class=\"col-form-label\">User Lookup:</label>\n              <div class=\"col-lg-6 col-12\">\n                <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\"\n                  [inputFormatter]=\"formatter\" name=\"selectedUser\" ngModel required>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <label for=\"fee\" class=\"col-form-label h6\">Add Tx Inputs</label>\n              <div class=\"col-12\">\n                <div class=\"utxo-box\" pDroppable=\"utxos\" (onDrop)=\"drop($event)\">\n                  <div class=\"utxoSelected\">\n                    <div *ngIf=\"selectedUtxos.length === 0\" class=\"helper-text text-center\">Drag UTXOs here</div>\n                    <div class=\"utxo\" pDraggable=\"selUtxos\" (onDragStart)=\"dragStart($event, utxo)\" (onDragEnd)=\"dragEnd($event)\" *ngFor=\"let utxo of selectedUtxos\">{{utxo.value.toFixed(1)}}</div>\n                  </div>\n                </div>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <label for=\"fee\" class=\"col-form-label\">Add Fee</label>\n              <div class=\"col-lg-3 col-12\">\n                <input type=\"text\" class=\"form-control\" name=\"fee\" ngModel required>\n              </div>\n              <div class=\"col-lg-3 col-12\">\n                <button class=\"btn btn-outline-primary\" type=\"button\" (click)=\"estimateFee()\">Estimate</button>\n              </div>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit Transaction</button>\n          </form>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-lg-8 col-12\">\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight\" pDroppable=\"selUtxos\" (onDrop)=\"dropSel($event)\">\n          <div class=\"row\" style=\"margin-bottom: 10px;\">\n            <div class=\"col-12\">\n                <h4 class=\"d-inline\">UTXO Set </h4>\n                <p class=\"d-inline\" style=\"margin-left: 10px\"> You own <span class=\"hash helper-text\">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"col-12\">\n              <div *ngIf=\"utxos.length === 0\" class=\"helper-text\">There are no UTXOs in the UTXO set! <a style=\"text-decoration: underline;\" routerLink=\"/blockchain-demo/create-block\">Create a Genesis Block first!</a></div>\n              <div *ngFor=\"let utxo of utxos\" class=\"utxo\" [ngClass]=\"{'my-utxo': utxo.current_owner === user.id }\"\n                pDraggable=\"utxos\" (onDragStart)=\"dragStart($event, utxo)\" (onDragEnd)=\"dragEnd($event)\">\n                {{utxo.value.toFixed(1)}}\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight mempool\">\n          <app-mempool (txSubscribed)=\"onTxSub()\"></app-mempool>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidUtxo\" type=\"warning\" [dismissible]=\"false\">Your private key did not unlock this UTXO.  Please select a gold UTXO.</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidTx\" type=\"warning\" [dismissible]=\"false\">You cannot send funds to yourself!  Select a different user!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"notEnoughFunds\" type=\"warning\" [dismissible]=\"false\">You do not have enough funds for this transaction.  Add more UTXOs or decrease the fee!</ngb-alert>\n        <ngb-alert class=\"helper-text\" *ngIf=\"invalidForm\" type=\"warning\" [dismissible]=\"false\">You must fill out all fields before submitting the transaction!</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-4 col-12 tx-form\">\n      <div class=\"row\">\n        <div class=\"col-12\">\n          <form class=\"shadowBoxLight\" (ngSubmit)=\"onTxSubmit()\" #txform=\"ngForm\">\n            <h2 class=\"text-primary\">Create Transaction</h2>\n            <hr>\n            <div class=\"form-group form-row\">\n              <label for=\"amount\" class=\"col-form-label\">Send</label>\n              <div class=\"col-lg-8 col-12\">\n                <input type=\"text\" class=\"form-control\" name=\"amount\" placeholder=\"Amount...\" ngModel required>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <ng-template #rt let-r=\"result\" let-t=\"term\">\n                <img [src]=\"r['picture_url']\" width=\"50\"> {{ r.username }}\n              </ng-template>\n              <label for=\"typeahead-template\" class=\"col-form-label\">User Lookup: <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"Type the username of the user that you want to send a transaction to.\" popoverTitle=\"User Lookup\"></i></label>\n              <div class=\"col-lg-6 col-12\">\n                <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\"\n                  [inputFormatter]=\"formatter\" name=\"selectedUser\" ngModel required>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <label for=\"fee\" class=\"col-form-label h6\">Add Tx Inputs</label>\n              <div class=\"col-12\">\n                <div class=\"utxo-box\" pDroppable=\"utxos\" (onDrop)=\"drop($event)\">\n                  <div class=\"utxoSelected\">\n                    <div *ngIf=\"selectedUtxos.length === 0\" class=\"helper-text text-center\">Drag UTXOs here</div>\n                    <div class=\"utxo\" pDraggable=\"selUtxos\" (onDragStart)=\"dragStart($event, utxo)\" (onDragEnd)=\"dragEnd($event)\" *ngFor=\"let utxo of selectedUtxos\">{{utxo.value.toFixed(1)}}</div>\n                  </div>\n                </div>\n              </div>\n            </div>\n            <div class=\"form-group form-row\">\n              <label for=\"fee\" class=\"col-form-label\">Add Fee <i class=\"fa fa-info-circle info-icon\" placement=\"right\" ngbPopover=\"We need to include a fee with our transaction because this incentivizes miners who will be adding transactions to their blocks to add your transaction.  If you include a fee of 0, miners will not include the transaction because they make no money off of it.  This fee estimator is not completely accurate with Bitcoin, but demonstrates how Bitcoin estimates fees.  For every UTXO you add as an input to your transaction, the fee will increase by 0.2 because each UTXO takes up memory in the transaction.  The more UTXOs you have in your transaction, the more memory it requires, and thus, miners will demand a higher fee as compensation for including your large transaction in their block.\" popoverTitle=\"Fees in Bitcoin\"></i></label>\n              <div class=\"col-lg-3 col-12\">\n                <input type=\"text\" class=\"form-control\" name=\"fee\" ngModel required>\n              </div>\n              <div class=\"col-lg-4 col-12\">\n                <button class=\"btn btn-outline-primary\" type=\"button\" (click)=\"estimateFee()\">Estimate</button>\n              </div>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit Transaction</button>\n          </form>\n        </div>\n      </div>\n    </div>\n    <div class=\"col-lg-8 col-12\">\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight\" pDroppable=\"selUtxos\" (onDrop)=\"dropSel($event)\">\n          <div class=\"row\" style=\"margin-bottom: 10px;\">\n            <div class=\"col-12\">\n                <h4 class=\"d-inline\">UTXO Set <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's 'balance' of Bitcoin.\" popoverTitle=\"UTXO Set\"></i></h4>\n                <p class=\"d-inline\" style=\"margin-left: 10px\"> You own <span class=\"hash helper-text\">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"col-12\">\n              <div *ngIf=\"utxos.length === 0\" class=\"helper-text\">There are no UTXOs in the UTXO set! <a style=\"text-decoration: underline;\" routerLink=\"/blockchain-demo/create-block\">Create a Genesis Block first!</a></div>\n              <div *ngFor=\"let utxo of utxos\" class=\"utxo\" [ngClass]=\"{'my-utxo': utxo.current_owner === user.id }\"\n                pDraggable=\"utxos\" (onDragStart)=\"dragStart($event, utxo)\" (onDragEnd)=\"dragEnd($event)\">\n                {{utxo.value.toFixed(1)}}\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-12 shadowBoxLight mempool\">\n          <app-mempool (txSubscribed)=\"onTxSub()\"></app-mempool>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1381,7 +1398,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/blockchain-demo/create-tx/mempool/mempool.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\"><div class=\"col-12\">\n  <h4>Incoming Transactions</h4>\n</div></div>\n<div class=\"row d-inline\" *ngFor=\"let tx of txs; let i=index;\">\n  <div class=\"col-12\">\n    <div class=\"row\">\n      <h6>Tx Hash</h6>\n      <div class=\"col-12 hash\">\n        {{tx.tx_hash}}\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-3 inout\">\n        <div>\n          <h6>Inputs</h6>\n        </div>\n        <h4 *ngIf=\"tx.inputs.length === 0\">Inputs Loading...</h4>\n        <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{input.value}}</div>\n      </div>\n      <div class=\"col-3 inout\">\n        <div>\n          <h6>Outputs</h6>\n        </div>\n        <h4 *ngIf=\"tx.outputs.length === 0\">Outputs Loading...</h4>\n        <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{output.value}}</div>\n      </div>\n      <div class=\"col-6\">\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton ml-auto\" (click)=\"accept(i)\">Accept</button>\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton mr-auto\" (click)=\"reject(i)\">Reject</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"row\"><div class=\"col-12\">\n  <h4>Incoming Transactions</h4>\n</div></div>\n<div class=\"row d-inline\" *ngFor=\"let tx of txs; let i=index;\">\n  <div class=\"col-12\">\n    <div class=\"row\">\n      <h6>Tx Hash</h6>\n      <div class=\"col-12 hash\">\n        {{tx.tx_hash}}\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-3 inout\">\n        <div>\n          <h6>Inputs</h6>\n        </div>\n        <h4 *ngIf=\"tx.inputs.length === 0\">Inputs Loading...</h4>\n        <div class=\"utxo\" *ngFor=\"let input of tx.inputs\">{{input.value}}</div>\n      </div>\n      <div class=\"col-3 inout\">\n        <div>\n          <h6>Outputs</h6>\n        </div>\n        <h4 *ngIf=\"tx.outputs.length === 0\">Outputs Loading...</h4>\n        <div class=\"utxo\" *ngFor=\"let output of tx.outputs\">{{output.value}}</div>\n      </div>\n      <div class=\"col-6\">\n        <button type=\"button\" class=\"btn btn-sm btn-primary txButton ml-auto\" (click)=\"accept(i)\">Accept</button>\n        <button *ngIf=\"rejectAllowed\" type=\"button\" class=\"btn btn-sm btn-primary txButton mr-auto\" (click)=\"reject(i)\">Reject</button>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1408,6 +1425,7 @@ var MempoolComponent = (function () {
         this.authService = authService;
         this.query = query;
         this.txSubscribed = new core_1.EventEmitter();
+        this.rejectAllowed = false;
         this.txs = [];
     }
     MempoolComponent.prototype.ngOnInit = function () {
@@ -1748,7 +1766,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/glossary/glossary.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n<div class=\"container-fluid\">\n  <div class=\"row text-center\">\n    <div class=\"col-12 text-primary\">\n      <h2>Blockchain Terms by Chainworks</h2>\n      <p>Click on each term to show definition</p>\n    </div>\n  </div>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 mr-auto ml-auto text-center\">\n      <div class=\"btn-group text-center \" *ngFor=\"let term of terms; let i = index;\">\n        <button class=\"btn btn-primary\" style=\"margin: 15px;\" (click)=\"open(content)\">{{ term.term }}</button>\n        <ng-template #content let-c=\"close\" let-d=\"dismiss\">\n          <div class=\"modal-header\">\n            <h4 class=\"modal-title\">{{term.term}}</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n          </div>\n          <div class=\"modal-body\">\n            <p>{{ term.definition }}</p>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<br>\n<div class=\"container-fluid\">\n  <div class=\"row text-center\">\n    <div class=\"col-12 text-primary\">\n      <h2>Blockchain Terms by Chainworks</h2>\n      <p>Click on each term to show definition</p>\n    </div>\n  </div>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 mr-auto ml-auto text-center\">\n      <div class=\"btn-group text-center \" *ngFor=\"let term of glossary.terms; let i = index;\">\n        <button class=\"btn btn-primary\" style=\"margin: 15px;\" (click)=\"open(content)\">{{ term.term }}</button>\n        <ng-template #content let-c=\"close\" let-d=\"dismiss\">\n          <div class=\"modal-header\">\n            <h4 class=\"modal-title\">{{ term.term}}</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n              <span aria-hidden=\"true\">&times;</span>\n            </button>\n          </div>\n          <div class=\"modal-body\">\n            <p>{{ term.definition }}</p>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1767,197 +1785,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var glossary_service_1 = __webpack_require__("../../../../../src/app/services/glossary.service.ts");
 var core_1 = __webpack_require__("../../../core/esm5/core.js");
 var ng_bootstrap_1 = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var GlossaryComponent = (function () {
-    function GlossaryComponent(modalService) {
+    function GlossaryComponent(modalService, glossary) {
         this.modalService = modalService;
-        /**
-         * CSV to JSON
-         *  {lb}
-           "term":"{f1}",
-          "definition":"{f2}"
-            {rb}
-            http://www.convertcsv.com/csv-to-json.htm
-         */
-        this.terms = [
-            {
-                "term": "Address",
-                "definition": "Publicly known string of characters used to send and receive transactions from on the network."
-            },
-            {
-                "term": "ASIC",
-                "definition": "Short form for ‘Application Specific Integrated Circuit’. Often compared to GPUs, ASICs are specially made for mining and may offer significant power savings."
-            },
-            {
-                "term": "Block",
-                "definition": "Package of data that carries immutable information including a block header and block transactions."
-            },
-            {
-                "term": "Block Hash",
-                "definition": "A deterministic, irreversible hash of the header of the block.  This hash will change if any data in the entire block is changed, including transactions."
-            },
-            {
-                "term": "Block Header",
-                "definition": "An 80-byte header belonging to a single block storing metadata pertaining to that block which includes the previous block hash, the merkle root hash, the timestamp, nonce, and number of transactions in the block."
-            },
-            {
-                "term": "Block Interval",
-                "definition": "The average time interval in which new blocks are typically mined.  Bitcoin strives for a 10 minute block interval and will adjust the difficulty target according to the aggregate hash power in the network."
-            },
-            {
-                "term": "Block Reward",
-                "definition": "The payment that a miner recceives for mining a block.  This provides an incentive for miners to participate in and secure the network via monetary compensation."
-            },
-            {
-                "term": "Block Timestamp",
-                "definition": "A Unix time timestamp contained in each block. Iit serves as a source of variation for the block hash making it more difficult for bad nodes to manipulate a blockchain."
-            },
-            {
-                "term": "Blockchain (Chainworks)",
-                "definition": "A write once (immutable), distributed and sequential database (chain) of transactions (blocks) fused onto a decentralized network of peer clients that are economic agents (incentivized by block reward) to agree (consensus protocol) at regular time intervals (block interval) about the state of shared network data (ledger)."
-            },
-            {
-                "term": "Blockchain (Tapscott)",
-                "definition": "An incorruptible digital ledger of economic transactions that can be programmed to record not just financial transactions but virtually everything of value."
-            },
-            {
-                "term": "Coinbase Transaction",
-                "definition": "The first transaction in a block. Always created by a miner, this transaction includes the current block reward and the sum of the transaction fees as outputs sent back to the miner.  There are no inputs in the coinbase transaction."
-            },
-            {
-                "term": "Consensus",
-                "definition": "A term often used in peer to peer networks which refers to the agreement between network participants on the state of some data."
-            },
-            {
-                "term": "Consensus Protocol",
-                "definition": "Often a reference to the type of consensus algorithm used to secure a particular blockchain.  In Bitcoin, the consensus protocol is POW (proof of work)."
-            },
-            {
-                "term": "Dapp",
-                "definition": "Referred to as a Decentralized Application, a Dapp replaces the common backend database architecture with the blockchain."
-            },
-            {
-                "term": "Deterministic",
-                "definition": "An algorithm which, given a particular input, will always produce the same output."
-            },
-            {
-                "term": "Distributed Ledger (aka Shared Ledger)",
-                "definition": "A consensus of replicated, shared, and synchronized digital data geographically spread across multiple sites, countries, or institutions."
-            },
-            {
-                "term": "Ethash",
-                "definition": "The consensus algorithm used natively for the proof-of-work function in Ethereum-based blockchain currencies."
-            },
-            {
-                "term": "Genesis Block",
-                "definition": "The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1."
-            },
-            {
-                "term": "Hash Function",
-                "definition": "Any function that can be used to map data of arbitrary size to data of fixed size, is deterministic, and irreversible. "
-            },
-            {
-                "term": "Hashes ",
-                "definition": "The values returned by a hash function.  Also known as: hash values, hash codes, or digests."
-            },
-            {
-                "term": "Immutable ",
-                "definition": "Unchanging over time or unable to be changed."
-            },
-            {
-                "term": "Keccak Hash 256",
-                "definition": "A common hash function which is used for address generation and other tasks in Ethereum."
-            },
-            {
-                "term": "Merkle Root",
-                "definition": "The topmost (root) leaf of a merkle tree which is stored in the block header and which changes anytime a transaction in a block is altered in any way."
-            },
-            {
-                "term": "Merkle Tree",
-                "definition": "A binary tree like data structure which allows all transactions in a block to be consolidated and represented by a single 64 character hash, also called the merkle root."
-            },
-            {
-                "term": "Mining",
-                "definition": "The process of creating a block, solving a proof-of-work for that block, and broadcasting the block to peers in the network as \"valid\"."
-            },
-            {
-                "term": "Nonce",
-                "definition": "An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining."
-            },
-            {
-                "term": "Peer-to-Peer",
-                "definition": "A decentralized network architecture in which each participant has equal rights but not necessarily responsibilities."
-            },
-            {
-                "term": "Previous Block Hash",
-                "definition": "Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together."
-            },
-            {
-                "term": "Privacy",
-                "definition": "In blockchain circles, privacy often refers to anonymity of both identity and data."
-            },
-            {
-                "term": "Private Key",
-                "definition": "A large, random number that is used to indicate a specific identity on the blockchain.  This value is responsible for securing a user's funds and if compromised, can result in a complete loss of funds."
-            },
-            {
-                "term": "Proof of Stake (POS)",
-                "definition": "A consensus mechanism where miners are chosen at random to solve the proof of work for a block based on their stake in the network."
-            },
-            {
-                "term": "Proof of Work (POW)",
-                "definition": "A consensus mechanism where miners compete to solve a computationally difficult cryptographic puzzle to prove that a block has been mined with integrity."
-            },
-            {
-                "term": "Public Key",
-                "definition": "A cryptographic key that can be obtained and used by anyone to encrypt messages intended for a particular recipient, such that the encrypted messages can be deciphered only by using a second key that is known only to the recipient (the private key)."
-            },
-            {
-                "term": "SHA-256 Hash",
-                "definition": "A popular hashing algorithm designed and developed by the NSA and used for a variety of functions including mining/hashing in Bitcoin."
-            },
-            {
-                "term": "Shared Ledger (aka Distributed Ledger)",
-                "definition": "A consensus of replicated, shared, and synchronized digital data geographically spread across multiple sites, countries, or institutions."
-            },
-            {
-                "term": "Smart contracts",
-                "definition": "business rules executed in trust-less manner via code"
-            },
-            {
-                "term": "Transaction",
-                "definition": "An exchange of value, services, or other goods between two or more people."
-            },
-            {
-                "term": "Transaction Hash",
-                "definition": "An identifier used to uniquely identify a particular transaction on the blockchain."
-            },
-            {
-                "term": "Transaction Inputs",
-                "definition": "One or more UTXOs which are unlocked via a user's private key and included as \"funds\" for a given transaction.  After being used in a transaction, a UTXO is considered \"spent\" and can no longer be used in the Bitcoin network."
-            },
-            {
-                "term": "Transaction Outputs",
-                "definition": "One or more UTXOs which are created as a result of a transaction, and which can only be spent by the user who's public key was used to lock the outputs.  All transaction outputs are newly created UTXOs and can be used as inputs in future transactions."
-            },
-            {
-                "term": "Trust-less",
-                "definition": "Refers to a system in which participants may interact and transact with each other despite lacking trust in each other.  This is common in peer to peer networks like Bitcoin."
-            },
-            {
-                "term": "UTXO",
-                "definition": "Bitcoin specific term.  An Unspent Transaction Output is a value of Bitcoin which has a locking and unlocking script.  The user who has the private key which satisfies the unlocking script can use the UTXO as a transaction input."
-            },
-            {
-                "term": "UTXO Set",
-                "definition": "Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's \"balance\" of Bitcoin."
-            },
-            {
-                "term": "Value",
-                "definition": "the importance, worth, or usefulness of something."
-            }
-        ];
+        this.glossary = glossary;
     }
     GlossaryComponent.prototype.open = function (content) {
         var _this = this;
@@ -1979,6 +1813,7 @@ var GlossaryComponent = (function () {
         }
     };
     GlossaryComponent.prototype.ngOnInit = function () {
+        console.log(this.glossary.terms);
     };
     GlossaryComponent = __decorate([
         core_1.Component({
@@ -1986,7 +1821,7 @@ var GlossaryComponent = (function () {
             template: __webpack_require__("../../../../../src/app/components/glossary/glossary.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/glossary/glossary.component.css")]
         }),
-        __metadata("design:paramtypes", [ng_bootstrap_1.NgbModal])
+        __metadata("design:paramtypes", [ng_bootstrap_1.NgbModal, glossary_service_1.GlossaryService])
     ], GlossaryComponent);
     return GlossaryComponent;
 }());
@@ -2016,7 +1851,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"authService.loggedIn()\" class=\"container\">\n  <br>\n  <br>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 col-lg-6 mr-auto ml-auto\">\n      <div *ngIf=\"authService.currentUser\" class=\"display-4 text-capitalize\">Welcome {{ user.f_name }}!</div>\n      <br>\n      <br>\n      <div class=\"lead\">Chainworks thanks you for your attendance and willingness to learn more about Blockchain technology. This site will\n        be your companion throughout the training session. On each page, there are tips indicated by the\n        <i class=\"fa fa-question\" aria-hidden=\"true\"></i> icon. There are many confusing concepts when talking about blockchain, and we want a painless experience for\n        all our trainees! If you have a question at any point in the training, you can submit it on the \"Submit Question\"\n        tab, and we will be sure to get to it at some point during or after the presentation! Enjoy!\n      </div>\n      <br>\n      <button type=\"button\" class=\"btn btn-lg btn-primary\" routerLink=\"/register\">Go to the Demos</button>\n      <button type=\"button\" class=\"btn btn-lg btn-primary\" routerLink=\"/register\">Take a Short Tour</button>\n      <br>\n      <br>\n    </div>\n    <div class=\"col-12 col-lg-6\">\n      <div class=\"container\">\n        <div class=\"row\">\n          <div class=\"col-12 col-lg-10 ml-auto\">\n            <form class=\"shadowBox\" (ngSubmit)=\"onQuestionSubmit()\" #question=\"ngForm\">\n              <h2 class=\"text-primary\">Ask a Question</h2>\n              <hr>\n              <p *ngIf=\"questionSuccess\" class=\"text-success\">Your question has been submitted!</p>\n              <p *ngIf=\"questionError\" class=\"text-danger\">Something went wrong. Try again.</p>\n              <div class=\"form-group\">\n                <textarea type=\"text\" class=\"form-control\" name=\"question\" placeholder=\"Enter your question here...\" ngModel></textarea>\n              </div>\n              <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit Question</button>\n            </form>\n          </div>\n        </div>\n      </div>\n      <br>\n      <br>\n    </div>\n  </div>\n</div>\n<div *ngIf=\"!authService.loggedIn()\" class=\"container\">\n  <br>\n  <br>\n  <br>\n  <br>\n  <br>\n  <br>\n  <div class=\"row text-center\">\n    <div class=\"col-6 mr-auto ml-auto\">\n\n      <div class=\"display-2 text-primary\">Welcome</div>\n      <br>\n      <br>\n      <div class=\"lead\">This training portal was created to help you better understand blockchain technology.</div>\n      <br>\n      <br>\n      <button type=\"button\" class=\"btn btn-lg btn-primary\" routerLink=\"/register\">Register</button>\n      <button type=\"button\" class=\"btn btn-lg btn-info\" routerLink=\"/login\">Login</button>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"authService.loggedIn()\" class=\"container\">\n  <br>\n  <br>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 col-lg-6 mr-auto ml-auto\">\n      <div *ngIf=\"authService.currentUser\" class=\"display-4 text-capitalize\">Welcome {{ user.f_name }}!</div>\n      <br>\n      <br>\n      <div class=\"lead\">Chainworks thanks you for your attendance and willingness to learn more about Blockchain technology. This site will\n        be your companion throughout the training session. On each page, there are tips indicated by the\n        <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"Additional explanation will display here\" popoverTitle=\"Term\"></i> icon.  Click on the icon (including this one) to see additional explanations. You can also refer to the <a routerLink=\"/glossary\" style=\"text-decoration: underline;\">glossary.</a> There are many confusing concepts when talking about blockchain, and we want a painless experience for\n        all our trainees! If you have a question at any point in the training, you can submit it here on the home page or on the your profile.  Click on the FAQ tab and upvote other user questions too so we can prioritize which ones we get to first! Enjoy!\n      </div>\n      <br>\n      <br>\n    </div>\n    <div class=\"col-12 col-lg-6\">\n      <div class=\"container\">\n        <div class=\"row\">\n          <div class=\"col-12 col-lg-10 ml-auto\">\n            <form class=\"shadowBox\" (ngSubmit)=\"onQuestionSubmit()\" #question=\"ngForm\">\n              <h2 class=\"text-primary\">Ask a Question</h2>\n              <hr>\n              <p *ngIf=\"questionSuccess\" class=\"text-success\">Your question has been submitted!</p>\n              <p *ngIf=\"questionError\" class=\"text-danger\">Something went wrong. Try again.</p>\n              <div class=\"form-group\">\n                <textarea type=\"text\" class=\"form-control\" name=\"question\" placeholder=\"Enter your question here...\" ngModel></textarea>\n              </div>\n              <button type=\"submit\" class=\"btn btn-primary btn-lg btn-block\">Submit Question</button>\n            </form>\n          </div>\n        </div>\n      </div>\n      <br>\n      <br>\n    </div>\n  </div>\n</div>\n<div *ngIf=\"!authService.loggedIn()\" class=\"container\">\n  <br>\n  <br>\n  <br>\n  <br>\n  <br>\n  <br>\n  <div class=\"row text-center\">\n    <div class=\"col-md-6 col-12 mr-auto ml-auto\">\n\n      <div class=\"display-2 text-primary\">Welcome</div>\n      <br>\n      <br>\n      <div class=\"lead\">This training portal was created to help you better understand blockchain technology.</div>\n      <br>\n      <br>\n      <button type=\"button\" class=\"btn btn-lg btn-primary\" routerLink=\"/register\">Register</button>\n      <button type=\"button\" class=\"btn btn-lg btn-info\" routerLink=\"/login\">Login</button>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2105,7 +1940,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-white\" id=\"appNav\">\n  <div class=\"container-fluid\">\n    <a class=\"navbar-brand\" href=\"#\">\n      <img src=\"../../assets/chainworks-logo.png\" class=\"img-rounded\" style=\"margin-left: 20px;\">\n    </a>\n    <button class=\"navbar-toggler\" type=\"button\" (click)=\"isNavbarCollapsed = !isNavbarCollapsed\" aria-controls=\"navCollapse\"\n      aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"isNavbarCollapsed\" class=\"navbar-collapse justify-content-end\" id=\"navCollapse\">\n      <ul class=\"navbar-nav\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" routerLink=\"/\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Home</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/certification\" routerLinkActive=\"active\" class=\"nav-link\">Certification</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/glossary\" routerLinkActive=\"active\" class=\"nav-link\">Glossary</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/faq\" routerLinkActive=\"active\" class=\"nav-link\">FAQ</a>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"presentation-resources\" class=\"nav-link dd\" ngbDropdownToggle>Presentation Resources</a>\n          <div ngbDropdownMenu aria-labelledby=\"presentation-resources\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/hash-demo']\">Hash Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/pow-demo']\">POW Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/wallet-generator']\">Wallet Generator</button>\n          </div>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"blockchain-demo\" ngbDropdownToggle class=\"nav-link dd\">Blockchain Demo</a>\n          <div ngbDropdownMenu aria-labelledby=\"blockchain-demo\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-tx']\">Create Transaction</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-block']\">Create Block</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/blockchain']\">View Blockchain</button>\n          </div>\n        </li>\n        <div *ngIf=\"authService.loggedIn()\" ngbDropdown placement=\"bottom-right\" class=\"nav-item d-inline-block\">\n          <a class=\"nav-link dd\" id=\"basicdrop\" ngbDropdownToggle>\n            <!-- The Profile picture inserted via div class below, with shaping provided by Bootstrap -->\n            <div class=\"profile-img dd\">\n              <img class=\"roundImg dd\" src=\"{{ this.authService.picture_url }}\">\n            </div>\n            <span class=\"caret dd\"></span>\n          </a>\n          <div ngbDropdownMenu aria-labelledby=\"basicdrop\">\n            <h4 *ngIf=\"user\" class=\"dropdown-item text-capitalize navli\">{{ user.f_name }}</h4>\n            <hr>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/profile']\">Profile</button>\n            <button class=\"dropdown-item dd\" href=\"#\" (click)=\"onLogout()\">Logout</button>\n          </div>\n        </div>\n      </ul>\n    </div>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-light bg-white\" id=\"appNav\">\n  <div class=\"container-fluid\">\n    <a class=\"navbar-brand\" href=\"#\">\n      <img src=\"../../assets/chainworks-logo.png\" class=\"img-rounded\" style=\"margin-left: 20px;\">\n    </a>\n    <button class=\"navbar-toggler\" type=\"button\" (click)=\"isNavbarCollapsed = !isNavbarCollapsed\" aria-controls=\"navCollapse\"\n      aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div [ngbCollapse]=\"!isNavbarCollapsed\" class=\"navbar-collapse justify-content-end\" id=\"navCollapse\">\n      <ul class=\"navbar-nav\">\n        <li class=\"nav-item\">\n          <a class=\"nav-link\" routerLink=\"/\" routerLinkActive=\"active\" [routerLinkActiveOptions]=\"{exact: true}\">Home</a>\n        </li>\n        <li class=\"nav-item\">\n            <a class=\"nav-link\" href=\"http://cwlabs.eastus.cloudapp.azure.com\" target=\"_new\" routerLinkActive=\"active\">UL Certificate Demo</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/glossary\" routerLinkActive=\"active\" class=\"nav-link\">Glossary</a>\n        </li>\n        <li class=\"nav-item\">\n          <a routerLink=\"/faq\" routerLinkActive=\"active\" class=\"nav-link\">FAQ</a>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"presentation-resources\" class=\"nav-link dd\" ngbDropdownToggle>Presentation Resources</a>\n          <div ngbDropdownMenu aria-labelledby=\"presentation-resources\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/hash-demo']\">Hash Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/pow-demo']\">POW Demo</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/presentation-resources/wallet-generator']\">Wallet Generator</button>\n          </div>\n        </li>\n        <li *ngIf=\"authService.loggedIn()\" class=\"nav-item\" ngbDropdown placement=\"bottom-right\">\n          <a id=\"blockchain-demo\" ngbDropdownToggle class=\"nav-link dd\">Blockchain Demo</a>\n          <div ngbDropdownMenu aria-labelledby=\"blockchain-demo\">\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-tx']\">Create Transaction</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/create-block']\">Create Block</button>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/blockchain-demo/blockchain']\">View Blockchain</button>\n          </div>\n        </li>\n        <div *ngIf=\"authService.loggedIn()\" ngbDropdown placement=\"bottom-right\" class=\"nav-item d-inline-block\">\n          <a class=\"nav-link dd\" id=\"basicdrop\" ngbDropdownToggle>\n            <!-- The Profile picture inserted via div class below, with shaping provided by Bootstrap -->\n            <div class=\"profile-img dd\">\n              <img class=\"roundImg dd\" src=\"{{ this.authService.picture_url }}\">\n            </div>\n            <span class=\"caret dd\"></span>\n          </a>\n          <div ngbDropdownMenu aria-labelledby=\"basicdrop\">\n            <h4 *ngIf=\"user\" class=\"dropdown-item text-capitalize navli\">{{ user.f_name }}</h4>\n            <hr>\n            <button class=\"dropdown-item dd\" [routerLink]=\"['/profile']\">Profile</button>\n            <button class=\"dropdown-item dd\" href=\"#\" (click)=\"onLogout()\">Logout</button>\n          </div>\n        </div>\n      </ul>\n    </div>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -2176,7 +2011,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/presentation-resources/hash-demo/hash-demo.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <br>\n  <div class=\"row text-center\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto\">\n      <h2>Hash Demo (SHA256)</h2>\n    </div>\n  </div>\n  <br>\n  <div class=\"row\">\n      <div class=\"col-12 col-lg-8 mr-auto ml-auto shadowBoxLight\">\n          <form (ngSubmit)=\"onFormSubmit()\" #hashform=\"ngForm\">\n              <div class=\"form-group\">\n                  <textarea style=\"min-height: 100px;\" type=\"text\" class=\"form-control\" name=\"rawdata\" placeholder=\"Enter some text here...\" ngModel></textarea>\n              </div>\n              <button type=\"submit\" class=\"btn btn-primary btn-block\">Hash Text</button>\n            </form>\n      </div>\n  </div>\n  <br>\n  <br>\n  <div *ngIf=\"hashedData\" class=\"row text-center\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto shadow-box\">\n      <div class=\"txt\">{{ hashedData }}</div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto\">\n      <div class=\"row text-center\">\n        <div class=\"col-12 col-md-4 h2\">Deterministic</div>\n        <div class=\"col-12 col-md-4 h2\">Irreversible</div>\n        <div class=\"col-12 col-md-4 h2\">Constant Size</div>\n      </div>\n    </div>\n  </div>\n</div>\n\n\n"
+module.exports = "<div class=\"container\">\n  <br>\n  <div class=\"row text-center\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto\">\n      <h2>Hash Demo (SHA256) <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"A popular hashing algorithm designed and developed by the NSA and used for a variety of functions including mining/hashing in Bitcoin.\" popoverTitle=\"SHA256 Hash\"></i></h2>\n    </div>\n  </div>\n  <br>\n  <div class=\"row\">\n      <div class=\"col-12 col-lg-8 mr-auto ml-auto shadowBoxLight\">\n          <form (ngSubmit)=\"onFormSubmit()\" #hashform=\"ngForm\">\n              <div class=\"form-group\">\n                  <textarea style=\"min-height: 100px;\" type=\"text\" class=\"form-control\" name=\"rawdata\" placeholder=\"Enter some text here...\" ngModel></textarea>\n              </div>\n              <button type=\"submit\" class=\"btn btn-primary btn-block\">Hash Text</button>\n            </form>\n      </div>\n  </div>\n  <br>\n  <br>\n  <div *ngIf=\"hashedData\" class=\"row text-center\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto shadow-box\">\n      <div class=\"txt\">{{ hashedData }}</div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-12 col-lg-8 mr-auto ml-auto\">\n      <div class=\"row text-center\">\n        <div class=\"col-12 col-md-4 h2\">Deterministic <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"An algorithm which, given a particular input, will always produce the same output.\" popoverTitle=\"Deterministic\"></i></div>\n        <div class=\"col-12 col-md-4 h2\">Irreversible</div>\n        <div class=\"col-12 col-md-4 h2\">Constant Size</div>\n      </div>\n    </div>\n  </div>\n</div>\n\n\n"
 
 /***/ }),
 
@@ -2246,7 +2081,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/presentation-resources/pow-demo/pow-demo.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <br>\n  <h1 class=\"text-center\">Proof of Work Demo</h1>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 shadowBoxLight\">\n      <form (ngSubmit)=\"mine()\" #powForm=\"ngForm\">\n        <div class=\"form-group\">\n          <textarea style=\"min-height: 100px;\" type=\"text\" class=\"form-control\" name=\"rawdata\" placeholder=\"Enter some text here...\"\n            ngModel></textarea>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-block\">Mine</button>\n      </form>\n    </div>\n  </div>\n  <br>\n  <br>\n  <div class=\"row  shadowBoxLight\">\n    <div class=\"col-8\">\n      <h4>Target</h4>\n      <div class=\"txt\">\n        <span [ngClass]=\"{'text-success lg': finished, 'text-danger': !finished}\">{{ difficulty[0].substring(0, 4) }}</span><span>{{ difficulty[0].substring(4) }}</span>\n      </div>\n      <br>\n      <h4>Solution</h4>\n      <div class=\"txt\">\n        <span *ngIf=\"solution\" [ngClass]=\"{'text-success lg': finished, 'text-danger': !finished}\">{{ solution.substring(0, 4) }}</span><span *ngIf=\"solution\">{{ solution.substring(4) }}</span>\n      </div>\n    </div>\n    <div class=\"col-4 text-center\">\n      <h4>Nonce</h4>\n      <div class=\"noncetext\">{{ nonce }}</div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <br>\n  <h1 class=\"text-center\">Proof of Work Demo</h1>\n  <br>\n  <div class=\"row\">\n    <div class=\"col-12 shadowBoxLight\">\n      <form (ngSubmit)=\"mine()\" #powForm=\"ngForm\">\n        <div class=\"form-group\">\n          <textarea style=\"min-height: 100px;\" type=\"text\" class=\"form-control\" name=\"rawdata\" placeholder=\"Enter some text here...\"\n            ngModel></textarea>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary btn-block\">Mine</button>\n      </form>\n    </div>\n  </div>\n  <br>\n  <br>\n  <div class=\"row  shadowBoxLight\">\n    <div class=\"col-8\">\n      <h4>Target <i class=\"fa fa-info-circle info-icon\" placement=\"top\" ngbPopover=\"The 'target' refers to a 64 character hexadecimal number.  In a POW algorithm, your computer takes a hash of the data plus an incrementing nonce until the hash is less than the difficulty number.  The '0x' at the beginning of both hashes are not actually part of the hash.  This indicates to computers that we are dealing with a hexadecimal number rather than an ordinary decimal.\" popoverTitle=\"UTXO Set\"></i></h4>\n      <div class=\"txt\">\n        <span [ngClass]=\"{'text-success lg': finished, 'text-danger': !finished}\">{{ difficulty[0].substring(0, 4) }}</span><span>{{ difficulty[0].substring(4) }}</span>\n      </div>\n      <br>\n      <h4>Solution</h4>\n      <div class=\"txt\">\n        <span *ngIf=\"solution\" [ngClass]=\"{'text-success lg': finished, 'text-danger': !finished}\">{{ solution.substring(0, 4) }}</span><span *ngIf=\"solution\">{{ solution.substring(4) }}</span>\n      </div>\n    </div>\n    <div class=\"col-4 text-center\">\n      <h4>Nonce <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining.\" popoverTitle=\"Nonce\"></i></h4>\n      <div class=\"noncetext\">{{ nonce }}</div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2410,7 +2245,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/presentation-resources/wallet-generator/wallet-generator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div *ngIf=\"keypair\" class=\"col-5\">\n      <h2>Ether Faucet (Rinkeby Testnet)</h2>\n      <p>Paste your public Ethereum address here to receive 1 ether</p>\n      <form (ngSubmit)=\"getEther()\" #ether=\"ngForm\">\n        <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" name=\"address\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Get Ether</button>\n      </form>\n    </div>\n    <div *ngIf=\"keypair\" class=\"col-7\">\n      <h2>Your Tasks</h2>\n      <hr>\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\">Send 0.001 ether to <span class=\"helper-text hash\">{{ demoAccount }}</span> using <a href=\"https://www.myetherwallet.com/\" target=\"_blank\" style=\"text-decoration: underline;\">My Ether Wallet</a></li>\n        <li class=\"list-group-item\">Find which block your transaction was added to using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n        <li class=\"list-group-item\">Find the number of transactions you have made with your account using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n        <li class=\"list-group-item\">with your account using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n      </ul>\n    </div>\n    <div  *ngIf=\"!keypair\" class=\"col-8\">\n      <h2>Ethereum Keypair Generator</h2>\n      <br>\n      <button class=\"btn btn-primary btn-lg\" (click)=\"genKeypair()\">Generate an Ethereum Keypair</button>\n    </div>\n  </div>\n  <br><hr><br>\n  <h2 *ngIf=\"generating\">Generating Keypair...</h2>\n  <div *ngIf=\"keypair\" class=\"row\">\n    <div class=\"col-12 mr-auto ml-auto\">\n      <h4>Your Public Address</h4>\n      <div class=\"shadow-box\">\n        <div class=\"txt\">{{ keypair.pub_key }}</div>\n      </div>\n      <h4>Your Private Key</h4>\n      <button class=\"btn btn-primary\" *ngIf=\"!privShow\" (click)=\"privShow = true;\">Show Private Key</button>\n      <div *ngIf=\"privShow\" class=\"shadow-box\" style=\"margin-bottom: 5px;\">\n        <div class=\"txt\">{{ keypair.priv_key }}</div>\n      </div>\n      <p *ngIf=\"privShow\" class=\"helper-text\" style=\"color: red;\">In real life, you would never see or store your private key in plain site!  We are using the Ethereum testnet for this demo and all funds are completely fake!</p>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div *ngIf=\"keypair\" class=\"col-5\">\n      <h2>Ether Faucet (Ropsten Testnet) <i class=\"fa fa-info-circle info-icon\" placement=\"bottom\" ngbPopover=\"An ether faucet is simply a smart contract which sends a pre-defined amount of ether to the specified address.  This is common with testnets.  The Ropsten testnet is one of several testnets for the main Ethereum blockchain.  It functions identically to the Ethereum blockchain, but the ether on it are fake.  This is a great tool for developers to test their programs on.\" popoverTitle=\"Faucets and Testnets\"></i></h2>\n      <p>Paste your public Ethereum address here to receive 1 ether</p>\n      <form (ngSubmit)=\"getEther()\" #ether=\"ngForm\">\n        <div class=\"form-group\">\n            <input type=\"text\" class=\"form-control\" name=\"address\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Get Ether</button>\n      </form>\n    </div>\n    <div *ngIf=\"keypair\" class=\"col-7\">\n      <h2>Your Tasks</h2>\n      <hr>\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\">Send 0.001 ether to <span class=\"helper-text hash\">{{ demoAccount }}</span> using <a href=\"https://www.myetherwallet.com/\" target=\"_blank\" style=\"text-decoration: underline;\">My Ether Wallet</a></li>\n        <li class=\"list-group-item\">Find which block your transaction was added to using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n        <li class=\"list-group-item\">Find the number of transactions you have made with your account using <a href=\"https://ropsten.etherscan.io\" target=\"_blank\" style=\"text-decoration: underline;\">etherscan</a></li>\n      </ul>\n    </div>\n    <div  *ngIf=\"!keypair\" class=\"col-8\">\n      <h2>Ethereum Keypair Generator</h2>\n      <br>\n      <button class=\"btn btn-primary btn-lg\" (click)=\"genKeypair()\">Generate an Ethereum Keypair</button>\n    </div>\n  </div>\n  <br><hr><br>\n  <h2 *ngIf=\"generating\">Generating Keypair...</h2>\n  <div *ngIf=\"keypair\" class=\"row\">\n    <div class=\"col-12 mr-auto ml-auto\">\n      <h4>Your Public Address <i class=\"fa fa-info-circle info-icon\" placement=\"top\" ngbPopover=\"This is a real, valid Ethereum address.  We could technically use this on the main Ethereum blockchain, but it would be insecure to do so since the private key is stored on our servers.  You wouldn't want Chainworks taking your money right?!  The public address is the last 40 characters of the public key generated from the private key shown below.\" popoverTitle=\"Public Address\"></i></h4>\n      <div class=\"shadow-box\">\n        <div class=\"txt\">{{ keypair.pub_key }}</div>\n      </div>\n      <h4>Your Private Key</h4>\n      <button class=\"btn btn-primary\" *ngIf=\"!privShow\" (click)=\"privShow = true;\">Show Private Key</button>\n      <div *ngIf=\"privShow\" class=\"shadow-box\" style=\"margin-bottom: 5px;\">\n        <div class=\"txt\">{{ keypair.priv_key }}</div>\n      </div>\n      <p *ngIf=\"privShow\" class=\"helper-text\" style=\"color: red;\">In real life, you would never see or store your private key in plain site!  We are using the Ethereum testnet for this demo and all funds are completely fake!</p>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2610,7 +2445,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/user/profile/profile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n<br>\n<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ngb-alert class=\"helper-text\" *ngIf=\"companyAlert\" type=\"success\" [dismissible]=\"false\">Company Added!</ngb-alert>\n      <ngb-alert class=\"helper-text\" *ngIf=\"blockchainCleared\" type=\"success\" [dismissible]=\"false\">Blockchain data cleared!</ngb-alert>\n      <ngb-alert class=\"helper-text\" *ngIf=\"adminAlert\" type=\"success\" [dismissible]=\"false\">Admin Privileges added!</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-xl-4 col-md-5\">\n      <div *ngIf=\"uploadMessage == '' && fileReady\">\n        <div class=\"progress\">\n          <div class=\"progress-bar progress-bar-striped progress-bar-animated\" [ngStyle]=\"{ 'width': uploader.progress + '%' }\" role=\"progressbar\">{{ uploader.progress }}%</div>\n        </div>\n        <br>\n      </div>\n      <p *ngIf=\"!fileReady && uploadMessage != ''\">{{ uploadMessage }}</p>\n      <div class=\"card\">\n        <div class=\"pic card-img-top\" (mouseover)=\"changeStyle($event)\" (mouseout)=\"changeStyle($event)\">\n          <img class=\"img-fluid\" src=\"{{ user.picture_url }}\">\n          <div class=\"overlay\"></div>\n          <div class=\"info\" [ngClass]=\"display\">\n            <input *ngIf=\"!uploader.isReady && !uploader.isUploading && !uploader.isSuccess && !fileReady\" type=\"file\" name=\"photo\" ng2FileSelect\n              [uploader]=\"uploader\" />\n          </div>\n        </div>\n        <div class=\"card-body\">\n          <h5 class=\"card-title text-capitalize\">{{ user.f_name }}'s Profile</h5>\n        </div>\n        <ul class=\"list-group list-group-flush\">\n          <li class=\"list-group-item\">\n            <strong>Email: </strong>{{ user.email }}</li>\n          <li class=\"list-group-item\">\n            <strong>Username: </strong>{{ user.username }}</li>\n          <li class=\"list-group-item\">\n            <strong>Session Id: </strong>{{ user.session }}</li>\n        </ul>\n\n      </div>\n    </div>\n    <div class=\"col-7 ml-auto\">\n      <div *ngIf=\"user.admin === true || user.username === 'zachgoll'\" class=\"row\">\n        <div class=\"col-12\">\n          <h2 class=\"display-4\">Admin Controls</h2>\n          <hr>\n          <div class=\"btn-group\">\n            <button class=\"btn btn-outline-primary\" (click)=\"resetBlockchain()\">Reset Blockchain Data</button>\n            <button class=\"btn btn-outline-primary\" (click)=\"addingCompany = !addingCompany\">Add Corporate Training Session</button>\n            <button class=\"btn btn-outline-primary\" (click)=\"addingAdmin = !addingAdmin\">Add Administrator</button>\n          </div>\n          <form *ngIf=\"addingAdmin\" (ngSubmit)=\"onAdminSubmit()\" #admin=\"ngForm\">\n            <br>\n            <div class=\"form-group\">\n              <ng-template #rt let-r=\"result\" let-t=\"term\">\n                <img [src]=\"r['picture_url']\" width=\"50\"> {{ r.username }}\n              </ng-template>\n              <label for=\"typeahead-template\" class=\"form-label\">User Lookup:</label>\n              <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\"\n                  [inputFormatter]=\"formatter\" name=\"selectedUser\" ngModel required>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary d-inline\">Add Admin</button>\n          </form>\n          <form *ngIf=\"addingCompany\" (ngSubmit)=\"onCompanySubmit()\" #company=\"ngForm\">\n            <br>\n            <div class=\"form-group\">\n              <input class=\"form-control\" name=\"sessionId\" placeholder=\"Enter session id\" ngModel>\n            </div>\n            <div class=\"form-group\">\n              <input class=\"form-control\" name=\"companyName\" placeholder=\"Enter company name\" ngModel>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary d-inline\">Add Company</button>\n          </form>\n        </div>\n      </div>\n      <br>\n      <h2 class=\"display-4\">My Questions</h2>\n      <form (ngSubmit)=\"onQuestionSubmit()\" #question=\"ngForm\">\n        <div class=\"form-group\">\n          <input class=\"form-control\" name=\"question\" placeholder=\"Enter your question here...\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary d-inline\">Submit Question</button>\n      </form>\n      <hr>\n      <ul class=\"list-group\">\n        <li *ngFor=\"let question of questions; let i = index;\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ question.question }}</span>\n          <button class=\"btn btn-danger btn-sm justify-content-end p-2 text-white\" (click)=\"deleteQuestion(i)\">Delete</button>\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<br>\n<br>\n<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-12\">\n      <ngb-alert class=\"helper-text\" *ngIf=\"companyAlert\" type=\"success\" [dismissible]=\"false\">Company Added!</ngb-alert>\n      <ngb-alert class=\"helper-text\" *ngIf=\"blockchainCleared\" type=\"success\" [dismissible]=\"false\">Blockchain data cleared!</ngb-alert>\n      <ngb-alert class=\"helper-text\" *ngIf=\"adminAlert\" type=\"success\" [dismissible]=\"false\">Admin Privileges added!</ngb-alert>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-xl-4 col-md-5\">\n      <div *ngIf=\"uploadMessage == '' && fileReady\">\n        <div class=\"progress\">\n          <div class=\"progress-bar progress-bar-striped progress-bar-animated\" [ngStyle]=\"{ 'width': uploader.progress + '%' }\" role=\"progressbar\">{{ uploader.progress }}%</div>\n        </div>\n        <br>\n      </div>\n      <p *ngIf=\"!fileReady && uploadMessage != ''\">{{ uploadMessage }}</p>\n      <div class=\"card\">\n        <div class=\"pic card-img-top\" (mouseover)=\"changeStyle($event)\" (mouseout)=\"changeStyle($event)\">\n          <img class=\"img-fluid\" src=\"{{ user.picture_url }}\">\n          <div class=\"overlay\"></div>\n          <div class=\"info\" [ngClass]=\"display\">\n            <input *ngIf=\"!uploader.isReady && !uploader.isUploading && !uploader.isSuccess && !fileReady\" type=\"file\" name=\"photo\" ng2FileSelect\n              [uploader]=\"uploader\" />\n          </div>\n        </div>\n        <div class=\"card-body\">\n          <h5 class=\"card-title text-capitalize\">{{ user.f_name }}'s Profile</h5>\n        </div>\n        <ul class=\"list-group list-group-flush\">\n          <li class=\"list-group-item\">\n            <strong>Email: </strong>{{ user.email }}</li>\n          <li class=\"list-group-item\">\n            <strong>Username: </strong>{{ user.username }}</li>\n          <li class=\"list-group-item\">\n            <strong>Session Id: </strong>{{ user.session }}</li>\n        </ul>\n\n      </div>\n    </div>\n    <div class=\"col-7 ml-auto\">\n      <div *ngIf=\"user.admin === true || user.username === 'zachgoll'\" class=\"row\">\n        <div class=\"col-12\">\n          <h2 class=\"display-4\">Admin Controls</h2>\n          <hr>\n          <div class=\"btn-group\">\n            <button class=\"btn btn-outline-primary\" (click)=\"open(content)\">Reset Blockchain Data</button>\n            <ng-template #content let-c=\"close\" let-d=\"dismiss\">\n              <div class=\"modal-header\">\n                <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"d('Cross click')\">\n                  <span aria-hidden=\"true\">&times;</span>\n                </button>\n              </div>\n              <div class=\"modal-body\">\n                <p>Are you sure you want to do this?</p>\n              </div>\n              <div class=\"modal-footer\">\n                <button class=\"btn btn-primary\" (click)=\"resetBlockchain()\">Yes, I am sure</button>\n                <button class=\"btn btn-primary\" (click)=\"c('Close click')\">Cancel</button>\n              </div>\n            </ng-template>\n            <button class=\"btn btn-outline-primary\" (click)=\"addingCompany = !addingCompany\">Add Corporate Training Session</button>\n            <button class=\"btn btn-outline-primary\" (click)=\"loadUsers()\" (click)=\"addingAdmin = !addingAdmin\">Add Administrator</button>\n          </div>\n          <form *ngIf=\"addingAdmin\" (ngSubmit)=\"onAdminSubmit()\" #admin=\"ngForm\">\n            <br>\n            <div class=\"form-group\">\n              <ng-template #rt let-r=\"result\" let-t=\"term\">\n                <img [src]=\"r['picture_url']\" width=\"50\"> {{ r.username }}\n              </ng-template>\n              <label for=\"typeahead-template\" class=\"form-label\">User Lookup:</label>\n              <input id=\"typeahead-template\" type=\"text\" class=\"form-control\" [(ngModel)]=\"model\" [ngbTypeahead]=\"search\" [resultTemplate]=\"rt\"\n                  [inputFormatter]=\"formatter\" name=\"selectedUser\" ngModel required>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary d-inline\">Add Admin</button>\n          </form>\n          <form *ngIf=\"addingCompany\" (ngSubmit)=\"onCompanySubmit()\" #company=\"ngForm\">\n            <br>\n            <div class=\"form-group\">\n              <input class=\"form-control\" name=\"sessionId\" placeholder=\"Enter session id\" ngModel>\n            </div>\n            <div class=\"form-group\">\n              <input class=\"form-control\" name=\"companyName\" placeholder=\"Enter company name\" ngModel>\n            </div>\n            <button type=\"submit\" class=\"btn btn-primary d-inline\">Add Company</button>\n          </form>\n        </div>\n      </div>\n      <br>\n      <h2 class=\"display-4\">My Questions</h2>\n      <form (ngSubmit)=\"onQuestionSubmit()\" #question=\"ngForm\">\n        <div class=\"form-group\">\n          <input class=\"form-control\" name=\"question\" placeholder=\"Enter your question here...\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary d-inline\">Submit Question</button>\n      </form>\n      <hr>\n      <ul class=\"list-group\">\n        <li *ngFor=\"let question of questions; let i = index;\" class=\"list-group-item d-flex align-items-center\">\n          <span class=\"mr-auto p-8 text-primary\">{{ question.question }}</span>\n          <button class=\"btn btn-danger btn-sm justify-content-end p-2 text-white\" (click)=\"deleteQuestion(i)\">Delete</button>\n        </li>\n      </ul>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2635,12 +2470,14 @@ var auth_service_1 = __webpack_require__("../../../../../src/app/services/auth.s
 var ng2_file_upload_1 = __webpack_require__("../../../../ng2-file-upload/ng2-file-upload.js");
 var http_1 = __webpack_require__("../../../common/esm5/http.js");
 var forms_1 = __webpack_require__("../../../forms/esm5/forms.js");
+var ng_bootstrap_1 = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
 var ProfileComponent = (function () {
-    function ProfileComponent(http, authService, queryService) {
+    function ProfileComponent(http, authService, queryService, modalService) {
         var _this = this;
         this.http = http;
         this.authService = authService;
         this.queryService = queryService;
+        this.modalService = modalService;
         this.usersWithPics = [];
         this.display = '';
         this.fileReady = false;
@@ -2775,6 +2612,25 @@ var ProfileComponent = (function () {
     ProfileComponent.prototype.changeStyle = function ($event) {
         this.display = $event.type === 'mouseover' ? 'db' : '';
     };
+    ProfileComponent.prototype.open = function (content) {
+        var _this = this;
+        this.modalService.open(content).result.then(function (result) {
+            _this.closeResult = "Closed with: " + result;
+        }, function (reason) {
+            _this.closeResult = "Dismissed " + _this.getDismissReason(reason);
+        });
+    };
+    ProfileComponent.prototype.getDismissReason = function (reason) {
+        if (reason === ng_bootstrap_1.ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        }
+        else if (reason === ng_bootstrap_1.ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        }
+        else {
+            return "with: " + reason;
+        }
+    };
     __decorate([
         core_1.Output(),
         __metadata("design:type", Object)
@@ -2797,7 +2653,8 @@ var ProfileComponent = (function () {
             template: __webpack_require__("../../../../../src/app/components/user/profile/profile.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/user/profile/profile.component.css")]
         }),
-        __metadata("design:paramtypes", [http_1.HttpClient, auth_service_1.AuthService, query_service_1.QueryService])
+        __metadata("design:paramtypes", [http_1.HttpClient, auth_service_1.AuthService, query_service_1.QueryService,
+            ng_bootstrap_1.NgbModal])
     ], ProfileComponent);
     return ProfileComponent;
 }());
@@ -3067,6 +2924,214 @@ exports.CanDeactivateGuard = CanDeactivateGuard;
 
 /***/ }),
 
+/***/ "../../../../../src/app/services/glossary.service.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("../../../core/esm5/core.js");
+var GlossaryService = (function () {
+    function GlossaryService() {
+        this.terms = [
+            {
+                "term": "Address",
+                "definition": "Publicly known string of characters used to send and receive transactions on the network."
+            },
+            {
+                "term": "ASIC",
+                "definition": "Short form for ‘Application Specific Integrated Circuit’. Often compared to GPUs (Graphics Processing Unit), ASICs are specially made for mining and may offer significant power savings."
+            },
+            {
+                "term": "Block",
+                "definition": "Package of data that carries immutable information including a block header and block transactions."
+            },
+            {
+                "term": "Block Hash",
+                "definition": "A deterministic, irreversible hash of the header of the block.  This hash will change if any data in the entire block is changed, including transactions."
+            },
+            {
+                "term": "Block Header",
+                "definition": "An 80-byte header belonging to a single block storing metadata pertaining to that block which includes the previous block hash, the merkle root hash, the timestamp, nonce, and number of transactions in the block."
+            },
+            {
+                "term": "Block Interval",
+                "definition": "The average time interval in which new blocks are typically mined.  Bitcoin strives for a 10 minute block interval and will adjust the difficulty target according to the aggregate hash power in the network."
+            },
+            {
+                "term": "Block Reward",
+                "definition": "The payment that a miner recceives for mining a block.  This provides an incentive for miners to participate in and secure the network via monetary compensation."
+            },
+            {
+                "term": "Block Timestamp",
+                "definition": "A Unix time timestamp contained in each block. It serves as a source of variation for the block hash making it more difficult for bad nodes to manipulate a blockchain."
+            },
+            {
+                "term": "Blockchain (Chainworks)",
+                "definition": "A write once (immutable), distributed and sequential database (chain) of transactions (blocks) fused onto a decentralized network of peer clients that are economic agents incentivized (by block rewards) to agree (consensus protocol) at regular time intervals (block interval) about the state of shared network data (ledger)."
+            },
+            {
+                "term": "Blockchain (Tapscott)",
+                "definition": "An incorruptible digital ledger of economic transactions that can be programmed to record not just financial transactions but virtually everything of value."
+            },
+            {
+                "term": "Coinbase Transaction",
+                "definition": "The first transaction in a block. Always created by a miner, this transaction includes the current block reward and the sum of the transaction fees as outputs sent back to the miner.  There are no inputs in the coinbase transaction."
+            },
+            {
+                "term": "Consensus",
+                "definition": "A term often used in peer to peer networks which refers to the agreement between network participants on the state of some data."
+            },
+            {
+                "term": "Consensus Protocol",
+                "definition": "Often a reference to the type of consensus algorithm used to secure a particular blockchain.  In Bitcoin, the consensus protocol is POW (proof of work)."
+            },
+            {
+                "term": "Dapp",
+                "definition": "Referred to as a Decentralized Application, a Dapp replaces the common backend database architecture with the blockchain."
+            },
+            {
+                "term": "Deterministic",
+                "definition": "An algorithm which, given a particular input, will always produce the same output."
+            },
+            {
+                "term": "Distributed Ledger (aka Shared Ledger)",
+                "definition": "A consensus of replicated, shared, and synchronized digital data geographically spread across multiple sites, countries, or institutions."
+            },
+            {
+                "term": "Ethash",
+                "definition": "The consensus algorithm used natively for the proof-of-work function in Ethereum-based blockchain currencies."
+            },
+            {
+                "term": "Genesis Block",
+                "definition": "The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1."
+            },
+            {
+                "term": "Hash Function",
+                "definition": "Any function that can be used to map data of arbitrary size to data of fixed size, is deterministic, and irreversible. "
+            },
+            {
+                "term": "Hashes ",
+                "definition": "The values returned by a hash function.  Also known as: hash values, hash codes, or digests."
+            },
+            {
+                "term": "Immutable ",
+                "definition": "Unchanging over time or unable to be changed."
+            },
+            {
+                "term": "Keccak Hash 256",
+                "definition": "A common hash function which is used for address generation and other tasks in Ethereum."
+            },
+            {
+                "term": "Merkle Root",
+                "definition": "The topmost (root) leaf of a merkle tree which is stored in the block header and which changes anytime a transaction in a block is altered in any way."
+            },
+            {
+                "term": "Merkle Tree",
+                "definition": "A binary tree like data structure which allows all transactions in a block to be consolidated and represented by a single 64 character hash, also called the merkle root."
+            },
+            {
+                "term": "Mining",
+                "definition": "The process of creating a block, solving a proof-of-work for that block, and broadcasting the block to peers in the network as \"valid\"."
+            },
+            {
+                "term": "Nonce",
+                "definition": "An arbitrary number incremented over and over to solve a proof-of-work algorithm while mining."
+            },
+            {
+                "term": "Peer-to-Peer",
+                "definition": "A decentralized network architecture in which each participant has equal rights but not necessarily responsibilities."
+            },
+            {
+                "term": "Previous Block Hash",
+                "definition": "Contained in the header of every block, the previous block hash refers to the previous block in the blockchain, and allows the chain to be linked together."
+            },
+            {
+                "term": "Privacy",
+                "definition": "In blockchain circles, privacy often refers to anonymity of both identity and data."
+            },
+            {
+                "term": "Private Key",
+                "definition": "A large, random number that is used to indicate a specific identity on the blockchain.  This value is responsible for securing a user's funds and if compromised, can result in a complete loss of funds."
+            },
+            {
+                "term": "Proof of Stake (POS)",
+                "definition": "A consensus mechanism where miners are chosen at random to solve the proof of work for a block based on their stake in the network."
+            },
+            {
+                "term": "Proof of Work (POW)",
+                "definition": "A consensus mechanism where miners compete to solve a computationally difficult cryptographic puzzle to prove that a block has been mined with integrity."
+            },
+            {
+                "term": "Public Key",
+                "definition": "A cryptographic key that can be obtained and used by anyone to encrypt messages intended for a particular recipient, such that the encrypted messages can be deciphered only by using a second key that is known only to the recipient (the private key)."
+            },
+            {
+                "term": "SHA-256 Hash",
+                "definition": "A popular hashing algorithm designed and developed by the NSA and used for a variety of functions including mining/hashing in Bitcoin."
+            },
+            {
+                "term": "Shared Ledger (aka Distributed Ledger)",
+                "definition": "A consensus of replicated, shared, and synchronized digital data geographically spread across multiple sites, countries, or institutions."
+            },
+            {
+                "term": "Smart contracts",
+                "definition": "Business rules executed in trust-less manner via code."
+            },
+            {
+                "term": "Transaction",
+                "definition": "An exchange of value, services, or other goods between two or more people."
+            },
+            {
+                "term": "Transaction Hash",
+                "definition": "An identifier used to uniquely identify a particular transaction on the blockchain."
+            },
+            {
+                "term": "Transaction Inputs",
+                "definition": "One or more UTXOs which are unlocked via a user's private key and included as \"funds\" for a given transaction.  After being used in a transaction, a UTXO is considered \"spent\" and can no longer be used in the Bitcoin network."
+            },
+            {
+                "term": "Transaction Outputs",
+                "definition": "One or more UTXOs which are created as a result of a transaction, and which can only be spent by the user who's public key was used to lock the outputs.  All transaction outputs are newly created UTXOs and can be used as inputs in future transactions."
+            },
+            {
+                "term": "Trust-less",
+                "definition": "Refers to a system in which participants may interact and transact with each other despite lacking trust in each other.  This is common in peer to peer networks like Bitcoin."
+            },
+            {
+                "term": "UTXO",
+                "definition": "Bitcoin specific term.  An Unspent Transaction Output is a value of Bitcoin which has a locking and unlocking script.  The user who has the private key which satisfies the unlocking script can use the UTXO as a transaction input."
+            },
+            {
+                "term": "UTXO Set",
+                "definition": "Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's \"balance\" of Bitcoin."
+            },
+            {
+                "term": "Value",
+                "definition": "The importance, worth, or usefulness of something."
+            }
+        ];
+    }
+    GlossaryService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [])
+    ], GlossaryService);
+    return GlossaryService;
+}());
+exports.GlossaryService = GlossaryService;
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/services/query.service.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3096,6 +3161,9 @@ var QueryService = (function () {
     };
     QueryService.prototype.getUserById = function () {
         var id = JSON.parse(localStorage.getItem('user')).id;
+        return this.http.get('/api/v1/users/' + id);
+    };
+    QueryService.prototype.getUserById2 = function (id) {
         return this.http.get('/api/v1/users/' + id);
     };
     QueryService.prototype.getUtxos = function (user_id) {

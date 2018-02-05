@@ -1,3 +1,4 @@
+import { User } from './../../user/user.model';
 import { AuthService } from './../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
@@ -13,11 +14,13 @@ import { QueryService } from '../../../services/query.service';
 })
 export class BlockchainComponent implements OnInit {
 
-  constructor(private authService: AuthService, private query: QueryService) { }
+  constructor(private authService: AuthService, private query: QueryService) {
+   }
 
   coinbaseAdded = false;
 
-  user: any
+  user: any;
+  loading = true;
 
   blocks = [];
 
@@ -34,9 +37,15 @@ export class BlockchainComponent implements OnInit {
   }
 
   loadBlocks() {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+    }, 4000);
     this.query.getUserBlockchain(this.user.id).subscribe((blocks) => {
       blocks.forEach((block) => {
         let b = {
+          minedByName: '',
+          minedByPicture: '',
           blockHeight: block.height,
           prevBlockHash: block.previous_block,
           merkleRoot: block.merkle_root,
@@ -47,6 +56,13 @@ export class BlockchainComponent implements OnInit {
           txs: []
         };
         this.query.getBlockTxs(block.id).subscribe((block_txs) => {
+          this.query.getOutputs(block_txs[0].id).subscribe((coinbase_outputs) => {
+            const minedBy = coinbase_outputs[0].current_owner;
+            this.query.getUserById2(minedBy).subscribe((user: User) => {
+              b.minedByName = user.f_name + ' ' + user.l_name;
+              b.minedByPicture = user.picture_url;
+            });
+          });
           block_txs.forEach((t) => {
             let tx_temp = {
               tx_hash: t.tx_hash,
@@ -57,12 +73,11 @@ export class BlockchainComponent implements OnInit {
             this.query.getInputs(t.id).subscribe((inputs) => {
               inputs.forEach((input) => tx_temp.inputs.push(input));
               this.query.getOutputs(t.id).subscribe((outputs) => {
-                outputs.forEach((output) => tx_temp.outputs.push(output));
+                outputs.forEach((output) => {tx_temp.outputs.push(output);});
                 b.txs.push(tx_temp);
               });
             });
           });
-          console.log(b);
         });
         this.blocks.push(b);
       });

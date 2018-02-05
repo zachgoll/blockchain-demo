@@ -1,8 +1,12 @@
-<div class="blockchain">
-  <h1 *ngIf="blocks.length === 0">There are no blocks in the blockchain.  <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Mine the Genesis Block now!</a></h1>
-  <div class="shadowBox block" *ngFor="let block of blocks">
-    <h2 *ngIf="block.blockHeight > 0" class="text-primary d-inline">Block #{{ block.blockHeight }}</h2>
-    <h2 *ngIf="block.blockHeight === 0" class="text-primary d-inline">Genesis Block</h2>
+<h2 *ngIf="loading">Loading the blockchain...</h2>
+<div *ngIf="!loading" class="blockchain">
+  <h1 *ngIf="blocks.length === 0 && !loading">There are no blocks in the blockchain.  <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Mine the Genesis Block now!</a></h1>
+  <div class="shadowBox block" *ngFor="let block of blocks; let i = index;">
+    <div class="header-contain">
+      <h2 *ngIf="block.blockHeight > 0" class="text-primary d-inline" style="vertical-align: middle;">Block #{{ block.blockHeight }}</h2>
+      <h2 *ngIf="block.blockHeight === 0" class="text-primary d-inline" style="vertical-align: middle;">Genesis Block</h2>
+      <div class="mined-by"><p class="d-inline helper-text" style="vertical-align: middle;">Mined by {{ block.minedByName }}  </p><img class="mined-by-image" src="{{ block.minedByPicture }}"></div>
+    </div>
     <div class="hash hash-margin-top">{{ block.blockHash }}</div>
     <hr>
     <h4>Block Header</h4>

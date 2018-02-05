@@ -17,6 +17,7 @@ export class MempoolComponent implements OnInit {
   @Output() txSubscribed = new EventEmitter();
 
   user: any;
+  rejectAllowed = false;
 
   txs: Tx[] = [];
 

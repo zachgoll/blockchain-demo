@@ -26,7 +26,7 @@
       </div>
       <div class="col-6">
         <button type="button" class="btn btn-sm btn-primary txButton ml-auto" (click)="accept(i)">Accept</button>
-        <button type="button" class="btn btn-sm btn-primary txButton mr-auto" (click)="reject(i)">Reject</button>
+        <button *ngIf="rejectAllowed" type="button" class="btn btn-sm btn-primary txButton mr-auto" (click)="reject(i)">Reject</button>
       </div>
     </div>
   </div>

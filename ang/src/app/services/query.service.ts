@@ -22,6 +22,10 @@ export class QueryService {
     return this.http.get('/api/v1/users/' + id);
   }
 
+  getUserById2(id) {
+    return this.http.get('/api/v1/users/' + id);
+  }
+
   getUtxos(user_id: number) {
     return this.http.get<Utxo[]>('/api/v1/utxos/unspent/' + user_id);
   }

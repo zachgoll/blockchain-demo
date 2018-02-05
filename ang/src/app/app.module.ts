@@ -13,6 +13,7 @@ import { FileSelectDirective } from 'ng2-file-upload';
 import { Ng2CarouselamosModule } from 'ng2-carouselamos';
 import { CarouselModule } from 'primeng/carousel';
 import {DragDropModule} from 'primeng/dragdrop';
+import { Ng2PageScrollModule } from 'ng2-page-scroll';
 
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/user/register/register.component';
@@ -36,6 +37,7 @@ import { ErrorPageComponent } from './components/error-page/error-page.component
 import { QueryService } from './services/query.service';
 import { GlossaryComponent } from './components/glossary/glossary.component';
 import { FaqComponent } from './components/faq/faq.component';
+import { GlossaryService } from './services/glossary.service';
 
 /**
  * All child routes protected if canActivate present on parent
@@ -99,9 +101,10 @@ const appRoutes: Routes = [
     NgbModule.forRoot(),
     Ng2CarouselamosModule,
     CarouselModule,
-    DragDropModule
+    DragDropModule,
+    Ng2PageScrollModule
   ],
-  providers: [AuthService, AuthGuardService, CanDeactivateGuard, QueryService],
+  providers: [AuthService, AuthGuardService, CanDeactivateGuard, QueryService, GlossaryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
