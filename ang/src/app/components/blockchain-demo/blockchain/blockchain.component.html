@@ -40,14 +40,14 @@
       <div>
         <h6 class="d-inline">
           Transaction Inputs
-          <div class="utxo" *ngFor="let input of tx.inputs">{{ input.value }}</div>
+          <div class="utxo" *ngFor="let input of tx.inputs">{{ input.value.toFixed(1) }}</div>
         </h6>
       </div>
 
       <div>
         <h6 class="d-inline">
           Transaction Outputs
-          <div class="utxo" *ngFor="let output of tx.outputs">{{ output.value }}</div>
+          <div class="utxo" *ngFor="let output of tx.outputs">{{ output.value.toFixed(1) }}</div>
         </h6>
       </div>
 

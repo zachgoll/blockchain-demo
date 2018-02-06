@@ -1,15 +1,5 @@
 <div class="container">
   <div class="row">
-    <div *ngIf="keypair" class="col-5">
-      <h2>Ether Faucet (Ropsten Testnet) <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="An ether faucet is simply a smart contract which sends a pre-defined amount of ether to the specified address.  This is common with testnets.  The Ropsten testnet is one of several testnets for the main Ethereum blockchain.  It functions identically to the Ethereum blockchain, but the ether on it are fake.  This is a great tool for developers to test their programs on." popoverTitle="Faucets and Testnets"></i></h2>
-      <p>Paste your public Ethereum address here to receive 1 ether</p>
-      <form (ngSubmit)="getEther()" #ether="ngForm">
-        <div class="form-group">
-            <input type="text" class="form-control" name="address" ngModel>
-        </div>
-        <button type="submit" class="btn btn-primary">Get Ether</button>
-      </form>
-    </div>
     <div *ngIf="keypair" class="col-7">
       <h2>Your Tasks</h2>
       <hr>
