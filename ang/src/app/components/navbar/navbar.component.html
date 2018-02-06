@@ -32,9 +32,9 @@
         <li *ngIf="authService.loggedIn()" class="nav-item" ngbDropdown placement="bottom-right">
           <a id="blockchain-demo" ngbDropdownToggle class="nav-link dd">Blockchain Demo</a>
           <div ngbDropdownMenu aria-labelledby="blockchain-demo">
-            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/create-tx']">Create Transaction</button>
-            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/create-block']">Create Block</button>
-            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/blockchain']">View Blockchain</button>
+            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/create-tx']">Transactions</button>
+            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/create-block']">Blocks</button>
+            <button class="dropdown-item dd" [routerLink]="['/blockchain-demo/blockchain']">Blockchain</button>
           </div>
         </li>
         <div *ngIf="authService.loggedIn()" ngbDropdown placement="bottom-right" class="nav-item d-inline-block">

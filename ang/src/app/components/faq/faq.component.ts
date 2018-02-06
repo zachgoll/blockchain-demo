@@ -1,3 +1,4 @@
+import { User } from './../user/user.model';
 import { QueryService } from './../../services/query.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -41,7 +42,7 @@ export class FaqComponent implements OnInit {
               q.subbed = false;
             }
           }
-          this.query.getUserById2(q.user_id).subscribe((user) => {
+          this.query.getUserById2(q.user_id).subscribe((user: User) => {
             q.userName = user.f_name + ' ' + user.l_name;
             this.sessionQuestions.push(q);
           });

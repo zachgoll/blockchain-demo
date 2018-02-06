@@ -53,7 +53,7 @@ export class CreateBlockComponent implements OnInit {
   coinbaseAlert = false;
   blocksLeft = true;
   blockAlert = false;
-  difficultyTarget = 2;
+  difficultyTarget = 1;
   blockLoser = false;
 
   // Mining difficulty
@@ -71,11 +71,12 @@ export class CreateBlockComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('user'));
     this.selectedTxs = [];
     this.getUserBlockchain();
+    this.loadTxs();
     setInterval(() => {
-      if (!this.mining) {
+      if (!this.mining && this.selectedTxs.length === 0) {
         this.loadTxs();
       }
-    }, 10000);
+    }, 20000);
     setInterval(() => {
       if (!this.mining) {
         this.mem.loadBlocks();
@@ -263,7 +264,7 @@ export class CreateBlockComponent implements OnInit {
   increment(data, difficulty): void {
     setTimeout(() => {
       if (web3.sha3(this.nonce + data) >= this.difficulty[difficulty]) {
-        if (this.nonce % 100 === 0) {
+        if (this.nonce % 10 === 0) {
           this.query.getIncomingBlocks(this.user.id).subscribe((blocks) => {
             if (blocks.length !== 0) {
               this.loseMiningStatus();
@@ -288,7 +289,7 @@ export class CreateBlockComponent implements OnInit {
           }
         });
       }
-    }, 0.1);
+    }, 90);
   }
 
 /**

@@ -18,7 +18,7 @@
           <div class="shadowBoxLight" pDroppable="txs" (onDrop)="drop($event)">
             <h2 *ngIf="blockHeight > 0" class="text-primary d-inline">Create Block #{{ blockHeight }}</h2>
             <h2 *ngIf="blockHeight === 0" class="text-primary d-inline">Create Genesis Block <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="The first block of a blockchain. Modern versions of Bitcoin number it as block 0, though very early versions counted it as block 1." popoverTitle="Genesis Block"></i></h2>
-            <button *ngIf="!finished" class="btn btn-warning btn-sm in-btn1 d-inline" (click)="mine()">Mine Block</button>
+            <button *ngIf="!finished" class="btn btn-warning btn-sm in-btn1 d-inline" [disabled]="mining" (click)="mine()">Mine Block</button>
             <button *ngIf="finished" class="btn btn-warning btn-sm in-btn1 d-inline pulse-button" (click)="broadcast()">Broadcast Block</button>
             <div class="hash hash-no-margin">{{ blockHash }}</div>
             <hr>
@@ -43,7 +43,7 @@
             <hr>
             <h4 class="d-inline">Block Transactions</h4>
             <button *ngIf="!coinbaseAdded" class="btn btn-sm btn-warning in-btn2 d-inline" (click)="createCoinbase()">Add Coinbase Transaction</button>
-            <button *ngIf="coinbaseAdded && !mining" class="btn btn-sm btn-danger in-btn2 d-inline" (click)="removeCoinbase()">Remove Coinbase Transaction</button>
+            <button *ngIf="coinbaseAdded && !mining && !finished" class="btn btn-sm btn-danger in-btn2 d-inline" (click)="removeCoinbase()">Remove Coinbase Transaction</button>
             <hr>
             <div class="utxo-box" pDroppable="txs" (onDrop)="drop($event)">
               <div *ngIf="selectedTxs.length === 0 && !coinbaseAdded" class="helper-text text-center utxoSelected">Drag Transactions here</div>
