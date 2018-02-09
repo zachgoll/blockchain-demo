@@ -4,13 +4,17 @@
   <br>
   <div class="row">
     <div class="col-12 col-lg-6 mr-auto ml-auto">
-      <div *ngIf="authService.currentUser" class="display-4 text-capitalize">Welcome {{ user.f_name }}!</div>
+      <div *ngIf="user" class="display-4 text-capitalize">Welcome {{ user.f_name }}!</div>
       <br>
       <br>
-      <div class="lead">Chainworks thanks you for your attendance and willingness to learn more about Blockchain technology. This site will
+      <div *ngIf="user.session !== 'chainworks-guest'" class="lead">Chainworks thanks you for your attendance and willingness to learn more about Blockchain technology. This site will
         be your companion throughout the training session. On each page, there are tips indicated by the
         <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Additional explanation will display here" popoverTitle="Term"></i> icon.  Click on the icon (including this one) to see additional explanations. You can also refer to the <a routerLink="/glossary" style="text-decoration: underline;">glossary.</a> There are many confusing concepts when talking about blockchain, and we want a painless experience for
         all our trainees! If you have a question at any point in the training, you can submit it here on the home page or on the your profile.  Click on the FAQ tab and upvote other user questions too so we can prioritize which ones we get to first! Enjoy!
+      </div>
+      <div *ngIf="user.session === 'chainworks-guest'" class="lead">On each page, there are tips indicated by the
+        <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Additional explanation will display here" popoverTitle="Term"></i> icon.  Click on the icon (including this one) to see additional explanations. You can also refer to the <a routerLink="/glossary" style="text-decoration: underline;">glossary.</a> There are many confusing concepts when talking about blockchain, so be patient, and reach out if you need help! 
+        If you have a question at any point, feel free to submit it, and we will send get to it as soon as possible either on the FAQ page or via direct email!
       </div>
       <br>
       <br>

@@ -12,7 +12,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="user.session !== 'chainworks-guest'" class="nav-item">
             <a class="nav-link" href="http://cwlabs.eastus.cloudapp.azure.com" target="_new" routerLinkActive="active">UL Certificate Demo</a>
         </li>
         <li class="nav-item">
@@ -21,7 +21,7 @@
         <li class="nav-item">
           <a routerLink="/faq" routerLinkActive="active" class="nav-link">FAQ</a>
         </li>
-        <li *ngIf="authService.loggedIn()" class="nav-item" ngbDropdown placement="bottom-right">
+        <li *ngIf="authService.loggedIn() && user.session !== 'chainworks-guest'" class="nav-item" ngbDropdown placement="bottom-right">
           <a id="presentation-resources" class="nav-link dd" ngbDropdownToggle>Presentation Resources</a>
           <div ngbDropdownMenu aria-labelledby="presentation-resources">
             <button class="dropdown-item dd" [routerLink]="['/presentation-resources/hash-demo']">Hash Demo</button>

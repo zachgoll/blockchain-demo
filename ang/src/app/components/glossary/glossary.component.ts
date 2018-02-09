@@ -32,7 +32,6 @@ export class GlossaryComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.glossary.terms);
   }
 
 }
