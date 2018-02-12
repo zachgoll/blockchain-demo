@@ -139,7 +139,7 @@ router.post('/new', (req, res, next) => {
             outputs.forEach((output) => {
                 let uId;
                 if (output.value > 0) {
-                    utxoQueries.postUtxo({value: output.value, current_owner: output.to})
+                    utxoQueries.postUtxo({value: output.value, current_owner: output.to, reward: output.reward})
                     .then((utxoId) => {
                         uId = utxoId[0];
                         return utxoQueries.bindUtxo({user_id: from, utxo_id: uId});

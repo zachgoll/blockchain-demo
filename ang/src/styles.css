@@ -72,7 +72,7 @@
 
 .utxo {
     font-size: 0.7rem;
-    border: solid black 1px;
+    border: solid #312a44 1px;
     border-radius: 50%;
     display: inline-block;
     width: 35px;

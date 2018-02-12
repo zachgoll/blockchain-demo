@@ -146,6 +146,7 @@ export class CreateTxComponent implements OnInit, CanComponentDeactivate {
 
   updateUtxos() {
     this.query.getUtxos(this.user.id).subscribe((utxos) => {
+      console.log(utxos);
       this.utxos = utxos.sort((a, b) => {
         if (a.current_owner === this.user.id) {
           return -1;

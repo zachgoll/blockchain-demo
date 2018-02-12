@@ -65,7 +65,7 @@ export class CreateBlockComponent implements OnInit {
 
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  coinbase: {tx_hash: string, outputs: {value: number, to: number}[], coinbase: boolean};
+  coinbase: {tx_hash: string, outputs: {value: number, to: number, reward: boolean}[], coinbase: boolean};
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
@@ -310,11 +310,13 @@ createCoinbase() {
     outputs: [
       {
         value: this.blockReward,
-        to: this.user.id
+        to: this.user.id,
+        reward: true
       },
       {
         value: totalFee,
-        to: this.user.id
+        to: this.user.id,
+        reward: false
       }
     ],
     coinbase: true

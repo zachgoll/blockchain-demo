@@ -42,6 +42,7 @@ exports.up = function(knex, Promise) {
         return knex.schema.createTable('utxo', function(table){
             table.increments().primary();
             table.float('value').notNullable();
+            table.boolean('reward').defaultTo(false);
             table.integer('current_owner').references('id').inTable('user_profile');
           });
     })

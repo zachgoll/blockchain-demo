@@ -31,6 +31,37 @@
     cursor: grab;
 }
 
+.reward {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    border: solid #312a44 2px;
+}
+
+.reward-main {
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    border: solid #312a44 2px;
+}
+
+.test {
+    background-color: blue;
+}
+
+.my-reward {
+    background-color: #ffc200;
+    color: white;
+}
+
+.no-drag:hover {
+    cursor: pointer;
+}
+
+.legend {
+    margin-left: 10px;
+}
+
 .my-utxo {
     background-color: #ffc200;
     width: 45px;

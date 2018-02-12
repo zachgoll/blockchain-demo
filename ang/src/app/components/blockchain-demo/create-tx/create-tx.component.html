@@ -1,10 +1,10 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-        <ngb-alert class="helper-text" *ngIf="invalidUtxo" type="warning" [dismissible]="false">Your private key did not unlock this UTXO.  Please select a gold UTXO.</ngb-alert>
-        <ngb-alert class="helper-text" *ngIf="invalidTx" type="warning" [dismissible]="false">You cannot send funds to yourself!  Select a different user!</ngb-alert>
-        <ngb-alert class="helper-text" *ngIf="notEnoughFunds" type="warning" [dismissible]="false">You do not have enough funds for this transaction.  Add more UTXOs or decrease the fee!</ngb-alert>
-        <ngb-alert class="helper-text" *ngIf="invalidForm" type="warning" [dismissible]="false">You must fill out all fields before submitting the transaction!</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="invalidUtxo" type="warning" [dismissible]="false">Your private key did not unlock this UTXO. Please select a gold UTXO.</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="invalidTx" type="warning" [dismissible]="false">You cannot send funds to yourself! Select a different user!</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="notEnoughFunds" type="warning" [dismissible]="false">You do not have enough funds for this transaction. Add more UTXOs or decrease the fee!</ngb-alert>
+      <ngb-alert class="helper-text" *ngIf="invalidForm" type="warning" [dismissible]="false">You must fill out all fields before submitting the transaction!</ngb-alert>
     </div>
   </div>
   <div class="row">
@@ -24,7 +24,10 @@
               <ng-template #rt let-r="result" let-t="term">
                 <img [src]="r['picture_url']" width="50"> {{ r.username }}
               </ng-template>
-              <label for="typeahead-template" class="col-form-label">User Lookup: <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Type the username of the user that you want to send a transaction to." popoverTitle="User Lookup"></i></label>
+              <label for="typeahead-template" class="col-form-label">User Lookup:
+                <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Type the username of the user that you want to send a transaction to."
+                  popoverTitle="User Lookup"></i>
+              </label>
               <div class="col-lg-6 col-12">
                 <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"
                   [inputFormatter]="formatter" name="selectedUser" ngModel required>
@@ -42,7 +45,10 @@
               </div>
             </div>
             <div class="form-group form-row">
-              <label for="fee" class="col-form-label">Add Fee <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="We need to include a fee with our transaction because this incentivizes miners who will be adding transactions to their blocks to add your transaction.  If you include a fee of 0, miners will not include the transaction because they make no money off of it.  This fee estimator is not completely accurate with Bitcoin, but demonstrates how Bitcoin estimates fees.  For every UTXO you add as an input to your transaction, the fee will increase by 0.2 because each UTXO takes up memory in the transaction.  The more UTXOs you have in your transaction, the more memory it requires, and thus, miners will demand a higher fee as compensation for including your large transaction in their block." popoverTitle="Fees in Bitcoin"></i></label>
+              <label for="fee" class="col-form-label">Add Fee
+                <i class="fa fa-info-circle info-icon" placement="right" ngbPopover="We need to include a fee with our transaction because this incentivizes miners who will be adding transactions to their blocks to add your transaction.  If you include a fee of 0, miners will not include the transaction because they make no money off of it.  This fee estimator is not completely accurate with Bitcoin, but demonstrates how Bitcoin estimates fees.  For every UTXO you add as an input to your transaction, the fee will increase by 0.2 because each UTXO takes up memory in the transaction.  The more UTXOs you have in your transaction, the more memory it requires, and thus, miners will demand a higher fee as compensation for including your large transaction in their block."
+                  popoverTitle="Fees in Bitcoin"></i>
+              </label>
               <div class="col-lg-3 col-12">
                 <input type="text" class="form-control" name="fee" ngModel required>
               </div>
@@ -57,22 +63,40 @@
     </div>
     <div class="col-lg-8 col-12">
       <div class="row">
-        <div class="col-12 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
+        <div class="col-8 shadowBoxLight" pDroppable="selUtxos" (onDrop)="dropSel($event)">
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-12">
-                <h4 class="d-inline">UTXO Set <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's 'balance' of Bitcoin." popoverTitle="UTXO Set"></i></h4>
-                <p class="d-inline" style="margin-left: 10px"> You own <span class="hash helper-text">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>
+              <h4 class="d-inline">UTXO Set
+                <i class="fa fa-info-circle info-icon" placement="bottom" ngbPopover="Bitcoin specific term.  The UTXO set represents all the UTXOs available in the Bitcoin network, and together, allow one to construct a user's 'balance' of Bitcoin."
+                  popoverTitle="UTXO Set"></i>
+              </h4>
+              <p class="d-inline" style="margin-left: 10px"> You own
+                <span class="hash helper-text">{{ totalUtxo.toFixed(1) }}</span> worth of UTXOs (highlighted in gold)</p>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <div *ngIf="utxos.length === 0" class="helper-text">There are no UTXOs in the UTXO set! <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Create a Genesis Block first!</a></div>
-              <div *ngFor="let utxo of utxos" class="utxo" [ngClass]="{'my-utxo': utxo.current_owner === user.id }"
-                pDraggable="utxos" (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
+              <div *ngIf="utxos.length === 0" class="helper-text">There are no UTXOs in the UTXO set!
+                <a style="text-decoration: underline;" routerLink="/blockchain-demo/create-block">Create a Genesis Block first!</a>
+              </div>
+              <div *ngFor="let utxo of utxos" class="utxo" [ngClass]="{'reward-main': utxo.reward === true, 'my-utxo': utxo.current_owner === user.id && utxo.reward === false, 'my-reward': utxo.current_owner === user.id && utxo.reward === true }" pDraggable="utxos"
+                (onDragStart)="dragStart($event, utxo)" (onDragEnd)="dragEnd($event)">
                 {{utxo.value.toFixed(1)}}
               </div>
             </div>
           </div>
+        </div>
+        <div class="col-3 shadowBoxLight text-center legend">
+            <h4>Types of UTXOs</h4>
+            <p>Click on each for info</p>
+            <div class="utxo my-utxo no-drag" placement="left" ngbPopover="UTXOs highlighted in gold represent those which your private key can unlock.  In other words, you are the sole owner of this UTXO."
+            popoverTitle="My Utxo">0</div>
+            <div class="utxo no-drag" placement="left" ngbPopover="UTXOs without any special colors are simply utxos which are owned by another peer in the blockchain.  You cannot use these as inputs to your own transactions."
+            popoverTitle="Generic Utxo">0</div>
+            <div class="utxo no-drag reward text-primary" placement="left" ngbPopover="UTXOs with a thick border represent block rewards.  These are utxos which are owned by another peer in the network and which came as a block reward from mining a new block."
+            popoverTitle="Generic Block Reward">0</div>
+            <div class="utxo no-drag reward my-reward" placement="left" ngbPopover="UTXOs highlighted in gold with a thick border are block rewards that are owned by you!  You received this utxo because you mined a block successfully."
+            popoverTitle="My Block Reward">0</div>
         </div>
       </div>
       <div class="row">
